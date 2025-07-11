@@ -1,1 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
 @import "tailwindcss";
+
+:root {
+  /* Polices */
+  --font-primary: "Caveat", cursive;
+  --font-secondary: "Red Hat Display", sans-serif;
+  
+  /* Vous pouvez ajouter d'autres variables comme : */
+  /* --color-primary: #3a86ff; */
+  /* --spacing-unit: 1rem; */
+}
+
+body {
+  /* font-family: var(--font-secondary); */
+  overflow-x: hidden;
+  background: #292524;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+}
+
+p {
+  font-family: var(--font-secondary);
+}
+
+.font-primary {
+  font-family: var(--font-primary);
+}
+
+.font-secondary {
+  font-family: var(--font-secondary);
+}
+
+body {
+  /* font-family: var(--font-secondary); */
+  overflow-x: hidden;
+  background: #292524;
+}
+

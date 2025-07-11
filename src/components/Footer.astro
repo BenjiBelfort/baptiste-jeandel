@@ -1,6 +1,23 @@
 ---
+import MentionsLegalesModal from './ui/MentionsLegalesModal.astro';
 ---
 
 <footer class="bg-gray-800 text-white text-center p-4">
-  © {new Date().getFullYear()} Baptiste Jeandel. Tous droits réservés.
+  <div class="w-full container mx-auto flex flex-col md:flex-row justify-center items-center md:items-start text-stone-400 text-sm text-center sm:text-left py-4 gap-1">
+    <p>© {new Date().getFullYear()} Baptiste Jeandel.</p>
+    <p>Tous droits réservés.</p>
+    <MentionsLegalesModal />
+    <a
+      href="https://benji-belfort-portfolio.netlify.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:text-amber-400 transition-colors duration-300"
+    >
+      Dev by Benji Belfort.
+    </a>
+  </div>
+
+
+
+  
 </footer>

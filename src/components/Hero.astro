@@ -2,9 +2,11 @@
 // Hero.astro
 ---
 
-<section class="p-8 text-center">
-  <h2 class="text-2xl font-semibold mb-4">À propos de moi</h2>
-  <p class="max-w-xl mx-auto">
-    Je suis Baptiste Jeandel, développeur fullstack spécialisé en React, Astro, et Node.js.
-  </p>
+<section class="relative h-screen bg-cover bg-center text-white" style="background-image: url('/images/baptiste-jeandel.webp');">
+  <div class="absolute inset-0 sepia/40"></div>
+
+  <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center z-10">
+    <h1 class="text-4xl md:text-6xl font-bold">Baptiste Jeandel</h1>
+    <h2 class="text-xl md:text-2xl mt-2">musicothérapie et formation</h2>
+  </div>
 </section>

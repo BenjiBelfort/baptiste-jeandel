@@ -1,0 +1,51 @@
+---
+const id = "mentions-modal";
+---
+
+<!-- Bouton d'ouverture -->
+<button 
+  class="hover:text-red-400 transition-colors duration-300 cursor-pointer"
+  onclick={`document.getElementById('${id}').classList.replace('hidden', 'flex'); document.body.style.overflow = 'hidden';`}
+>
+  Mentions légales.
+</button>
+
+<!-- Modale -->
+<div 
+  id={id}
+  class="hidden fixed inset-0 z-50 backdrop-blur-md bg-stone-900/20 items-center justify-center"
+>
+  <div class="bg-stone-950 text-white max-w-3xl w-full p-8 relative overflow-y-auto max-h-[90vh] rounded-lg shadow-lg">
+    <!-- Bouton de fermeture -->
+    <button
+      onclick={`document.getElementById('${id}').classList.replace('flex', 'hidden'); document.body.style.overflow = '';`}
+      class="absolute top-4 right-4 text-stone-300 hover:text-white text-5xl cursor-pointer transition-transform transform hover:scale-110"
+    >
+      &times;
+    </button>
+
+    <!-- Contenu -->
+    <h3>Mentions légales</h3>
+
+    <p class="mb-2"><strong>Éditeur du site :</strong></p>
+    <p class="mb-4">
+      Association BEST OFF'<br/>
+      Adresse : 28 rue des Eygras - 90300 OFFEMONT<br/>
+      Responsable de la publication : Roland CIBIL<br/>
+      Développement web : Benjamin TISSERAND<br/>
+      Contact : bestoffmusic90@gmail.com<br/>
+      Tél : 06 77 26 87 32
+    </p>
+
+    <p class="mb-2"><strong>Hébergement :</strong></p>
+    <p class="mb-4">
+      OVH<br/>
+      2 rue Kellermann - 59100 Roubaix - France
+    </p>
+
+    <p class="mb-2"><strong>Propriété intellectuelle :</strong></p>
+    <p class="mb-4">
+      L'ensemble des contenus présents sur ce site (textes, images, musiques) sont protégés par le droit d’auteur. Toute reproduction ou utilisation sans autorisation préalable est interdite.
+    </p>
+  </div>
+</div>
