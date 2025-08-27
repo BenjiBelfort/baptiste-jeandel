@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"   # lance "astro build"
+  publish = "dist"            # dossier généré par Astro
+
+[build.environment]
+  NODE_VERSION = "20"         # propre et évite les surprises
