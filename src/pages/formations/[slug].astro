@@ -1,0 +1,36 @@
+---
+import Site from '@/layouts/SiteLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('formations');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await entry.render();
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<Site title={data.seoTitle ?? data.title}
+      description={data.seoDescription ?? data.excerpt}
+      image="/og.jpg"
+      type="article">
+  <article class="prose max-w-3xl mx-auto px-4 py-12">
+    <h1>{data.title}</h1>
+    <Content />
+    <div class="mt-8">
+        <a
+            class="inline-flex items-center px-3 py-2 rounded-lg border"
+            href={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`formations/${entry.slug}`)}`}
+        >
+            Demander un devis
+        </a>
+
+    </div>
+  </article>
+</Site>

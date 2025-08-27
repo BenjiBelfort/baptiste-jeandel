@@ -1,0 +1,25 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '@/styles/fonts.css';
+import '../styles/global.css';
+
+const { title, description, image, type } = Astro.props;
+---
+<html lang="fr" class="scroll-smooth">
+  <BaseHead {title} {description} {image} {type} />
+  <body class="antialiased text-gray-900 bg-white">
+    <header class="border-b">
+      <Nav />
+    </header>
+
+    <main id="main" class="min-h-[70vh]">
+      <slot />
+    </main>
+
+    <footer class="border-t">
+      <Footer />
+    </footer>
+  </body>
+</html>

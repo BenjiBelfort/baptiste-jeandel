@@ -1,0 +1,41 @@
+---
+const {
+  title = 'Baptiste Jeandel',
+  description = 'Musique, accompagnement et formations',
+  image = '/og.jpg',
+  type = 'website', // 'article' sur les pages détail
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+// JSON-LD basique (Organisation/Person)
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Baptiste Jeandel",
+  "url": canonical,
+};
+---
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="canonical" href={canonical} />
+  <meta name="description" content={description} />
+
+  <meta property="og:type" content={type} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={image} />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={image} />
+
+  <!-- Manifest + favicon (tu as déjà favicon.svg) -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</head>

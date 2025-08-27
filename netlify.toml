@@ -5,6 +5,11 @@
 [build.environment]
   NODE_VERSION = "20"         # propre et évite les surprises
 
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [context.deploy-preview]
   [[context.deploy-preview.headers]]
     for = "/*"

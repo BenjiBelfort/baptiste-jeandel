@@ -1,53 +1,174 @@
 ---
-const title = "Contact";
+import Site from '@/layouts/SiteLayout.astro';
+
+// Lecture des éventuels paramètres d’URL côté serveur (pour l’hydratation initiale)
+const url = new URL(Astro.request.url);
+const domainFromQuery = url.searchParams.get('domain') ?? '';
+const originFromQuery = url.searchParams.get('origin') ?? '';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <title>{title}</title>
-  </head>
-  <body class="min-h-screen bg-white text-gray-900">
-    <main class="mx-auto max-w-xl p-6">
-      <h1 class="mb-6 text-3xl font-bold">Contact</h1>
 
-      <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        action="/merci"
-        class="space-y-4"
-      >
-        <!-- requis pour l’identification du form -->
-        <input type="hidden" name="form-name" value="contact" />
+<Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
+  <section class="max-w-3xl mx-auto px-4 py-10">
+    <!-- Bouton retour -->
+    <div class="mb-6">
+      <a id="back-link" href="/" class="text-sm underline">← Retour</a>
+    </div>
 
-        <!-- honeypot anti-spam -->
-        <p class="hidden">
-          <label>Ne pas remplir : <input name="bot-field" /></label>
-        </p>
+    <h1 class="text-3xl font-bold mb-6">Demander un devis</h1>
+    <p class="text-gray-600 mb-6">
+      Choisissez un domaine pour afficher les questions adaptées. Tous les champs marqués * sont requis.
+    </p>
 
+    <!-- Formulaire Netlify -->
+    <form
+      id="contact-form"
+      method="POST"
+      name="devis"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      action="/merci"
+      class="space-y-6"
+    >
+      <!-- requis par Netlify Forms -->
+      <input type="hidden" name="form-name" value="devis" />
+      <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
+      <!-- on stocke l’origine pour le mail -->
+      <input type="hidden" id="origin" name="origin" value={originFromQuery} />
+      <!-- Domaine (prérempli si query) -->
+      <label class="block">
+        <span class="text-sm">Domaine *</span>
+        <select id="domain" name="domain" required class="mt-1 w-full border rounded-lg p-2">
+          <option value="">— Sélectionner —</option>
+          <option>EVEIL MUSICAL</option>
+          <option>MUSICO THERAPIE</option>
+          <option>Spectacles</option>
+          <option>Atelier EHPAD</option>
+          <option>Atelier Petite Enfance</option>
+          <option>Handpan</option>
+        </select>
+      </label>
+
+      <!-- Champs spécifiques au domaine -->
+      <div id="dynamic-fields" class="space-y-4"></div>
+
+      <!-- Coordonnées -->
+      <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
-          <span class="mb-1 block text-sm font-medium">Nom</span>
-          <input class="w-full rounded border p-2" type="text" name="name" required />
+          <span class="text-sm">Nom *</span>
+          <input name="name" required class="mt-1 w-full border rounded-lg p-2" />
         </label>
-
         <label class="block">
-          <span class="mb-1 block text-sm font-medium">Email</span>
-          <input class="w-full rounded border p-2" type="email" name="email" required />
+          <span class="text-sm">Email *</span>
+          <input name="email" type="email" required class="mt-1 w-full border rounded-lg p-2" />
         </label>
+      </div>
 
+      <label class="block">
+        <span class="text-sm">Message</span>
+        <textarea name="message" rows="5" class="mt-1 w-full border rounded-lg p-2"></textarea>
+      </label>
+
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" id="back-btn" class="px-3 py-2 border rounded-lg">Retour</button>
+        <button type="submit" class="px-4 py-2 rounded-lg border bg-gray-900 text-white">Envoyer</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Script minimal, hoisté (un seul bundle minuscule) -->
+  <script is:inline>
+    // Mapping des champs par domaine
+    const FIELD_MAP = {
+      'EVEIL MUSICAL': [
+        { name: 'age', label: "Âge des enfants", type: 'text', required: true },
+        { name: 'nbParticipants', label: "Nombre de participants", type: 'number', required: true },
+        { name: 'lieu', label: "Lieu (ville)", type: 'text' },
+        { name: 'dateSouhaitee', label: "Date souhaitée", type: 'date' },
+      ],
+      'MUSICO THERAPIE': [
+        { name: 'public', label: "Public (pathologies, besoins)", type: 'text', required: true },
+        { name: 'frequence', label: "Fréquence (ponctuel / hebdo)", type: 'text' },
+        { name: 'lieu', label: "Lieu (établissement)", type: 'text' },
+      ],
+      'Spectacles': [
+        { name: 'typeSpectacle', label: "Type de spectacle", type: 'text', required: true },
+        { name: 'duree', label: "Durée (mn)", type: 'number' },
+        { name: 'lieu', label: "Lieu", type: 'text' },
+        { name: 'dateSouhaitee', label: "Date souhaitée", type: 'date' },
+      ],
+      'Atelier EHPAD': [
+        { name: 'service', label: "Service / unité", type: 'text' },
+        { name: 'nbResidents', label: "Nombre de résidents", type: 'number', required: true },
+        { name: 'frequence', label: "Fréquence", type: 'text' },
+      ],
+      'Atelier Petite Enfance': [
+        { name: 'structure', label: "Structure (crèche, RAM...)", type: 'text' },
+        { name: 'nbEnfants', label: "Nombre d’enfants", type: 'number' },
+        { name: 'age', label: "Tranche d’âge", type: 'text' },
+      ],
+      'Handpan': [
+        { name: 'niveau', label: "Niveau (débutant, intermédiaire…)", type: 'text', required: true },
+        { name: 'objectif', label: "Objectif", type: 'text' },
+        { name: 'duree', label: "Durée souhaitée", type: 'text' },
+      ],
+    };
+
+    const params = new URLSearchParams(location.search);
+    const domainFromQuery = params.get('domain');
+    const originFromQuery = params.get('origin');
+
+    const domainSelect = document.getElementById('domain');
+    const dynamic = document.getElementById('dynamic-fields');
+    const originInput = document.getElementById('origin');
+
+    function renderFields(domain) {
+      const fields = FIELD_MAP[domain] || [];
+      dynamic.innerHTML = fields.map(f => `
         <label class="block">
-          <span class="mb-1 block text-sm font-medium">Message</span>
-          <textarea class="w-full rounded border p-2" name="message" rows="5"></textarea>
+          <span class="text-sm">${f.label}${f.required ? ' *' : ''}</span>
+          <input name="${f.name}" ${f.type ? `type="${f.type}"` : ''} ${f.required ? 'required' : ''} class="mt-1 w-full border rounded-lg p-2" />
         </label>
+      `).join('');
+    }
 
-        <!-- (optionnel) reCAPTCHA intégré Netlify -->
-        <!-- <div data-netlify-recaptcha="true"></div> -->
+    // Pré-remplissage
+    if (domainFromQuery && [...domainSelect.options].some(o => o.value === domainFromQuery)) {
+      domainSelect.value = domainFromQuery;
+      renderFields(domainFromQuery);
+    }
+    if (originFromQuery && originInput) {
+      originInput.value = originFromQuery;
+    }
 
-        <button type="submit" class="rounded bg-black px-4 py-2 text-white">
-          Envoyer
-        </button>
-      </form>
-    </main>
-  </body>
-</html>
+    domainSelect.addEventListener('change', () => renderFields(domainSelect.value));
+
+    // Boutons retour
+    const backBtn = document.getElementById('back-btn');
+    const backLink = document.getElementById('back-link');
+    const fallbackHref = originFromQuery ? `/${originFromQuery}` : '/';
+
+    function goBack() {
+      if (document.referrer && new URL(document.referrer).origin === location.origin) {
+        history.back();
+      } else {
+        location.href = fallbackHref;
+      }
+    }
+    backBtn.addEventListener('click', goBack);
+    backLink.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
+
+    // ✅ Redirection vers /merci?origin=... au moment de l’envoi (Netlify Forms)
+    const form = document.getElementById('contact-form');
+    if (form) {
+      form.addEventListener('submit', () => {
+        const current = new URL(form.getAttribute('action') || '/merci', location.origin);
+        const originVal = (originInput && 'value' in originInput ? originInput.value : '') || originFromQuery || '';
+        if (originVal) current.searchParams.set('origin', originVal);
+        // On écrit uniquement le chemin + query pour rester relatif
+        form.setAttribute('action', current.pathname + current.search);
+      });
+    }
+  </script>
+
+</Site>
