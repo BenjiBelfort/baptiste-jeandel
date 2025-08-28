@@ -1,11 +1,10 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
 
-// Lecture des éventuels paramètres d’URL côté serveur (pour l’hydratation initiale)
+// Préremplissage côté serveur (pas de DOM ici)
 const url = new URL(Astro.request.url);
 const domainFromQuery = url.searchParams.get('domain') ?? '';
 const originFromQuery = url.searchParams.get('origin') ?? '';
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
@@ -33,8 +32,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       <!-- requis par Netlify Forms -->
       <input type="hidden" name="form-name" value="devis" />
       <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
-      <!-- on stocke l’origine pour le mail -->
-      <input type="hidden" id="origin" name="origin" value={originFromQuery} />
+
+      <!-- Origine (pour l'email Netlify) — renommé en originPath pour éviter les doublons -->
+      <input type="hidden" id="originPath" name="originPath" value={originFromQuery} />
+
       <!-- Domaine (prérempli si query) -->
       <label class="block">
         <span class="text-sm">Domaine *</span>
@@ -49,8 +50,38 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         </select>
       </label>
 
-      <!-- Champs spécifiques au domaine -->
+      <!-- Champs spécifiques au domaine (rendus via JS) -->
       <div id="dynamic-fields" class="space-y-4"></div>
+
+      <!-- 🔒 Registre de champs pour Netlify (assure l’apparition dans les emails) -->
+      <div aria-hidden="true" class="hidden">
+        <!-- ÉVEIL MUSICAL -->
+        <input name="age" />
+        <input name="nbParticipants" />
+        <input name="lieu" />
+        <input name="dateSouhaitee" />
+        <!-- MUSICO THERAPIE -->
+        <input name="public" />
+        <input name="frequence" />
+        <input name="lieu" />
+        <!-- Spectacles -->
+        <input name="typeSpectacle" />
+        <input name="duree" />
+        <input name="lieu" />
+        <input name="dateSouhaitee" />
+        <!-- Atelier EHPAD -->
+        <input name="service" />
+        <input name="nbResidents" />
+        <input name="frequence" />
+        <!-- Atelier Petite Enfance -->
+        <input name="structure" />
+        <input name="nbEnfants" />
+        <input name="age" />
+        <!-- Handpan -->
+        <input name="niveau" />
+        <input name="objectif" />
+        <input name="duree" />
+      </div>
 
       <!-- Coordonnées -->
       <div class="grid md:grid-cols-2 gap-4">
@@ -76,7 +107,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     </form>
   </section>
 
-  <!-- Script minimal, hoisté (un seul bundle minuscule) -->
+  <!-- Script client (inline pour éviter le hoist inutile) -->
   <script is:inline>
     // Mapping des champs par domaine
     const FIELD_MAP = {
@@ -120,7 +151,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
     const domainSelect = document.getElementById('domain');
     const dynamic = document.getElementById('dynamic-fields');
-    const originInput = document.getElementById('origin');
+    const originPathInput = document.getElementById('originPath');
 
     function renderFields(domain) {
       const fields = FIELD_MAP[domain] || [];
@@ -137,17 +168,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       domainSelect.value = domainFromQuery;
       renderFields(domainFromQuery);
     }
-    if (originFromQuery && originInput) {
-      originInput.value = originFromQuery;
+    if (originFromQuery && originPathInput) {
+      originPathInput.value = originFromQuery;
     }
 
+    // Changement manuel du domaine
     domainSelect.addEventListener('change', () => renderFields(domainSelect.value));
 
-    // Boutons retour
+    // Boutons retour : priorité à l’historique, sinon à ?origin, sinon /
     const backBtn = document.getElementById('back-btn');
     const backLink = document.getElementById('back-link');
     const fallbackHref = originFromQuery ? `/${originFromQuery}` : '/';
-
     function goBack() {
       if (document.referrer && new URL(document.referrer).origin === location.origin) {
         history.back();
@@ -158,17 +189,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     backBtn.addEventListener('click', goBack);
     backLink.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // ✅ Redirection vers /merci?origin=... au moment de l’envoi (Netlify Forms)
+    // Redirection vers /merci?origin=... au moment de l’envoi (Netlify Forms)
     const form = document.getElementById('contact-form');
     if (form) {
       form.addEventListener('submit', () => {
         const current = new URL(form.getAttribute('action') || '/merci', location.origin);
-        const originVal = (originInput && 'value' in originInput ? originInput.value : '') || originFromQuery || '';
+        const originVal = (originPathInput && 'value' in originPathInput ? originPathInput.value : '') || originFromQuery || '';
         if (originVal) current.searchParams.set('origin', originVal);
-        // On écrit uniquement le chemin + query pour rester relatif
         form.setAttribute('action', current.pathname + current.search);
       });
     }
   </script>
-
 </Site>
