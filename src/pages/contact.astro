@@ -30,7 +30,7 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       <input type="hidden" name="form-name" value="devis" />
       <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
 
-      <!-- Origine (évite le doublon, plus lisible dans l'email) -->
+      <!-- Origine (un seul champ, nom lisible) -->
       <input type="hidden" id="originPath" name="originPath" value={originFromQuery} />
 
       <!-- Domaine -->
@@ -49,24 +49,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
 
       <!-- Champs spécifiques au domaine (affichés via JS, SANS name) -->
       <div id="dynamic-fields" class="space-y-4"></div>
-
-      <!-- 🔒 Registre de champs Netlify (un seul input par nom, SANS doublon) -->
-      <div id="registry" aria-hidden="true" class="hidden">
-        <input name="age" />
-        <input name="nbParticipants" />
-        <input name="lieu" />
-        <input name="dateSouhaitee" />
-        <input name="public" />
-        <input name="frequence" />
-        <input name="typeSpectacle" />
-        <input name="duree" />
-        <input name="service" />
-        <input name="nbResidents" />
-        <input name="structure" />
-        <input name="nbEnfants" />
-        <input name="niveau" />
-        <input name="objectif" />
-      </div>
 
       <!-- Coordonnées -->
       <div class="grid md:grid-cols-2 gap-4">
@@ -136,7 +118,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     const domainSelect = document.getElementById('domain');
     const dynamic = document.getElementById('dynamic-fields');
     const originPathInput = document.getElementById('originPath');
-    const registry = document.getElementById('registry');
 
     function renderFields(domain) {
       const fields = FIELD_MAP[domain] || [];
@@ -153,9 +134,7 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       domainSelect.value = domainFromQuery;
       renderFields(domainFromQuery);
     }
-    if (originFromQuery && originPathInput) {
-      originPathInput.value = originFromQuery;
-    }
+    if (originFromQuery && originPathInput) originPathInput.value = originFromQuery;
 
     // Changement manuel du domaine
     domainSelect.addEventListener('change', () => renderFields(domainSelect.value));
@@ -174,26 +153,27 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     backBtn.addEventListener('click', goBack);
     backLink.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // Submit : copie les valeurs visibles -> inputs cachés (registry), supprime les cachés vides, ajuste la redirection
+    // Submit : créer UNIQUEMENT les inputs cachés pour les champs remplis
     const form = document.getElementById('contact-form');
     if (form) {
       form.addEventListener('submit', () => {
-        // 1) reset le registre
-        registry.querySelectorAll('input[name]').forEach(inp => { inp.value = ''; });
+        // Nettoie d'anciens auto-champs si déjà ajoutés
+        form.querySelectorAll('input[data-auto="1"]').forEach(n => n.remove());
 
-        // 2) copie les champs dynamiques dans le registre
+        // Pour chaque champ visible, si valeur non vide -> créer un hidden "name=value"
         dynamic.querySelectorAll('input[data-key]').forEach(src => {
           const key = src.getAttribute('data-key');
-          const target = registry.querySelector(`input[name="${key}"]`);
-          if (target) target.value = src.value;
+          const val = (src.value || '').trim();
+          if (!key || !val) return;
+          const hidden = document.createElement('input');
+          hidden.type = 'hidden';
+          hidden.name = key;
+          hidden.value = val;
+          hidden.setAttribute('data-auto', '1');
+          form.appendChild(hidden);
         });
 
-        // 3) retire du DOM les inputs du registre qui sont vides (pour ne pas les voir dans l'email)
-        registry.querySelectorAll('input[name]').forEach(inp => {
-          if (!inp.value) inp.parentElement.removeChild(inp);
-        });
-
-        // 4) redirection vers /merci?origin=...
+        // Redirection vers /merci?origin=...
         const current = new URL(form.getAttribute('action') || '/merci', location.origin);
         const originVal = (originPathInput && 'value' in originPathInput ? originPathInput.value : '') || originFromQuery || '';
         if (originVal) current.searchParams.set('origin', originVal);
