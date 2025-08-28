@@ -20,17 +20,17 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     <form
       id="contact-form"
       method="POST"
-      name="devis"
+      name="devis-v2"
       data-netlify="true"
       netlify-honeypot="bot-field"
       action="/merci"
       class="space-y-6"
     >
       <!-- requis par Netlify Forms -->
-      <input type="hidden" name="form-name" value="devis" />
+      <input type="hidden" name="form-name" value="devis-v2" />  <!-- 🔁 idem -->
       <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
 
-      <!-- Origine (un seul champ, nom lisible) -->
+      <!-- Origine pour suivi (champ technique propre) -->
       <input type="hidden" id="originPath" name="originPath" value={originFromQuery} />
 
       <!-- Domaine -->
@@ -75,40 +75,50 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
   </section>
 
   <script is:inline>
-    // Mapping des champs par domaine
+    // Mapping des champs par domaine (clé = name technique, labelFR = intitulé email)
     const FIELD_MAP = {
       'EVEIL MUSICAL': [
-        { key: 'age', label: "Âge des enfants", type: 'text', required: true },
-        { key: 'nbParticipants', label: "Nombre de participants", type: 'number', required: true },
-        { key: 'lieu', label: "Lieu (ville)", type: 'text' },
-        { key: 'dateSouhaitee', label: "Date souhaitée", type: 'date' },
+        { key: 'age',            labelFR: "Âge des enfants",           type: 'text',   required: true },
+        { key: 'nbParticipants', labelFR: "Nombre de participants",     type: 'number', required: true },
+        { key: 'lieu',           labelFR: "Lieu (ville)",               type: 'text' },
+        { key: 'dateSouhaitee',  labelFR: "Date souhaitée",             type: 'date' },
       ],
       'MUSICO THERAPIE': [
-        { key: 'public', label: "Public (pathologies, besoins)", type: 'text', required: true },
-        { key: 'frequence', label: "Fréquence (ponctuel / hebdo)", type: 'text' },
-        { key: 'lieu', label: "Lieu (établissement)", type: 'text' },
+        { key: 'public',         labelFR: "Public (pathologies, besoins)", type: 'text', required: true },
+        { key: 'frequence',      labelFR: "Fréquence (ponctuel / hebdo)",  type: 'text' },
+        { key: 'lieu',           labelFR: "Lieu (établissement)",          type: 'text' },
       ],
       'Spectacles': [
-        { key: 'typeSpectacle', label: "Type de spectacle", type: 'text', required: true },
-        { key: 'duree', label: "Durée (mn)", type: 'number' },
-        { key: 'lieu', label: "Lieu", type: 'text' },
-        { key: 'dateSouhaitee', label: "Date souhaitée", type: 'date' },
+        { key: 'typeSpectacle',  labelFR: "Type de spectacle",          type: 'text',   required: true },
+        { key: 'duree',          labelFR: "Durée (mn)",                 type: 'number' },
+        { key: 'lieu',           labelFR: "Lieu",                       type: 'text' },
+        { key: 'dateSouhaitee',  labelFR: "Date souhaitée",             type: 'date' },
       ],
       'Atelier EHPAD': [
-        { key: 'service', label: "Service / unité", type: 'text' },
-        { key: 'nbResidents', label: "Nombre de résidents", type: 'number', required: true },
-        { key: 'frequence', label: "Fréquence", type: 'text' },
+        { key: 'service',        labelFR: "Service / unité",            type: 'text' },
+        { key: 'nbResidents',    labelFR: "Nombre de résidents",        type: 'number', required: true },
+        { key: 'frequence',      labelFR: "Fréquence",                  type: 'text' },
       ],
       'Atelier Petite Enfance': [
-        { key: 'structure', label: "Structure (crèche, RAM...)", type: 'text' },
-        { key: 'nbEnfants', label: "Nombre d’enfants", type: 'number' },
-        { key: 'age', label: "Tranche d’âge", type: 'text' },
+        { key: 'structure',      labelFR: "Structure (crèche, RAM...)", type: 'text' },
+        { key: 'nbEnfants',      labelFR: "Nombre d’enfants",           type: 'number' },
+        { key: 'age',            labelFR: "Tranche d’âge",              type: 'text' },
       ],
       'Handpan': [
-        { key: 'niveau', label: "Niveau (débutant, intermédiaire…)", type: 'text', required: true },
-        { key: 'objectif', label: "Objectif", type: 'text' },
-        { key: 'duree', label: "Durée souhaitée", type: 'text' },
+        { key: 'niveau',         labelFR: "Niveau",                     type: 'text',   required: true },
+        { key: 'objectif',       labelFR: "Objectif",                   type: 'text' },
+        { key: 'duree',          labelFR: "Durée souhaitée",            type: 'text' },
       ],
+    };
+
+    // Mappage "joli" pour le Domaine (FR / casse)
+    const DOMAIN_LABELS = {
+      'EVEIL MUSICAL': 'Éveil musical',
+      'MUSICO THERAPIE': 'Musicothérapie',
+      'Spectacles': 'Spectacles',
+      'Atelier EHPAD': 'Atelier EHPAD',
+      'Atelier Petite Enfance': 'Atelier petite enfance',
+      'Handpan': 'Handpan',
     };
 
     const params = new URLSearchParams(location.search);
@@ -122,8 +132,8 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     function renderFields(domain) {
       const fields = FIELD_MAP[domain] || [];
       dynamic.innerHTML = fields.map(f => `
-        <label class="block" data-field>
-          <span class="text-sm">${f.label}${f.required ? ' *' : ''}</span>
+        <label class="block">
+          <span class="text-sm">${f.labelFR}${f.required ? ' *' : ''}</span>
           <input ${f.type ? `type="${f.type}"` : ''} ${f.required ? 'required' : ''} data-key="${f.key}" class="mt-1 w-full border rounded-lg p-2" />
         </label>
       `).join('');
@@ -153,27 +163,61 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     backBtn.addEventListener('click', goBack);
     backLink.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // Submit : créer UNIQUEMENT les inputs cachés pour les champs remplis
+    // Submit : on fabrique UNIQUEMENT les champs cachés utiles, avec étiquettes FR
     const form = document.getElementById('contact-form');
     if (form) {
       form.addEventListener('submit', () => {
-        // Nettoie d'anciens auto-champs si déjà ajoutés
-        form.querySelectorAll('input[data-auto="1"]').forEach(n => n.remove());
+        // 1) Nettoyer d'anciens auto-champs si présents
+        form.querySelectorAll('input[data-auto="1"], textarea[data-auto="1"]').forEach(n => n.remove());
 
-        // Pour chaque champ visible, si valeur non vide -> créer un hidden "name=value"
+        // 2) Domaine (label FR)
+        const rawDomain = domainSelect.value;
+        const domainFR = DOMAIN_LABELS[rawDomain] || rawDomain;
+        const domaineHidden = document.createElement('input');
+        domaineHidden.type = 'hidden';
+        domaineHidden.name = 'Domaine';
+        domaineHidden.value = domainFR;
+        domaineHidden.setAttribute('data-auto', '1');
+        form.appendChild(domaineHidden);
+
+        // 3) Provenance
+        const provHidden = document.createElement('input');
+        provHidden.type = 'hidden';
+        provHidden.name = 'Provenance';
+        provHidden.value = originPathInput?.value || originFromQuery || '';
+        provHidden.setAttribute('data-auto', '1');
+        form.appendChild(provHidden);
+
+        // 4) Champs spécifiques : créer un hidden par champ rempli, avec label FR
+        const fields = FIELD_MAP[rawDomain] || [];
+        const values = [];
         dynamic.querySelectorAll('input[data-key]').forEach(src => {
           const key = src.getAttribute('data-key');
+          const cfg = fields.find(f => f.key === key);
           const val = (src.value || '').trim();
-          if (!key || !val) return;
-          const hidden = document.createElement('input');
-          hidden.type = 'hidden';
-          hidden.name = key;
-          hidden.value = val;
-          hidden.setAttribute('data-auto', '1');
-          form.appendChild(hidden);
+          if (!cfg || !val) return;
+
+          // champ caché pour Netlify (nom lisible)
+          const h = document.createElement('input');
+          h.type = 'hidden';
+          h.name = cfg.labelFR;    // ← intitulé français dans l’email
+          h.value = val;
+          h.setAttribute('data-auto', '1');
+          form.appendChild(h);
+
+          values.push(`${cfg.labelFR}: ${val}`);
         });
 
-        // Redirection vers /merci?origin=...
+        // 5) (Optionnel) Résumé joli en une zone
+        if (values.length) {
+          const resume = document.createElement('textarea');
+          resume.name = 'Résumé';
+          resume.setAttribute('data-auto', '1');
+          resume.value = [`Domaine: ${domainFR}`, ...values].join('\n');
+          form.appendChild(resume);
+        }
+
+        // 6) Redirection /merci?origin=...
         const current = new URL(form.getAttribute('action') || '/merci', location.origin);
         const originVal = (originPathInput && 'value' in originPathInput ? originPathInput.value : '') || originFromQuery || '';
         if (originVal) current.searchParams.set('origin', originVal);
