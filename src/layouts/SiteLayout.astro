@@ -7,14 +7,17 @@ import '../styles/global.css';
 
 const { title, description, image, type } = Astro.props;
 ---
-<html lang="fr" class="scroll-smooth">
+<html lang="fr" class="scroll-smooth h-full">
   <BaseHead {title} {description} {image} {type} />
-  <body class="antialiased text-gray-900 bg-white">
-    <header class="border-b">
-      <Nav />
-    </header>
+  <body class="h-full min-h-[100svh] flex flex-col antialiased text-gray-900 bg-white">
+    <!-- Nav est FIXED dans son propre composant -->
+    <Nav />
 
-    <main id="main" class="min-h-[70vh]">
+    <!-- Spacer pour compenser la nav fixe (même hauteur que la nav) -->
+    <div aria-hidden="true" class="h-[64px] md:h-[72px]"></div>
+
+    <!-- Contenu qui prend toute la place restante -->
+    <main id="main" class="flex-1">
       <slot />
     </main>
 
