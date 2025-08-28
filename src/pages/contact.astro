@@ -25,21 +25,22 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       netlify-honeypot="bot-field"
       action="/merci"
       class="space-y-6"
+      autocomplete="off"
     >
       <!-- requis par Netlify Forms -->
-      <input type="hidden" name="form-name" value="devis-v2" />  <!-- 🔁 idem -->
+      <input type="hidden" name="form-name" value="devis-v2" />
       <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
 
-      <!-- Origine pour suivi (champ technique propre) -->
-      <input type="hidden" id="originPath" name="originPath" value={originFromQuery} />
+      <!-- Provenance (FR) -->
+      <input type="hidden" id="Provenance" name="Provenance" value={originFromQuery} />
 
-      <!-- Domaine -->
+      <!-- Domaine (FR) -->
       <label class="block">
         <span class="text-sm">Domaine *</span>
-        <select id="domain" name="domain" required class="mt-1 w-full border rounded-lg p-2">
+        <select id="domain" name="Domaine" required class="mt-1 w-full border rounded-lg p-2">
           <option value="">— Sélectionner —</option>
-          <option>EVEIL MUSICAL</option>
-          <option>MUSICO THERAPIE</option>
+          <option>Éveil musical</option>
+          <option>Musicothérapie</option>
           <option>Spectacles</option>
           <option>Atelier EHPAD</option>
           <option>Atelier Petite Enfance</option>
@@ -47,24 +48,49 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         </select>
       </label>
 
-      <!-- Champs spécifiques au domaine (affichés via JS, SANS name) -->
+      <!-- Champs spécifiques (affichés via JS, SANS name) -->
       <div id="dynamic-fields" class="space-y-4"></div>
+
+      <!-- 🔒 Registre caché FR (connu par Netlify) — tout est hidden + disabled -->
+      <div id="registry" aria-hidden="true" class="hidden">
+        <input type="hidden" name="Âge des enfants" id="reg-age" disabled />
+        <input type="hidden" name="Nombre de participants" id="reg-nbParticipants" disabled />
+        <input type="hidden" name="Lieu" id="reg-lieu" disabled />
+        <input type="hidden" name="Date souhaitée" id="reg-dateSouhaitee" disabled />
+
+        <input type="hidden" name="Public (pathologies, besoins)" id="reg-public" disabled />
+        <input type="hidden" name="Fréquence" id="reg-frequence" disabled />
+
+        <input type="hidden" name="Type de spectacle" id="reg-typeSpectacle" disabled />
+        <input type="hidden" name="Durée (mn)" id="reg-duree" disabled />
+
+        <input type="hidden" name="Service / unité" id="reg-service" disabled />
+        <input type="hidden" name="Nombre de résidents" id="reg-nbResidents" disabled />
+
+        <input type="hidden" name="Structure (crèche, RAM...)" id="reg-structure" disabled />
+        <input type="hidden" name="Nombre d’enfants" id="reg-nbEnfants" disabled />
+        <input type="hidden" name="Tranche d’âge" id="reg-agePe" disabled />
+
+        <input type="hidden" name="Niveau" id="reg-niveau" disabled />
+        <input type="hidden" name="Objectif" id="reg-objectif" disabled />
+        <input type="hidden" name="Durée souhaitée" id="reg-dureeHandpan" disabled />
+      </div>
 
       <!-- Coordonnées -->
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Nom *</span>
-          <input name="name" required class="mt-1 w-full border rounded-lg p-2" />
+          <input name="Nom" required class="mt-1 w-full border rounded-lg p-2" />
         </label>
         <label class="block">
           <span class="text-sm">Email *</span>
-          <input name="email" type="email" required class="mt-1 w-full border rounded-lg p-2" />
+          <input name="Email" type="email" required class="mt-1 w-full border rounded-lg p-2" />
         </label>
       </div>
 
       <label class="block">
         <span class="text-sm">Message</span>
-        <textarea name="message" rows="5" class="mt-1 w-full border rounded-lg p-2"></textarea>
+        <textarea name="Message" rows="5" class="mt-1 w-full border rounded-lg p-2"></textarea>
       </label>
 
       <div class="flex items-center justify-between pt-2">
@@ -75,84 +101,91 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
   </section>
 
   <script is:inline>
-    // Mapping des champs par domaine (clé = name technique, labelFR = intitulé email)
-    const FIELD_MAP = {
-      'EVEIL MUSICAL': [
-        { key: 'age',            labelFR: "Âge des enfants",           type: 'text',   required: true },
-        { key: 'nbParticipants', labelFR: "Nombre de participants",     type: 'number', required: true },
-        { key: 'lieu',           labelFR: "Lieu (ville)",               type: 'text' },
-        { key: 'dateSouhaitee',  labelFR: "Date souhaitée",             type: 'date' },
-      ],
-      'MUSICO THERAPIE': [
-        { key: 'public',         labelFR: "Public (pathologies, besoins)", type: 'text', required: true },
-        { key: 'frequence',      labelFR: "Fréquence (ponctuel / hebdo)",  type: 'text' },
-        { key: 'lieu',           labelFR: "Lieu (établissement)",          type: 'text' },
-      ],
-      'Spectacles': [
-        { key: 'typeSpectacle',  labelFR: "Type de spectacle",          type: 'text',   required: true },
-        { key: 'duree',          labelFR: "Durée (mn)",                 type: 'number' },
-        { key: 'lieu',           labelFR: "Lieu",                       type: 'text' },
-        { key: 'dateSouhaitee',  labelFR: "Date souhaitée",             type: 'date' },
-      ],
-      'Atelier EHPAD': [
-        { key: 'service',        labelFR: "Service / unité",            type: 'text' },
-        { key: 'nbResidents',    labelFR: "Nombre de résidents",        type: 'number', required: true },
-        { key: 'frequence',      labelFR: "Fréquence",                  type: 'text' },
-      ],
-      'Atelier Petite Enfance': [
-        { key: 'structure',      labelFR: "Structure (crèche, RAM...)", type: 'text' },
-        { key: 'nbEnfants',      labelFR: "Nombre d’enfants",           type: 'number' },
-        { key: 'age',            labelFR: "Tranche d’âge",              type: 'text' },
-      ],
-      'Handpan': [
-        { key: 'niveau',         labelFR: "Niveau",                     type: 'text',   required: true },
-        { key: 'objectif',       labelFR: "Objectif",                   type: 'text' },
-        { key: 'duree',          labelFR: "Durée souhaitée",            type: 'text' },
-      ],
-    };
-
-    // Mappage "joli" pour le Domaine (FR / casse)
-    const DOMAIN_LABELS = {
+    // Map legacy (param URL) -> libellé FR du select
+    const LEGACY_TO_FR = {
       'EVEIL MUSICAL': 'Éveil musical',
       'MUSICO THERAPIE': 'Musicothérapie',
       'Spectacles': 'Spectacles',
       'Atelier EHPAD': 'Atelier EHPAD',
-      'Atelier Petite Enfance': 'Atelier petite enfance',
+      'Atelier Petite Enfance': 'Atelier Petite Enfance',
       'Handpan': 'Handpan',
     };
 
+    // Champs par domaine (clé technique -> id du registre + label affiché)
+    const FIELD_MAP = {
+      'Éveil musical': [
+        { key: 'age', regId: 'reg-age', label: 'Âge des enfants', type: 'text', required: true },
+        { key: 'nbParticipants', regId: 'reg-nbParticipants', label: 'Nombre de participants', type: 'number', required: true },
+        { key: 'lieu', regId: 'reg-lieu', label: 'Lieu', type: 'text' },
+        { key: 'dateSouhaitee', regId: 'reg-dateSouhaitee', label: 'Date souhaitée', type: 'date' },
+      ],
+      'Musicothérapie': [
+        { key: 'public', regId: 'reg-public', label: 'Public (pathologies, besoins)', type: 'text', required: true },
+        { key: 'frequence', regId: 'reg-frequence', label: 'Fréquence', type: 'text' },
+        { key: 'lieu', regId: 'reg-lieu', label: 'Lieu', type: 'text' },
+      ],
+      'Spectacles': [
+        { key: 'typeSpectacle', regId: 'reg-typeSpectacle', label: 'Type de spectacle', type: 'text', required: true },
+        { key: 'duree', regId: 'reg-duree', label: 'Durée (mn)', type: 'number' },
+        { key: 'lieu', regId: 'reg-lieu', label: 'Lieu', type: 'text' },
+        { key: 'dateSouhaitee', regId: 'reg-dateSouhaitee', label: 'Date souhaitée', type: 'date' },
+      ],
+      'Atelier EHPAD': [
+        { key: 'service', regId: 'reg-service', label: 'Service / unité', type: 'text' },
+        { key: 'nbResidents', regId: 'reg-nbResidents', label: 'Nombre de résidents', type: 'number', required: true },
+        { key: 'frequence', regId: 'reg-frequence', label: 'Fréquence', type: 'text' },
+      ],
+      'Atelier Petite Enfance': [
+        { key: 'structure', regId: 'reg-structure', label: 'Structure (crèche, RAM...)', type: 'text' },
+        { key: 'nbEnfants', regId: 'reg-nbEnfants', label: 'Nombre d’enfants', type: 'number' },
+        { key: 'age', regId: 'reg-agePe', label: 'Tranche d’âge', type: 'text' },
+      ],
+      'Handpan': [
+        { key: 'niveau', regId: 'reg-niveau', label: 'Niveau', type: 'text', required: true },
+        { key: 'objectif', regId: 'reg-objectif', label: 'Objectif', type: 'text' },
+        { key: 'duree', regId: 'reg-dureeHandpan', label: 'Durée souhaitée', type: 'text' },
+      ],
+    };
+
     const params = new URLSearchParams(location.search);
-    const domainFromQuery = params.get('domain');
-    const originFromQuery = params.get('origin');
+    const domainParam = params.get('domain'); // peut être legacy (EVEIL MUSICAL)
+    const originParam = params.get('origin');
 
     const domainSelect = document.getElementById('domain');
     const dynamic = document.getElementById('dynamic-fields');
-    const originPathInput = document.getElementById('originPath');
+    const provenanceInput = document.getElementById('Provenance');
+    const registry = document.getElementById('registry');
 
-    function renderFields(domain) {
-      const fields = FIELD_MAP[domain] || [];
+    // Rendu des champs visibles (sans name)
+    function renderFields(domainFR) {
+      const fields = FIELD_MAP[domainFR] || [];
       dynamic.innerHTML = fields.map(f => `
         <label class="block">
-          <span class="text-sm">${f.labelFR}${f.required ? ' *' : ''}</span>
+          <span class="text-sm">${f.label}${f.required ? ' *' : ''}</span>
           <input ${f.type ? `type="${f.type}"` : ''} ${f.required ? 'required' : ''} data-key="${f.key}" class="mt-1 w-full border rounded-lg p-2" />
         </label>
       `).join('');
     }
 
-    // Pré-remplissage
-    if (domainFromQuery && [...domainSelect.options].some(o => o.value === domainFromQuery)) {
-      domainSelect.value = domainFromQuery;
-      renderFields(domainFromQuery);
+    // Pré-remplissage domaine depuis l’URL
+    const mapped = domainParam ? (LEGACY_TO_FR[domainParam] || domainParam) : '';
+    if (mapped && [...domainSelect.options].some(o => o.value === mapped)) {
+      domainSelect.value = mapped;
+      renderFields(mapped);
     }
-    if (originFromQuery && originPathInput) originPathInput.value = originFromQuery;
 
-    // Changement manuel du domaine
+    // Provenance
+    if (originParam && provenanceInput) {
+      provenanceInput.value = originParam;
+    }
+
+    // Changement manuel
     domainSelect.addEventListener('change', () => renderFields(domainSelect.value));
 
-    // Boutons retour
+    // Retour
     const backBtn = document.getElementById('back-btn');
     const backLink = document.getElementById('back-link');
-    const fallbackHref = originFromQuery ? `/${originFromQuery}` : '/';
+    const fallbackHref = originParam ? `/${originParam}` : '/';
     function goBack() {
       if (document.referrer && new URL(document.referrer).origin === location.origin) {
         history.back();
@@ -163,63 +196,34 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     backBtn.addEventListener('click', goBack);
     backLink.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // Submit : on fabrique UNIQUEMENT les champs cachés utiles, avec étiquettes FR
+    // Submit : activer UNIQUEMENT les champs du registre qui ont une valeur
     const form = document.getElementById('contact-form');
     if (form) {
       form.addEventListener('submit', () => {
-        // 1) Nettoyer d'anciens auto-champs si présents
-        form.querySelectorAll('input[data-auto="1"], textarea[data-auto="1"]').forEach(n => n.remove());
+        // 0) Tout désactiver au départ
+        registry.querySelectorAll('input[type="hidden"]').forEach(inp => {
+          inp.disabled = true;
+          inp.value = '';
+        });
 
-        // 2) Domaine (label FR)
-        const rawDomain = domainSelect.value;
-        const domainFR = DOMAIN_LABELS[rawDomain] || rawDomain;
-        const domaineHidden = document.createElement('input');
-        domaineHidden.type = 'hidden';
-        domaineHidden.name = 'Domaine';
-        domaineHidden.value = domainFR;
-        domaineHidden.setAttribute('data-auto', '1');
-        form.appendChild(domaineHidden);
+        // 1) Domaine FR : le select a déjà name="Domaine" → OK (pas de registre nécessaire)
 
-        // 3) Provenance
-        const provHidden = document.createElement('input');
-        provHidden.type = 'hidden';
-        provHidden.name = 'Provenance';
-        provHidden.value = originPathInput?.value || originFromQuery || '';
-        provHidden.setAttribute('data-auto', '1');
-        form.appendChild(provHidden);
-
-        // 4) Champs spécifiques : créer un hidden par champ rempli, avec label FR
-        const fields = FIELD_MAP[rawDomain] || [];
-        const values = [];
+        // 2) Copier les valeurs visibles -> registre et activer uniquement celles non vides
+        const fields = FIELD_MAP[domainSelect.value] || [];
         dynamic.querySelectorAll('input[data-key]').forEach(src => {
           const key = src.getAttribute('data-key');
           const cfg = fields.find(f => f.key === key);
+          const reg = cfg ? document.getElementById(cfg.regId) : null;
           const val = (src.value || '').trim();
-          if (!cfg || !val) return;
-
-          // champ caché pour Netlify (nom lisible)
-          const h = document.createElement('input');
-          h.type = 'hidden';
-          h.name = cfg.labelFR;    // ← intitulé français dans l’email
-          h.value = val;
-          h.setAttribute('data-auto', '1');
-          form.appendChild(h);
-
-          values.push(`${cfg.labelFR}: ${val}`);
+          if (reg && val) {
+            reg.value = val;
+            reg.disabled = false; // ← seulement celles-ci seront envoyées
+          }
         });
 
-        // 5) (Optionnel) Résumé joli en une zone
-        if (values.length) {
-          const resume = document.createElement('textarea');
-          resume.name = 'Résumé';
-          resume.setAttribute('data-auto', '1');
-          resume.value = [`Domaine: ${domainFR}`, ...values].join('\n');
-          form.appendChild(resume);
-        }
-
-        // 6) Redirection /merci?origin=...
+        // 3) Redirection /merci?origin=...
         const current = new URL(form.getAttribute('action') || '/merci', location.origin);
-        const originVal = (originPathInput && 'value' in originPathInput ? originPathInput.value : '') || originFromQuery || '';
+        const originVal = provenanceInput?.value || originParam || '';
         if (originVal) current.searchParams.set('origin', originVal);
         form.setAttribute('action', current.pathname + current.search);
       });
