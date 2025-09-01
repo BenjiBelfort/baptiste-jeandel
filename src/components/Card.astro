@@ -1,0 +1,35 @@
+---
+/**
+* Card réutilisable
+* Props :
+* - title: string
+* - excerpt?: string
+* - href?: string (lien principal)
+* - ctaLabel?: string (libellé du bouton principal)
+* - secondaryHref?: string (lien secondaire)
+* - secondaryLabel?: string
+* - debug?: string (texte debug optionnel)
+*/
+const {
+title,
+excerpt,
+href,
+ctaLabel = 'En savoir +',
+secondaryHref,
+secondaryLabel,
+debug,
+} = Astro.props;
+---
+<article class="border rounded-2xl p-6 h-full flex flex-col">
+    <h3 class="text-lg font-semibold">{title}</h3>
+        {excerpt && <p class="mt-2 text-sm text-stone-600">{excerpt}</p>}
+        {debug && <p class="text-xs text-stone-500 mt-1">{debug}</p>}
+        <div class="mt-4 flex gap-3">
+        {href && <a class="underline" href={href}>{ctaLabel}</a>}
+        {secondaryHref && (
+        <a class="inline-flex items-center px-3 py-2 rounded-lg border" href={secondaryHref}>
+        {secondaryLabel}
+        </a>
+        )}
+    </div>
+</article>

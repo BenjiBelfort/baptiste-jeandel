@@ -1,8 +1,8 @@
+// src/content/config.ts
 import { defineCollection, z } from 'astro:content';
 
 const baseFields = {
   title: z.string(),
-  // slug: z.string(),   // ❌ retire-le
   excerpt: z.string(),
   sort: z.number().default(0),
   seoTitle: z.string().optional(),

@@ -1,0 +1,14 @@
+/* TEAM */
+Site owner: Baptiste Jeandel
+Developer: Benjamin Tisserand
+Contact: contact@ton-domaine.fr
+
+/* SITE */
+Last update: 2025-08-29
+Language: French [fr]
+Doctype: HTML5
+Standards: W3C Validated
+Components: Astro, TailwindCSS, Netlify
+
+/* THANKS */
+Thanks to the open source community ♥

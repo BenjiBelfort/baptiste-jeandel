@@ -1,0 +1,49 @@
+---
+const {
+  image = '/images/baptiste-jeandel.webp',
+  title = 'Baptiste Jeandel',
+  subtitle = 'Musique, médiation et transmission pour tous les âges et tous les publics.',
+} = Astro.props;
+---
+<section
+  class="relative w-full min-h-screen flex items-center"
+  style={{ '--hero': `url(${image})` }}
+>
+  <!-- Calque image -->
+  <div class="absolute inset-0 bg-[image:var(--hero)] bg-fixed bg-cover bg-center grayscale-25"></div>
+
+  <!-- Overlay gradient : de blanc (à droite) vers transparent (à gauche) -->
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/70 to-transparent"></div>
+
+  <!-- Contenu centré verticalement -->
+  <div class="relative z-10 w-full">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 items-center">
+        <!-- Colonne texte (1/2 largeur du conteneur) -->
+        <div>
+          <h1 class="text-5xl md:text-7xl font-bold hand">{title}</h1>
+          {subtitle && (
+            <h2 class="mt-4 text-xl font-bold text-stone-900 pr-12">{subtitle}</h2>
+          )}
+          <div class="mt-6 flex gap-3">
+            <a
+              class="inline-flex items-center px-4 py-2 rounded-lg border bg-green-400 hover:bg-white transition"
+              href="/services"
+            >
+              Découvrir les services
+            </a>
+            <a
+              class="inline-flex items-center px-4 py-2 rounded-lg border bg-white hover:bg-white transition"
+              href="/formations"
+            >
+              Voir les formations
+            </a>
+          </div>
+        </div>
+
+        <!-- Colonne vide (1/2 largeur du conteneur) -->
+        <div></div>
+      </div>
+    </div>
+  </div>
+</section>

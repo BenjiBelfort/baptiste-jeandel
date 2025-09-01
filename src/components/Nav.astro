@@ -18,9 +18,9 @@ const formations = [
 ];
 
 const socials = [
-  { href: 'https://youtube.com', label: 'YouTube', key: 'yt' },
-  { href: 'https://facebook.com', label: 'Facebook', key: 'fb' },
-  { href: 'https://instagram.com', label: 'Instagram', key: 'ig' },
+  { href: 'https://www.youtube.com/@baptistejeandel', label: 'YouTube', key: 'yt' },
+  { href: 'https://www.facebook.com/bat.lebatt.1', label: 'Facebook', key: 'fb' },
+  { href: 'https://www.instagram.com/baptiste_jeandel_pro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', label: 'Instagram', key: 'ig' },
 ];
 ---
 <!-- Skip link -->
@@ -29,7 +29,7 @@ const socials = [
 </a>
 
 <!-- Navbar (au-dessus du menu mobile) -->
-<header class="fixed inset-x-0 top-0 z-50 w-full bg-gray-900/90 backdrop-blur text-white">
+<header class="fixed inset-x-0 top-0 z-50 w-full bg-stone-900/90 backdrop-blur text-white">
   <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
     <!-- Logo -->
     <a href="/" class="font-semibold text-3xl md:text-4xl hand whitespace-nowrap" aria-label="Accueil — Baptiste Jeandel">
@@ -38,7 +38,7 @@ const socials = [
 
     <!-- Centre : À propos + Services / Formations -->
     <div class="hidden md:flex items-center gap-8 mx-auto">
-      <a href="/#a-propos" class="px-1 py-1 hover:underline underline-offset-4">
+      <a href="/#a-propos" class="px-1 py-1 hover:underline underline-offset-6">
         À propos
       </a>
 
@@ -56,7 +56,7 @@ const socials = [
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <!-- Sous-menu collé à l’entête -->
           <div
-            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 rounded-xl bg-gray-700 shadow-lg 
+            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 rounded-xl bg-stone-700 shadow-lg 
                   opacity-0 pointer-events-none transition
                   group-hover:opacity-100 group-hover:pointer-events-auto
                   group-[data-open='1']:opacity-100 group-[data-open='1']:pointer-events-auto"
@@ -64,10 +64,10 @@ const socials = [
           >
           <ul class="py-2">
             {services.map((s) => (
-              <li><a href={s.href} class="block px-6 py-2 hover:bg-gray-500">{s.label}</a></li>
+              <li><a href={s.href} class="block px-6 py-2 hover:bg-stone-500">{s.label}</a></li>
             ))}
-            <li class="border-t border-gray-400 mt-2">
-              <a href="/services" class="block px-6 py-2 font-medium hover:bg-gray-500">Tous les services →</a>
+            <li class="border-t border-stone-400 mt-2">
+              <a href="/services" class="block px-6 py-2 font-medium hover:bg-stone-500">Tous les services →</a>
             </li>
           </ul>
         </div>
@@ -85,7 +85,7 @@ const socials = [
         </a>
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <div
-            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 rounded-xl bg-gray-700 shadow-lg 
+            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 rounded-xl bg-stone-700 shadow-lg 
                   opacity-0 pointer-events-none transition
                   group-hover:opacity-100 group-hover:pointer-events-auto
                   group-[data-open='1']:opacity-100 group-[data-open='1']:pointer-events-auto"
@@ -93,10 +93,10 @@ const socials = [
           >
           <ul class="py-2">
             {formations.map((f) => (
-              <li><a href={f.href} class="block px-6 py-2 hover:bg-gray-500">{f.label}</a></li>
+              <li><a href={f.href} class="block px-6 py-2 hover:bg-stone-500">{f.label}</a></li>
             ))}
-            <li class="border-t border-gray-400 mt-2">
-              <a href="/formations" class="block px-6 py-2 font-medium hover:bg-gray-500">Toutes les formations →</a>
+            <li class="border-t border-stone-400 mt-2">
+              <a href="/formations" class="block px-6 py-2 font-medium hover:bg-stone-500">Toutes les formations →</a>
             </li>
           </ul>
         </div>
@@ -107,7 +107,8 @@ const socials = [
     <div class="hidden md:flex items-center gap-3">
       <div class="flex items-center gap-2">
         {socials.map(s => (
-          <a href={s.href} aria-label={s.label} class="inline-flex w-9 h-9 items-center justify-center rounded-lg hover:bg-gray-50">
+          <a href={s.href} aria-label={s.label} class="inline-flex w-9 h-9 items-center justify-center rounded-lg"
+             target="_blank" rel="noopener noreferrer">
             {s.key === 'yt' ? (
               <svg viewBox="0 0 24 24" class="w-4.5 h-4.5" fill="currentColor" aria-hidden="true">
                 <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/>
@@ -125,7 +126,7 @@ const socials = [
         ))}
       </div>
 
-      <a href="/contact" class="inline-flex text-sm px-5 py-2 rounded-lg border">
+      <a href="/contact" class="inline-flex text-sm px-5 py-2 rounded-lg border hover:bg-stone-500">
         Contact
       </a>
     </div>
@@ -157,7 +158,7 @@ const socials = [
     aria-hidden="true"
   >
     <!-- On pousse le contenu sous la nav pour que le bouton reste visible -->
-    <div class="pt-[64px] md:pt-[72px] bg-gray-900 shadow">
+    <div class="pt-[64px] md:pt-[72px] bg-stone-900 shadow">
       <div class="max-w-6xl mx-auto px-4 pb-4">
         <nav class="flex flex-col gap-2 py-3">
           <a href="/#a-propos" class="px-2 py-2 text-base hover:underline underline-offset-4">À propos</a>
@@ -192,7 +193,8 @@ const socials = [
           <!-- Réseaux -->
           <div class="mt-3 flex justify-center items-center gap-3">
             {socials.map(s => (
-              <a href={s.href} aria-label={s.label} class="inline-flex w-10 h-10 items-center justify-center rounded-lg">
+              <a href={s.href} aria-label={s.label} class="inline-flex w-10 h-10 items-center justify-center rounded-lg"
+              target="_blank" rel="noopener noreferrer">
                 {s.key === 'yt' ? (
                   <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>
                 ) : s.key === 'fb' ? (
