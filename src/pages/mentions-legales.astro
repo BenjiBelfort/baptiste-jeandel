@@ -1,0 +1,55 @@
+---
+import Site from '@/layouts/SiteLayout.astro';
+import backLinkUrl from '@/scripts/back-link.js?url';
+---
+
+<Site title="Mentions légales — Baptiste Jeandel" description="Mentions légales du site de Baptiste Jeandel.">
+  <section class="max-w-3xl mx-auto px-4 prose prose-stone my-16">
+
+    <div class="mb-6">
+        <!-- data-back-link + data-fallback pour config sans JS inline -->
+        <a id="back-link" data-back-link data-fallback="/" href="/" class="text-sm underline">← Retour</a>
+    </div>
+
+    <h1>Mentions légales</h1>
+
+    <h2>Éditeur du site</h2>
+    <p>
+      <strong>Baptiste Jeandel</strong><br />
+      10 rue de la Bavière<br />
+      90110 Rougemont-le-Château<br />
+      Email : <a href="mailto:ecrireabaptiste@gmail.com">ecrireabaptiste@gmail.com</a><br />
+      Téléphone : <a href="tel:+33666636228">+33 (0)6 66 63 62 28</a><br />
+      SIRET : 515 117 257 000 37
+    </p>
+
+    <h2>Hébergement</h2>
+    <p>
+      Le site est hébergé par <strong>Netlify</strong><br />
+      Netlify, Inc. – 44 Montgomery Street, Suite 300, San Francisco, California 94104
+    </p>
+
+    <h2>Propriété intellectuelle</h2>
+    <p>
+      L’ensemble du contenu du site (textes, images, vidéos, graphismes, logos) est la propriété exclusive de Baptiste Jeandel,
+      sauf mention contraire. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation expresse est interdite.
+    </p>
+
+    <h2>Données personnelles</h2>
+    <p>
+      Les informations collectées via les formulaires sont uniquement utilisées dans le cadre des services proposés.  
+      Conformément au RGPD, vous pouvez demander la modification ou la suppression de vos données personnelles en écrivant à l’adresse suivante :  
+      <a href="mailto:ecrireabaptiste@gmail.com">ecrireabaptiste@gmail.com</a>.
+    </p>
+
+    <h2>Responsabilité</h2>
+    <p>
+      Baptiste Jeandel s’efforce d’assurer l’exactitude des informations présentes sur ce site, mais ne peut garantir qu’elles soient exemptes
+      d’erreurs ou d’omissions. L’éditeur ne pourra être tenu responsable de l’utilisation faite du site ou des informations qu’il contient.
+    </p>
+  </section>
+
+
+    <script type="module" src={backLinkUrl}></script>
+
+</Site>

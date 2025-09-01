@@ -12,7 +12,7 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       <a id="back-link" href="/" class="text-sm underline">← Retour</a>
     </div>
 
-    <h1 class="text-3xl font-bold mb-6">Demander un devis</h1>
+    <h1 class="text-3xl font-bold mb-6">Contact / Demander un devis</h1>
     <p class="text-stone-600 mb-6">
       Choisissez un domaine pour afficher les questions adaptées. Tous les champs marqués * sont requis.
     </p>
@@ -41,6 +41,7 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
           <option value="">— Sélectionner —</option>
           <option>Éveil musical</option>
           <option>Musicothérapie</option>
+          <option>Relaxations sonores</option>
           <option>Spectacles</option>
           <option>Atelier EHPAD</option>
           <option>Atelier Petite Enfance</option>
@@ -93,9 +94,28 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         <textarea name="Message" rows="5" class="mt-1 w-full border rounded-lg p-2"></textarea>
       </label>
 
+      <!-- Consentement RGPD -->
+      <label class="flex items-start gap-2 text-sm">
+        <input
+          type="checkbox"
+          name="Consentement RGPD"
+          value="Oui"
+          required
+          class="mt-1"
+        />
+        <span>
+          J’accepte que mes informations soient utilisées par <strong>Baptiste Jeandel</strong> afin d’être recontacté.
+          <br />
+          <span class="text-stone-600">
+            Vos données ne sont jamais revendues. En savoir plus :
+            <a href="/mentions-legales" class="underline">Mentions légales</a>.
+          </span>
+        </span>
+      </label>
+
       <div class="flex items-center justify-between pt-2">
-        <button type="button" id="back-btn" class="px-3 py-2 border rounded-lg">Retour</button>
-        <button type="submit" class="px-4 py-2 rounded-lg border bg-stone-900 text-white">Envoyer</button>
+        <button type="button" id="back-btn" class="px-3 py-2 border rounded-lg cursor-pointer">Retour</button>
+        <button type="submit" class="px-4 py-2 rounded-lg border bg-stone-800 text-white cursor-pointer">Envoyer</button>
       </div>
     </form>
   </section>
@@ -106,6 +126,7 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       'EVEIL MUSICAL': 'Éveil musical',
       'MUSICO THERAPIE': 'Musicothérapie',
       'Spectacles': 'Spectacles',
+      'Relaxations sonores': 'Relaxations sonores',
       'Atelier EHPAD': 'Atelier EHPAD',
       'Atelier Petite Enfance': 'Atelier Petite Enfance',
       'Handpan': 'Handpan',
@@ -130,6 +151,14 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         { key: 'lieu', regId: 'reg-lieu', label: 'Lieu', type: 'text' },
         { key: 'dateSouhaitee', regId: 'reg-dateSouhaitee', label: 'Date souhaitée', type: 'date' },
       ],
+      'Relaxations sonores': [
+        { key: 'duree',          regId: 'reg-duree',          label: 'Durée (mn)',                  type: 'number' },
+        { key: 'nbParticipants', regId: 'reg-nbParticipants', label: 'Nombre de participants',      type: 'number', required: true },
+        { key: 'lieu',           regId: 'reg-lieu',           label: 'Lieu',                        type: 'text' },
+        { key: 'dateSouhaitee',  regId: 'reg-dateSouhaitee',  label: 'Date souhaitée',              type: 'date' },
+        { key: 'objectif',       regId: 'reg-objectif',       label: 'Objectif (optionnel)',        type: 'text' },
+      ],
+
       'Atelier EHPAD': [
         { key: 'service', regId: 'reg-service', label: 'Service / unité', type: 'text' },
         { key: 'nbResidents', regId: 'reg-nbResidents', label: 'Nombre de résidents', type: 'number', required: true },

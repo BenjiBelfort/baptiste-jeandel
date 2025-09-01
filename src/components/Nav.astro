@@ -9,6 +9,7 @@ const services = [
   { href: '/services/eveil-musical', label: 'Éveil musical' },
   { href: '/services/musico-therapie', label: 'Musicothérapie' },
   { href: '/services/spectacles', label: 'Spectacles' },
+  { href: '/services/relaxations-sonores', label: 'Relaxations Sonores' },
 ];
 
 const formations = [
@@ -29,7 +30,7 @@ const socials = [
 </a>
 
 <!-- Navbar (au-dessus du menu mobile) -->
-<header class="fixed inset-x-0 top-0 z-50 w-full bg-stone-900/90 backdrop-blur text-white">
+<header class="fixed inset-x-0 top-0 z-50 w-full bg-stone-900 backdrop-blur text-white">
   <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">
     <!-- Logo -->
     <a href="/" class="font-semibold text-3xl md:text-4xl hand whitespace-nowrap" aria-label="Accueil — Baptiste Jeandel">
@@ -103,22 +104,22 @@ const socials = [
       </div>
     </div>
 
-    <!-- Droite : Réseaux (sans cadre) + Contact (avec cadre) -->
+    <!-- Droite : Réseaux + Contact -->
     <div class="hidden md:flex items-center gap-3">
       <div class="flex items-center gap-2">
         {socials.map(s => (
           <a href={s.href} aria-label={s.label} class="inline-flex w-9 h-9 items-center justify-center rounded-lg"
              target="_blank" rel="noopener noreferrer">
             {s.key === 'yt' ? (
-              <svg viewBox="0 0 24 24" class="w-4.5 h-4.5" fill="currentColor" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
                 <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/>
               </svg>
             ) : s.key === 'fb' ? (
-              <svg viewBox="0 0 24 24" class="w-4.5 h-4.5" fill="currentColor" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
                 <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.7V12h2.7V9.8c0-2.7 1.6-4.2 4-4.2 1.2 0 2.4.2 2.4.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 2.9h-2.5v7A10 10 0 0 0 22 12"/>
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" class="w-4.5 h-4.5" fill="currentColor" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
                 <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.7A5.3 5.3 0 1 1 6.7 13 5.3 5.3 0 0 1 12 7.7zm0 2A3.3 3.3 0 1 0 15.3 13 3.3 3.3 0 0 0 12 9.7zM18 6.8a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.8z"/>
               </svg>
             )}
@@ -196,11 +197,11 @@ const socials = [
               <a href={s.href} aria-label={s.label} class="inline-flex w-10 h-10 items-center justify-center rounded-lg"
               target="_blank" rel="noopener noreferrer">
                 {s.key === 'yt' ? (
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>
+                  <svg viewBox="0 0 24 24" class="w-7 h-7" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>
                 ) : s.key === 'fb' ? (
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.7V12h2.7V9.8c0-2.7 1.6-4.2 4-4.2 1.2 0 2.4.2 2.4.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 2.9h-2.5v7A10 10 0 0 0 22 12"/></svg>
+                  <svg viewBox="0 0 24 24" class="w-7 h-7" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.7V12h2.7V9.8c0-2.7 1.6-4.2 4-4.2 1.2 0 2.4.2 2.4.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 2.9h-2.5v7A10 10 0 0 0 22 12"/></svg>
                 ) : (
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.7A5.3 5.3 0 1 1 6.7 13 5.3 5.3 0 0 1 12 7.7zm0 2A3.3 3.3 0 1 0 15.3 13 3.3 3.3 0 0 0 12 9.7zM18 6.8a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.8z"/></svg>
+                  <svg viewBox="0 0 24 24" class="w-7 h-7" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.7A5.3 5.3 0 1 1 6.7 13 5.3 5.3 0 0 1 12 7.7zm0 2A3.3 3.3 0 1 0 15.3 13 3.3 3.3 0 0 0 12 9.7zM18 6.8a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.8z"/></svg>
                 )}
               </a>
             ))}

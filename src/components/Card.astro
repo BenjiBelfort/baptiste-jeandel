@@ -1,35 +1,57 @@
 ---
-/**
-* Card réutilisable
-* Props :
-* - title: string
-* - excerpt?: string
-* - href?: string (lien principal)
-* - ctaLabel?: string (libellé du bouton principal)
-* - secondaryHref?: string (lien secondaire)
-* - secondaryLabel?: string
-* - debug?: string (texte debug optionnel)
-*/
 const {
-title,
-excerpt,
-href,
-ctaLabel = 'En savoir +',
-secondaryHref,
-secondaryLabel,
-debug,
+  title,
+  excerpt,
+  href,                     // lien "En savoir plus"
+  ctaLabel = 'En savoir plus',
+  secondaryHref,            // lien "Demander un devis"
+  secondaryLabel = 'Demander un devis',
+  icon,
 } = Astro.props;
 ---
-<article class="border rounded-2xl p-6 h-full flex flex-col">
-    <h3 class="text-lg font-semibold">{title}</h3>
-        {excerpt && <p class="mt-2 text-sm text-stone-600">{excerpt}</p>}
-        {debug && <p class="text-xs text-stone-500 mt-1">{debug}</p>}
-        <div class="mt-4 flex gap-3">
-        {href && <a class="underline" href={href}>{ctaLabel}</a>}
-        {secondaryHref && (
-        <a class="inline-flex items-center px-3 py-2 rounded-lg border" href={secondaryHref}>
-        {secondaryLabel}
+<article
+  class="group relative h-full rounded-2xl border bg-white/70 p-6 shadow-sm
+         transition-all duration-200 hover:shadow-md hover:-translate-y-0.5
+         focus-within:ring-2 focus-within:ring-stone-400"
+>
+  <div class="relative flex h-full flex-col">
+    <h3 class="my-6 mx-auto text-2xl font-semibold text-stone-900 flex items-start gap-2 ">
+      {icon && <span aria-hidden="true" class="mt-0.5">{icon}</span>}
+      {title}
+    </h3>
+
+    {excerpt && <p class="mt-2 text-stone-700">{excerpt}</p>}
+
+    <!-- barre d’actions collée en bas -->
+    <div class="mt-auto pt-4 flex items-center justify-between gap-3">
+      {secondaryHref && (
+        <a
+          href={secondaryHref}
+          class="inline-flex items-center px-3 py-2 rounded-lg border shadow-sm
+                 bg-white/70 hover:bg-stone-100 transition
+                 focus:outline-none focus:ring-2 focus:ring-stone-400"
+        >
+          {secondaryLabel}
         </a>
-        )}
+      )}
+
+      {href && (
+        <a
+          href={href}
+          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border shadow-sm
+                 border-stone-900 bg-stone-900 text-white
+                 hover:bg-stone-800 transition
+                 focus:outline-none focus:ring-2 focus:ring-stone-400"
+        >
+          <span>{ctaLabel}</span>
+          <svg class="acc-icon w-4 h-4 -rotate-180" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M15 18 l-6-6 l6-6"/>
+          </svg>
+        </a>
+      )}
     </div>
+  </div>
 </article>
+

@@ -14,14 +14,14 @@ export const collections = {
     type: 'content',
     schema: z.object({
       ...baseFields,
-      domain: z.enum(['EVEIL MUSICAL','MUSICO THERAPIE','Spectacles']),
+      domain: z.string(),
     }),
   }),
   formations: defineCollection({
     type: 'content',
     schema: z.object({
       ...baseFields,
-      domain: z.enum(['Atelier EHPAD','Atelier Petite Enfance','Handpan']),
+      domain: z.string(),
     }),
   }),
 };

@@ -1,22 +1,30 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
-import { getCollection } from 'astro:content';
+import PageTitle from '@/components/PageTitle.astro';
 import Card from '@/components/Card.astro';
-
+import { getCollection } from 'astro:content';
 
 const items = (await getCollection('services')).sort((a,b)=>a.data.sort - b.data.sort);
 ---
 <Site title="Services — Baptiste Jeandel" description="Services proposés.">
-  <section class="max-w-6xl mx-auto px-4 py-12 grid gap-6 md:grid-cols-3">
+  <PageTitle
+    title="Services"
+    subtitle="Éveil musical, musicothérapie, spectacles et relaxations sonores."
+  />
+
+  <section class="max-w-6xl mx-auto px-4 py-12 grid gap-6 md:grid-cols-2">
     {items.map((entry) => (
-    <Card
-      title={entry.data.title}
-      excerpt={entry.data.excerpt}
-      href={`/services/${entry.slug}`}
-      ctaLabel="En savoir +"
-      secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`services/${entry.slug}`)}`}
-      secondaryLabel="Demander un devis"
-    />
+      <!-- Card service -->
+      <Card
+        title={entry.data.title}
+        excerpt={entry.data.excerpt}
+        eyebrow={entry.data.domain}
+        href={`/services/${entry.slug}`}
+        ctaLabel="En savoir plus"
+        secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`services/${entry.slug}`)}`}
+        secondaryLabel="Demander un devis"
+        debug={entry.slug}
+      />
     ))}
   </section>
 </Site>

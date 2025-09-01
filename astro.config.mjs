@@ -1,16 +1,12 @@
-// @ts-check
+// astro.config.mjs
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { EnumChangefreq } from 'sitemap'; // pour typer correctement
+import { EnumChangefreq } from 'sitemap';
 
 const SITE = process.env.URL || process.env.PUBLIC_SITE || 'http://localhost:4321';
 
-/** Retourne une priorité pour le sitemap
- *  @param {string} p
- *  @returns {number}
- */
 function getPriority(p) {
   if (p === '/') return 1.0;
   if (p.startsWith('/services') || p.startsWith('/formations')) return 0.8;
@@ -20,24 +16,28 @@ function getPriority(p) {
 
 export default defineConfig({
   site: SITE,
-
+  trailingSlash: 'never', // évite les doublons /page/ vs /page
   integrations: [
     mdx(),
     sitemap({
+      filter: (page) => ![
+        '/404',
+        '/merci',
+        '/humans.txt',
+        '/site.webmanifest',
+      ].includes(page),
       serialize(item) {
         const url = new URL(item.url);
         const p = url.pathname;
-
         return {
           ...item,
           changefreq: p === '/' ? EnumChangefreq.WEEKLY : EnumChangefreq.MONTHLY,
           priority: getPriority(p),
+          // Optionnel : si tu veux mettre un lastmod global au build :
+          // lastmod: new Date().toISOString(),
         };
       },
     }),
   ],
-
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  vite: { plugins: [tailwindcss()] },
 });

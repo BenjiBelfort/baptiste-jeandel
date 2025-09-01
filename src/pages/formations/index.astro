@@ -1,22 +1,29 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
-import { getCollection } from 'astro:content';
+import PageTitle from '@/components/PageTitle.astro';
 import Card from '@/components/Card.astro';
-
+import { getCollection } from 'astro:content';
 
 const items = (await getCollection('formations')).sort((a,b)=>a.data.sort - b.data.sort);
 ---
 <Site title="Formations — Baptiste Jeandel" description="Formations proposées.">
-  <section class="max-w-6xl mx-auto px-4 py-12 grid gap-6 md:grid-cols-3">
+  <PageTitle
+    title="Formations"
+    subtitle="Transmission et outils concrets pour vos équipes."
+  />
+
+  <section class="max-w-6xl mx-auto px-4 py-12 grid gap-6 md:grid-cols-2">
     {items.map((entry) => (
-    <Card
-      title={entry.data.title}
-      excerpt={entry.data.excerpt}
-      href={`/formations/${entry.slug}`}
-      ctaLabel="En savoir +"
-      secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`formations/${entry.slug}`)}`}
-      secondaryLabel="Demander un devis"
-    />
+      <Card
+        title={entry.data.title}
+        excerpt={entry.data.excerpt}
+        eyebrow={entry.data.domain}
+        href={`/formations/${entry.slug}`}
+        ctaLabel="En savoir plus"
+        secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`formations/${entry.slug}`)}`}
+        secondaryLabel="Demander un devis"
+        debug={entry.slug}
+      />
     ))}
   </section>
 </Site>

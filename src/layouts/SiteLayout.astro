@@ -13,16 +13,14 @@ const { title, description, image, type } = Astro.props;
     <!-- Nav est FIXED dans son propre composant -->
     <Nav />
 
-    <!-- Spacer pour compenser la nav fixe (même hauteur que la nav) -->
-    <div aria-hidden="true" class="h-[64px] md:h-[72px]"></div>
+
 
     <!-- Contenu qui prend toute la place restante -->
-    <main id="main" class="flex-1">
+    <main id="main" class="flex-1 pt-12">
       <slot />
     </main>
 
-    <footer class="border-t">
-      <Footer />
-    </footer>
+
+    <Footer />
   </body>
 </html>

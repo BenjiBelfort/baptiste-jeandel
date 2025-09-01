@@ -1,0 +1,16 @@
+---
+type Props = {
+  title: string;
+  subtitle?: string;
+  class?: string; // pour pouvoir ajouter des marges ou overrides
+};
+
+const { title, subtitle, class: extraClass = '' } = Astro.props;
+---
+
+<div class={`text-center mb-8 ${extraClass}`}>
+  <h2 class="text-4xl md:text-5xl font-bold hand">{title}</h2>
+  {subtitle && (
+    <p class="mt-2 text-stone-700">{subtitle}</p>
+  )}
+</div>
