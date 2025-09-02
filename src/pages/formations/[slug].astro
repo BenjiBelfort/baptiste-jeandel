@@ -1,6 +1,7 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
 import PageTitle from '@/components/PageTitle.astro';
+import StickyDevis from '@/components/StickyDevis.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -14,26 +15,22 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await entry.render();
-const url = new URL(Astro.url.pathname, Astro.site).toString();
 ---
-<Site title={data.seoTitle ?? data.title}
-      description={data.seoDescription ?? data.excerpt}
-      image="/og.jpg"
-      type="article">
-
-  <!-- H1 + H2 (bandeau vert auto) -->
+<Site
+  title={data.seoTitle ?? data.title}
+  description={data.seoDescription ?? data.excerpt}
+  image="/og.jpg"
+  type="article"
+>
   <PageTitle title={data.title} subtitle={data.excerpt} />
 
-  <article class="prose max-w-3xl mx-auto px-4 py-12">
-    <!-- plus de H1 ici -->
+  <article class="prose max-w-3xl mx-auto px-4 py-12 pb-28">
+    <!-- pb-28 pour laisser la place au CTA sticky -->
     <Content />
-    <div class="mt-8">
-      <a
-        class="inline-flex items-center px-3 py-2 rounded-lg border"
-        href={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`formations/${entry.slug}`)}`}
-      >
-        Demander un devis
-      </a>
-    </div>
   </article>
+
+  <StickyDevis
+    domain={data.domain ?? 'Formations'}
+    origin={`formations/${entry.slug}`}
+  />
 </Site>

@@ -1,0 +1,36 @@
+---
+/** Props: { quote: string; author: string; domain?: string } */
+type Props = { quote: string; author: string; domain?: string };
+const { quote, author, domain } = Astro.props;
+
+function normalize(s = '') {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+function badgeClass(d?: string) {
+  const key = normalize(d);
+  if (key.includes('spectacle') || key.includes('eveil') || key.includes('musico') || key.includes('relax')) {
+    return 'bg-violet-300 text-black';
+  }
+  if (key.includes('ehpad') || key.includes('atelier') || key.includes('handpan')) {
+    return 'bg-green-300 text-black';
+  }
+  return 'bg-stone-900 text-white';
+}
+
+---
+
+<article
+  class="relative shrink-0 border border-stone-900 bg-white/90 p-5
+         aspect-square flex flex-col items-center justify-center text-center"
+>
+  {domain && (
+    <span class={`absolute top-2 left-2 px-2 py-0.5 text-[11px] uppercase tracking-wide font-medium rounded-full shadow-xs/20 ${badgeClass(domain)}`}>
+      {domain}
+    </span>
+  )}
+
+  <p class="italic leading-relaxed text-[clamp(0.95rem,1rem+0.2vw,1.15rem)] text-stone-800">
+    “{quote}”
+  </p>
+  <footer class="mt-4 text-sm text-stone-600">— {author}</footer>
+</article>

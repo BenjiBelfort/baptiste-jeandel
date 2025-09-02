@@ -1,0 +1,28 @@
+---
+import SectionTitle from "@/components/SectionTitle.astro";
+import TestimonialCard from "@/components/TestimonialCard.astro";
+import data from "@/data/testimonials.json";
+
+/** Props
+ * - title?: string         (titre affiché avec SectionTitle)
+ * - domain?: string        (filtre optionnel par univers)
+ * - limit?: number         (optionnel : limiter le nombre de cartes)
+ */
+type Props = { title?: string; domain?: string; limit?: number };
+
+const { title = "Témoignages", domain, limit } = Astro.props;
+
+// Filtre éventuel + limite optionnelle
+let list = domain ? data.filter(t => t.domain === domain) : data.slice();
+if (typeof limit === 'number' && limit > 0) list = list.slice(0, limit);
+---
+
+<section class="max-w-6xl mx-auto px-4 py-16">
+  <SectionTitle title={title} />
+
+  <div class="mt-8 grid gap-6 md:grid-cols-3">
+    {list.map((t) => (
+      <TestimonialCard quote={t.quote} author={t.author} domain={t.domain} />
+    ))}
+  </div>
+</section>

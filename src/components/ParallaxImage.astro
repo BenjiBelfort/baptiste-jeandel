@@ -1,0 +1,17 @@
+---
+const {
+  src,
+  alt = "",
+  height = "60vh",
+  overlay = "bg-black/20", // classe Tailwind pour l’overlay
+} = Astro.props;
+---
+
+<div
+  class="relative w-full bg-fixed bg-center bg-cover"
+  style={`background-image: url(${src}); height: ${height};`}
+  role="img"
+  aria-label={alt}
+>
+  <div class={`absolute inset-0 ${overlay}`}></div>
+</div>

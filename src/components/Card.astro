@@ -1,57 +1,59 @@
 ---
+import FunkyButton from '@/components/FunkyButton.astro';
+
 const {
   title,
   excerpt,
-  href,                     // lien "En savoir plus"
+  href,                     
   ctaLabel = 'En savoir plus',
-  secondaryHref,            // lien "Demander un devis"
+  secondaryHref,            
   secondaryLabel = 'Demander un devis',
   icon,
 } = Astro.props;
+
+// On récupère le path actuel
+const currentPath = Astro.url.pathname;
+
+// Couleur du bouton CTA en fonction de la route
+let ctaColor = 'bg-sky-300'; // par défaut
+if (currentPath.startsWith('/services')) {
+  ctaColor = 'bg-violet-300';
+} else if (currentPath.startsWith('/formations')) {
+  ctaColor = 'bg-green-300';
+}
 ---
+
 <article
-  class="group relative h-full rounded-2xl border bg-white/70 p-6 shadow-sm
-         transition-all duration-200 hover:shadow-md hover:-translate-y-0.5
+  class="group relative h-full border border-stone-900 bg-white/80 p-6
+         rounded-none shadow-sm
+         transition-all duration-200
+         hover:-translate-y-0.5 hover:rotate-[-1deg] hover:shadow-md
          focus-within:ring-2 focus-within:ring-stone-400"
 >
   <div class="relative flex h-full flex-col">
-    <h3 class="my-6 mx-auto text-2xl font-semibold text-stone-900 flex items-start gap-2 ">
+    <h3 class="my-6 mx-auto text-4xl hand font-bold text-stone-900 flex items-start gap-2">
       {icon && <span aria-hidden="true" class="mt-0.5">{icon}</span>}
       {title}
     </h3>
 
     {excerpt && <p class="mt-2 text-stone-700">{excerpt}</p>}
 
-    <!-- barre d’actions collée en bas -->
-    <div class="mt-auto pt-4 flex items-center justify-between gap-3">
+    <div class="mt-auto pt-6 flex flex-col md:flex-row gap-3 justify-between">
       {secondaryHref && (
-        <a
+        <FunkyButton
           href={secondaryHref}
-          class="inline-flex items-center px-3 py-2 rounded-lg border shadow-sm
-                 bg-white/70 hover:bg-stone-100 transition
-                 focus:outline-none focus:ring-2 focus:ring-stone-400"
-        >
-          {secondaryLabel}
-        </a>
+          label={secondaryLabel}
+          color="bg-slate-300"
+        />
       )}
 
       {href && (
-        <a
+        <FunkyButton
           href={href}
-          class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border shadow-sm
-                 border-stone-900 bg-stone-900 text-white
-                 hover:bg-stone-800 transition
-                 focus:outline-none focus:ring-2 focus:ring-stone-400"
-        >
-          <span>{ctaLabel}</span>
-          <svg class="acc-icon w-4 h-4 -rotate-180" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               aria-hidden="true">
-            <path d="M15 18 l-6-6 l6-6"/>
-          </svg>
-        </a>
+          label={ctaLabel}
+          color={ctaColor}
+        />
       )}
     </div>
   </div>
 </article>
-

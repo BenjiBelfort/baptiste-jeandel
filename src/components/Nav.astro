@@ -1,4 +1,6 @@
 ---
+import FunkyButton from "./FunkyButton.astro";
+
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 function isActive(href: string) {
   const clean = href.replace(/\/+$/, '') || '/';
@@ -57,7 +59,7 @@ const socials = [
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <!-- Sous-menu collé à l’entête -->
           <div
-            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 rounded-xl bg-stone-700 shadow-lg 
+            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-violet-300 border border-stone-900 shadow-lg 
                   opacity-0 pointer-events-none transition
                   group-hover:opacity-100 group-hover:pointer-events-auto
                   group-[data-open='1']:opacity-100 group-[data-open='1']:pointer-events-auto"
@@ -65,10 +67,10 @@ const socials = [
           >
           <ul class="py-2">
             {services.map((s) => (
-              <li><a href={s.href} class="block px-6 py-2 hover:bg-stone-500">{s.label}</a></li>
+              <li><a href={s.href} class="block px-6 py-2 hover:bg-violet-400">{s.label}</a></li>
             ))}
-            <li class="border-t border-stone-400 mt-2">
-              <a href="/services" class="block px-6 py-2 font-medium hover:bg-stone-500">Tous les services →</a>
+            <li class="border-t border-stone-700 mt-2">
+              <a href="/services" class="block px-6 py-2 font-medium hover:bg-violet-400">Tous les services →</a>
             </li>
           </ul>
         </div>
@@ -86,7 +88,7 @@ const socials = [
         </a>
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <div
-            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 rounded-xl bg-stone-700 shadow-lg 
+            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-green-300 border border-stone-900 shadow-lg 
                   opacity-0 pointer-events-none transition
                   group-hover:opacity-100 group-hover:pointer-events-auto
                   group-[data-open='1']:opacity-100 group-[data-open='1']:pointer-events-auto"
@@ -94,10 +96,10 @@ const socials = [
           >
           <ul class="py-2">
             {formations.map((f) => (
-              <li><a href={f.href} class="block px-6 py-2 hover:bg-stone-500">{f.label}</a></li>
+              <li><a href={f.href} class="block px-6 py-2 hover:bg-green-400">{f.label}</a></li>
             ))}
-            <li class="border-t border-stone-400 mt-2">
-              <a href="/formations" class="block px-6 py-2 font-medium hover:bg-stone-500">Toutes les formations →</a>
+            <li class="border-t border-stone-700 mt-2">
+              <a href="/formations" class="block px-6 py-2 font-medium hover:bg-green-400">Toutes les formations →</a>
             </li>
           </ul>
         </div>
@@ -127,7 +129,7 @@ const socials = [
         ))}
       </div>
 
-      <a href="/contact" class="inline-flex text-sm px-5 py-2 rounded-lg border hover:bg-stone-500">
+      <a href="/contact" class="inline-flex text-sm px-5 py-2 border hover:bg-stone-400">
         Contact
       </a>
     </div>
@@ -206,7 +208,7 @@ const socials = [
               </a>
             ))}
           </div>
-          <a href="/contact" class="px-2 py-2 rounded border text-base text-center">Contact</a>
+          <a href="/contact" class="px-2 py-2 border text-base text-center">Contact</a>
         </nav>
       </div>
     </div>

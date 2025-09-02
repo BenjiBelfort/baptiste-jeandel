@@ -1,25 +1,61 @@
 ---
-import Card from './Card.astro';
 import SectionTitle from "@/components/SectionTitle.astro"
+import FunkyButton from "@/components/FunkyButton.astro"
 ---
 
 <section class="max-w-6xl mx-auto px-4 py-16">
-    <SectionTitle
-        title="Proposition de valeur"
-        subtitle="Deux portes d’entrée claires : interventions et transmission."
-    />
-    <div class="mt-8 grid gap-6 md:grid-cols-2">
-        <Card
-        title="Services"
-        excerpt="Éveil musical, musicothérapie, spectacles et relaxations sonores."
-        href="/services"
-        ctaLabel="Voir les services"
-        />
-        <Card
-        title="Formations"
-        excerpt="Formations adaptées pour équipes éducatives et soignantes."
-        href="/formations"
-        ctaLabel="Voir les formations"
-        />
-    </div>
+  <SectionTitle
+    title="Ce que je propose"
+    subtitle="Deux portes d’entrée claires : interventions et transmission."
+  />
+
+  <div class="mt-8 grid gap-6 md:grid-cols-2">
+    <!-- Services -->
+    <article
+      class="group relative h-full border border-stone-900 bg-white/80 p-6
+             rounded-none shadow-sm
+             transition-all duration-200
+             hover:-translate-y-0.5 hover:rotate-[-1deg] hover:shadow-md
+             focus-within:ring-2 focus-within:ring-stone-400"
+    >
+      <div class="flex flex-col h-full text-center">
+        <h3 class="my-6 text-5xl hand font-bold text-stone-900">Services</h3>
+        <p class="mt-2 text-stone-700">
+          Éveil musical, musicothérapie, spectacles et relaxations sonores.
+        </p>
+
+        <div class="mt-auto pt-6 flex justify-center">
+          <FunkyButton
+            href="/services"
+            label="Voir les services"
+            color="bg-violet-300"
+          />
+        </div>
+      </div>
+    </article>
+
+    <!-- Formations -->
+    <article
+      class="group relative h-full border border-stone-900 bg-white/80 p-6
+             rounded-none shadow-sm
+             transition-all duration-200
+             hover:-translate-y-0.5 hover:rotate-[-1deg] hover:shadow-md
+             focus-within:ring-2 focus-within:ring-stone-400"
+    >
+      <div class="flex flex-col h-full text-center">
+        <h3 class="my-6 text-5xl hand font-bold text-stone-900">Formations</h3>
+        <p class="mt-2 text-stone-700">
+          Formations adaptées pour équipes éducatives et soignantes.
+        </p>
+
+        <div class="mt-auto pt-6 flex justify-center">
+          <FunkyButton
+            href="/formations"
+            label="Voir les formations"
+            color="bg-green-300"
+          />
+        </div>
+      </div>
+    </article>
+  </div>
 </section>

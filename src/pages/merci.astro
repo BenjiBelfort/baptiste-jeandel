@@ -1,27 +1,27 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
-
-const url = new URL(Astro.request.url);
-const origin = url.searchParams.get('origin') ?? '';
-const backHref = origin ? `/${origin}` : '/';
 ---
 
 <Site title="Merci — Message envoyé" description="Votre demande a bien été envoyée.">
-  <section class="mx-auto max-w-xl p-6">
-    <h1 class="mb-3 text-3xl font-bold">Merci beaucoup</h1>
-    <p>Votre message a bien été envoyé. Je reviens vers vous rapidement.</p>
+  <section class="mx-auto max-w-xl px-4 py-20 text-center">
+    <h1 class="mb-4 text-3xl font-bold">Merci beaucoup</h1>
+    <p class="text-stone-700">Votre message a bien été envoyé. Je reviens vers vous rapidement.</p>
 
-    <div class="mt-6 flex items-center gap-4">
-      <a class="inline-flex items-center px-4 py-2 rounded-lg border" href={backHref}>← Retour</a>
-      <a class="inline-flex items-center px-4 py-2 rounded-lg border" href="/">Accueil</a>
+    <div class="mt-8">
+      <a 
+        href="/" 
+        class="inline-flex items-center px-6 py-3 rounded-lg border bg-stone-800 text-white hover:bg-stone-700 transition"
+      >
+        Retour à l’accueil
+      </a>
     </div>
   </section>
 
-  <!-- Option: éviter l’indexation de la page de remerciement -->
+  <!-- Évite l’indexation SEO -->
   <script is:inline>
-    // Ajoute une balise robots noindex (optionnel)
     const m = document.createElement('meta');
-    m.name = 'robots'; m.content = 'noindex, nofollow';
+    m.name = 'robots';
+    m.content = 'noindex, nofollow';
     document.head.appendChild(m);
   </script>
 </Site>

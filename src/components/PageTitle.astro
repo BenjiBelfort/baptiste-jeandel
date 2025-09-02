@@ -8,21 +8,13 @@ const { title, subtitle } = Astro.props as Props;
 const path = Astro.url.pathname;
 
 let bgClass = 'bg-stone-600';
-if (path.startsWith('/services'))   bgClass = 'bg-orange-500';
-if (path.startsWith('/formations')) bgClass = 'bg-green-500';
+if (path.startsWith('/services'))   bgClass = 'bg-violet-200';
+if (path.startsWith('/formations')) bgClass = 'bg-green-200';
 
-// Motif (points). Opacité un peu plus forte pour bien voir (0.25)
-const pattern = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='white' stroke-opacity='0.25'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/svg%3E")`;
-
-const style = {
-  backgroundImage: pattern,
-  backgroundRepeat: 'repeat',
-  backgroundSize: '20px 20px', // optionnel si tu veux fixer la taille
-};
 ---
-<section class={` relative w-full min-h-[35vh] flex items-center ${bgClass}`} style={style}>
-  <div class="w-full max-w-6xl mx-auto px-4 text-center text-white">
-    <h1 class="text-5xl md:text-9xl font-bold hand drop-shadow-md">{title}</h1>
-    {subtitle && <h2 class="mt-3 text-xl md:text-3xl text-white drop-shadow-xs">{subtitle}</h2>}
+<section class={` relative w-full min-h-[35vh] flex items-center ${bgClass}`}>
+  <div class="w-full max-w-6xl mx-auto px-4 text-center text-black">
+    <h1 class="text-5xl md:text-7xl font-bold hand drop-shadow-xs/30">{title}</h1>
+    {subtitle && <h2 class="mt-3 text-xl md:text-2xl text-black">{subtitle}</h2>}
   </div>
 </section>

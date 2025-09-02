@@ -1,0 +1,42 @@
+---
+type Props = {
+  label: string;
+  color?: string;           // ex: "bg-sky-300"
+  href?: string;            // si as="a"
+  as?: 'a' | 'button';      // défaut: 'a'
+  type?: 'button' | 'submit' | 'reset'; // si as="button"
+  id?: string;              // pour les hooks (ex: back-btn)
+  class?: string;           // classes additionnelles optionnelles
+};
+
+const {
+  label,
+  color = 'bg-sky-300',
+  href = '#',
+  as = 'a',
+  type = 'button',
+  id,
+  class: extra = '',
+} = Astro.props;
+
+const base =
+  `relative w-full max-w-[460px] md:w-auto inline-flex items-center justify-center
+          ${color} text-black px-6 py-3 text-base md:text-xl
+          rounded-none cursor-pointer select-none touch-manipulation
+          transform transition-all duration-200
+          after:content-[''] after:absolute after:border after:border-black after:bottom-1 after:left-1
+          after:w-[calc(100%-1px)] after:h-[calc(100%-1px)]
+          hover:after:bottom-0.5 hover:after:left-0.5
+          hover:shadow-md/30 hover:-translate-y-0.5`;
+
+---
+
+{as === 'button' ? (
+  <button id={id} type={type} class={base}>
+    <span class="relative z-10">{label}</span>
+  </button>
+) : (
+  <a id={id} href={href} class={base}>
+    <span class="relative z-10">{label}</span>
+  </a>
+)}

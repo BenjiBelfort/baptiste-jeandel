@@ -2,11 +2,11 @@
 const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 ---
 
-<footer class="border-t bg-stone-100 text-stone-700">
+<footer class="border-t bg-stone-700 text-stone-200">
   <div class="max-w-6xl mx-auto px-4 py-10 grid gap-8 md:grid-cols-4">
     <!-- Col 1 : identité -->
     <div>
-      <h2 class="text-3xl font-semibold text-stone-900 hand">Baptiste Jeandel</h2>
+      <h2 class="text-3xl font-semibold text-stone-100 hand">Baptiste Jeandel</h2>
       <p class="mt-2">
         Musicothérapeute, médiateur musical et formateur.<br />
         Basé à Rougemont-le-Château, j’interviens en petite enfance, EHPAD et structures spécialisées.
@@ -17,7 +17,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
     <!-- Col 3 : contact -->
     <div>
-      <h3 class="text-xl  font-semibold text-stone-900">Contact</h3>
+      <h3 class="text-xl  font-semibold text-stone-100">Contact</h3>
       <ul class="mt-2 space-y-1">
         <li>10 rue de la Bavière<br />90110 Rougemont-le-Château</li>
         <li><a href="mailto:ecrireabaptiste@gmail.com" class="hover:underline">ecrireabaptiste@gmail.com</a></li>
@@ -28,7 +28,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
     <!-- Col 2 : navigation -->
     <div>
-      <h3 class="text-xl font-semibold text-stone-900">Navigation</h3>
+      <h3 class="text-xl font-semibold text-stone-100">Navigation</h3>
       <ul class="mt-2 space-y-1">
         <li><a href="/#a-propos" class="hover:underline">À propos</a></li>
         <li><a href="/services" class="hover:underline">Services</a></li>
@@ -39,7 +39,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
     <!-- Col 4 : réseaux -->
     <div>
-      <h3 class="text-xl font-semibold text-stone-900">Réseaux sociaux</h3>
+      <h3 class="text-xl font-semibold text-stone-100">Réseaux sociaux</h3>
       <ul class="mt-2 space-y-1">
         <li><a href="https://www.youtube.com/@baptistejeandel" target="_blank" rel="noopener noreferrer" class="hover:underline">YouTube</a></li>
         <li><a href="https://www.facebook.com/bat.lebatt.1" target="_blank" rel="noopener noreferrer" class="hover:underline">Facebook</a></li>
@@ -53,7 +53,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
   </div>
 
   <!-- Bas du footer -->
-    <div class="border-t mt-8 text-xs bg-yellow-300">
+    <div class="border-t mt-8 text-sm bg-yellow-300 text-black">
       <div
         class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-center md:text-left"
       >

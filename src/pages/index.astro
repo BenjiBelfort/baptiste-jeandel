@@ -3,7 +3,8 @@ import Site from '@/layouts/SiteLayout.astro';
 import Hero from '@/components/Hero.astro';
 import About from '@/components/About.astro';
 import ValueProps from '@/components/ValueProps.astro';
-import Testimonials from '@/components/Testimonials.astro';
+import TestimonialsGrid from '@/components/TestimonialsGrid.astro';
+import ParallaxImage from '@/components/ParallaxImage.astro';
 import SocialLinks from '@/components/SocialLinks.astro';
 import ContactCTA from '@/components/ContactCTA.astro';
 
@@ -15,8 +16,25 @@ import ContactCTA from '@/components/ContactCTA.astro';
       subtitle="Musique, médiation et transmission pour tous les âges et tous les publics."
       />
     <About />
+
+    <ParallaxImage
+      src="/images/logo_baptiste_jeandel.webp"
+      alt="Logo Baptiste Jeandel"
+      height="60vh"
+    />
+
     <ValueProps />
-    <Testimonials />
-    <SocialLinks />
+
+
+    <ParallaxImage
+      src="/images/instruments.webp"
+      alt="Instruments de musique de Baptiste Jeandel"
+      height="60vh"
+      overlay="bg-yellow-100/30"
+    />
+
+    <TestimonialsGrid />
+
     <ContactCTA />
+    <SocialLinks />
 </Site>

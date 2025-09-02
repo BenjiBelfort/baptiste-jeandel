@@ -1,5 +1,6 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
+import FunkyButton from '@/components/FunkyButton.astro';
 
 const url = new URL(Astro.request.url);
 const domainFromQuery = url.searchParams.get('domain') ?? '';
@@ -36,8 +37,8 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
 
       <!-- Domaine (FR) -->
       <label class="block">
-        <span class="text-sm">Domaine *</span>
-        <select id="domain" name="Domaine" required class="mt-1 w-full border rounded-lg p-2">
+        <span>Domaine *</span>
+        <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
           <option value="">— Sélectionner —</option>
           <option>Éveil musical</option>
           <option>Musicothérapie</option>
@@ -81,17 +82,17 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Nom *</span>
-          <input name="Nom" required class="mt-1 w-full border rounded-lg p-2" />
+          <input name="Nom" required class="mt-1 w-full border bg-white p-2" />
         </label>
         <label class="block">
           <span class="text-sm">Email *</span>
-          <input name="Email" type="email" required class="mt-1 w-full border rounded-lg p-2" />
+          <input name="Email" type="email" required class="mt-1 w-full border bg-white p-2" />
         </label>
       </div>
 
       <label class="block">
         <span class="text-sm">Message</span>
-        <textarea name="Message" rows="5" class="mt-1 w-full border rounded-lg p-2"></textarea>
+        <textarea name="Message" rows="5" class="mt-1 w-full border bg-white p-2"></textarea>
       </label>
 
       <!-- Consentement RGPD -->
@@ -114,8 +115,22 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       </label>
 
       <div class="flex items-center justify-between pt-2">
-        <button type="button" id="back-btn" class="px-3 py-2 border rounded-lg cursor-pointer">Retour</button>
-        <button type="submit" class="px-4 py-2 rounded-lg border bg-stone-800 text-white cursor-pointer">Envoyer</button>
+        <!-- Retour (button pour que ton script lui attache l’handler) -->
+        <FunkyButton
+          id="back-btn"
+          as="button"
+          type="button"
+          label="Retour"
+          color="bg-white"        /* look clair */
+        />
+
+        <!-- Envoyer (vrai submit) -->
+        <FunkyButton
+          as="button"
+          type="submit"
+          label="Envoyer"
+          color="bg-green-300"    /* adapte si tu veux une autre teinte */
+        />
       </div>
     </form>
   </section>
@@ -191,7 +206,7 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       dynamic.innerHTML = fields.map(f => `
         <label class="block">
           <span class="text-sm">${f.label}${f.required ? ' *' : ''}</span>
-          <input ${f.type ? `type="${f.type}"` : ''} ${f.required ? 'required' : ''} data-key="${f.key}" class="mt-1 w-full border rounded-lg p-2" />
+          <input ${f.type ? `type="${f.type}"` : ''} ${f.required ? 'required' : ''} data-key="${f.key}" class="mt-1 w-full border bg-white p-2" />
         </label>
       `).join('');
     }
