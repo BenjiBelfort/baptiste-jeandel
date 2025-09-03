@@ -1,0 +1,41 @@
+---
+/** Sous-formulaire : Éveil musical (exemple simplifié) */
+---
+
+<section
+  data-domain-form="Éveil musical"
+  class="hidden border border-stone-900 bg-violet-50/70 p-4 md:p-5 -rotate-1"
+  aria-label="Questions spécifiques — Éveil musical"
+>
+  <h2 class="hand text-2xl mb-3 rotate-1">Éveil musical — précisions</h2>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <label class="block">
+      <span class="text-sm">Âge des enfants *</span>
+      <input data-reg-id="reg-age" required class="mt-1 w-full border bg-white p-2" />
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Nombre de participants *</span>
+      <input data-reg-id="reg-nbParticipants" type="number" required class="mt-1 w-full border bg-white p-2" />
+    </label>
+
+    <label class="block md:col-span-2">
+      <span class="text-sm">Lieu</span>
+      <input data-reg-id="reg-lieu" class="mt-1 w-full border bg-white p-2" />
+    </label>
+
+    <label class="block md:col-span-2">
+      <span class="text-sm">Date souhaitée</span>
+      <input data-reg-id="reg-dateSouhaitee" type="date" class="mt-1 w-full border bg-white p-2" />
+    </label>
+  </div>
+
+  <!-- 🔒 Registre hidden -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Âge des enfants" id="reg-age" disabled />
+    <input type="hidden" name="Nombre de participants" id="reg-nbParticipants" disabled />
+    <input type="hidden" name="Lieu" id="reg-lieu" disabled />
+    <input type="hidden" name="Date souhaitée" id="reg-dateSouhaitee" disabled />
+  </div>
+</section>

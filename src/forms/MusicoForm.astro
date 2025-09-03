@@ -1,0 +1,110 @@
+---
+/** Sous-formulaire : Musicothérapie
+ * - Champs visibles avec data-reg-id="<id du hidden>"
+ * - Registre hidden (names Netlify) désactivé par défaut
+ */
+---
+
+<section
+  data-domain-form="Musicothérapie"
+  class="hidden border border-stone-900 bg-violet-50/70 p-4 md:p-5"
+  aria-label="Questions spécifiques — Musicothérapie"
+>
+  <h2 class="hand text-3xl mb-3">Musicothérapie</h2>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <label class="block">
+      <span class="text-sm">Représentant de la structure *</span>
+      <input data-reg-id="reg-structureMt" required class="mt-1 w-full border bg-white p-2" placeholder="Nom & fonction" />
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Code postal *</span>
+      <input data-reg-id="reg-cp" required class="mt-1 w-full border bg-white p-2" placeholder="Ex. 90110" />
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Ville *</span>
+      <input data-reg-id="reg-ville" required class="mt-1 w-full border bg-white p-2" />
+    </label>
+
+    <label class="block">
+      <span class="text-sm">N° de téléphone *</span>
+      <input data-reg-id="reg-tel" type="tel" required class="mt-1 w-full border bg-white p-2" placeholder="06…" />
+    </label>
+  </div>
+
+  <label class="block mt-4">
+    <span class="text-sm">Souhaitez-vous mettre en place de la musicothérapie… *</span>
+    <select data-reg-id="typeMt" required class="mt-1 w-full border bg-white p-2">
+      <option value="">— Sélectionner —</option>
+      <option value="active">Active (les résidents jouent)</option>
+      <option value="receptive">Réceptive (écoute et détente)</option>
+      <option value="les-deux">Les deux</option>
+    </select>
+  </label>
+
+  <label class="block mt-4">
+    <span class="text-sm">Avez-vous déjà du matériel sur place ? Si oui, précisez</span>
+    <textarea rows="3" data-reg-id="reg-matos" class="mt-1 w-full border bg-white p-2" placeholder="Listez ce que vous avez…"></textarea>
+  </label>
+
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">Fréquence souhaitée *</span>
+      <select data-reg-id="reg-frequence" required class="mt-1 w-full border bg-white p-2">
+        <option value="">— Sélectionner —</option>
+        <option value="hebdo">Une fois par semaine</option>
+        <option value="bihebdo">Une fois tous les 15 jours</option>
+        <option value="mensuel">Une fois par mois</option>
+        <option value="autre">Autre (préciser)</option>
+      </select>
+    </label>
+
+    <label class="block" data-show-if="reg-frequence" data-show-eq="autre">
+      <span class="text-sm">Précisez la fréquence</span>
+      <input data-reg-id="frequenceAutre" class="mt-1 w-full border bg-white p-2" placeholder="Ex. toutes les 3 semaines" />
+    </label>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">Public ciblé *</span>
+      <select data-reg-id="reg-publicCible" required class="mt-1 w-full border bg-white p-2">
+        <option value="">— Sélectionner —</option>
+        <option value="tres-avances">Troubles cognitifs très avancés</option>
+        <option value="avances">Troubles cognitifs avancés</option>
+        <option value="moderés">Troubles cognitifs modérés</option>
+        <option value="sans-troubles">Sans troubles cognitifs</option>
+      </select>
+    </label>
+
+    <label class="block" data-show-if="typeMt" data-show-any="active,les-deux">
+      <span class="text-sm">Niveau de dépendance (file active)</span>
+      <select data-reg-id="reg-gir" class="mt-1 w-full border bg-white p-2">
+        <option value="">— Sélectionner —</option>
+        <option value="GIR 1-2">GIR 1 - 2</option>
+        <option value="GIR 3-4">GIR 3 - 4</option>
+      </select>
+    </label>
+  </div>
+
+  <label class="block mt-4">
+    <span class="text-sm">Souhaitez-vous programmer des séances individuelles ? Si oui, précisez</span>
+    <textarea rows="3" data-reg-id="reg-solo" class="mt-1 w-full border bg-white p-2" placeholder="Nombre de résident·e·s, rythme…"></textarea>
+  </label>
+
+  <!-- 🔒 Registre hidden de ce sous-form -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Structure (représentant)" id="reg-structureMt" disabled />
+    <input type="hidden" name="Code postal" id="reg-cp" disabled />
+    <input type="hidden" name="Ville" id="reg-ville" disabled />
+    <input type="hidden" name="Téléphone" id="reg-tel" disabled />
+    <input type="hidden" name="Type de musicothérapie" id="typeMt" disabled />
+    <input type="hidden" name="Matériel sur place (précisions)" id="reg-matos" disabled />
+    <input type="hidden" name="Fréquence" id="reg-frequence" disabled />
+    <input type="hidden" name="Type de public ciblé" id="reg-publicCible" disabled />
+    <input type="hidden" name="Niveau de dépendance (file active)" id="reg-gir" disabled />
+    <input type="hidden" name="Séances individuelles (précisions)" id="reg-solo" disabled />
+  </div>
+</section>

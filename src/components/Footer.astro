@@ -2,7 +2,7 @@
 const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 ---
 
-<footer class="border-t bg-stone-700 text-stone-200">
+<footer class="bg-slate-700 text-stone-200 z-40">
   <div class="max-w-6xl mx-auto px-4 py-10 grid gap-8 md:grid-cols-4">
     <!-- Col 1 : identité -->
     <div>
@@ -53,7 +53,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
   </div>
 
   <!-- Bas du footer -->
-    <div class="border-t mt-8 text-sm bg-yellow-300 text-black">
+    <div class="border-t mt-8 text-sm bg-yellow-300 text-slate-800">
       <div
         class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-center md:text-left"
       >
@@ -64,16 +64,16 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
         <!-- Centre -->
         <nav class="order-3 md:order-2 flex justify-center gap-4">
-          <a href="/mentions-legales" class="hover:text-yellow-700">Mentions légales</a>
-          <a href="/sitemap.xml" class="hover:text-yellow-700">Plan du site</a>
-          <a href="/humans.txt" class="hover:text-yellow-700">humans.txt</a>
+          <a href="/mentions-legales" class="hover:text-slate-600 hover:underline hover:underline-offset-2">Mentions légales</a>
+          <a href="/sitemap.xml" class="hover:text-slate-600 hover:underline hover:underline-offset-2">Plan du site</a>
+          <a href="/humans.txt" class="hover:text-slate-600 hover:underline hover:underline-offset-2">humans.txt</a>
         </nav>
 
         <!-- Droite -->
         <p class="order-2 md:order-3">
           <a
             href="https://benji-belfort-portfolio.netlify.app/"
-            class="hover:text-yellow-700"
+            class="hover:text-slate-600 hover:underline hover:underline-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
