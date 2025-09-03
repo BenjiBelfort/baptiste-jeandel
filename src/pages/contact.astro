@@ -5,7 +5,7 @@ import FunkyButton from '@/components/FunkyButton.astro';
 // Domain subforms
 import MusicoForm from '@/forms/MusicoForm.astro';
 import EveilForm from '@/forms/EveilForm.astro';
-import HandpanForm from '@/forms/HandpanForm.astro';
+import CoursForm from '@/forms/CoursForm.astro';
 
 const url = new URL(Astro.request.url);
 const originFromQuery = url.searchParams.get('origin') ?? '';
@@ -58,20 +58,12 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
             <option>Spectacles</option>
             <option>Atelier EHPAD</option>
             <option>Atelier Petite Enfance</option>
-            <option>Handpan</option>
+            <option>Cours de batterie / Handpan</option>
             <option>Me contacter</option>
           </select>
       </label>
 
-      <!-- Bloc spécifique domaine -->
-      <div id="domain-blocks" class="space-y-6">
-        <MusicoForm />
-        <EveilForm />
-        <HandpanForm />
-        <!-- tu pourras ajouter d'autres sous-formulaires ici -->
-      </div>
-
-      <!-- Coordonnées (communs) -->
+            <!-- Coordonnées (communs) -->
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Prénom Nom *</span>
@@ -81,6 +73,14 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
           <span class="text-sm">Email *</span>
           <input name="Email" type="email" required class="mt-1 w-full border bg-white p-2" />
         </label>
+      </div>
+
+      <!-- Bloc spécifique domaine -->
+      <div id="domain-blocks" class="space-y-6">
+        <MusicoForm />
+        <EveilForm />
+        <CoursForm />
+        <!-- tu pourras ajouter d'autres sous-formulaires ici -->
       </div>
 
       <label class="block">
@@ -145,7 +145,8 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       'Spectacles': 'Spectacles',
       'Atelier EHPAD': 'Atelier EHPAD',
       'Atelier Petite Enfance': 'Atelier Petite Enfance',
-      'Handpan': 'Handpan',
+      'Cours': 'Cours de batterie / Handpan',
+      'cours': 'Cours de batterie / Handpan',
       'ME CONTACTER': 'Me contacter',
       'Me contacter uniquement': 'Me contacter',
     };

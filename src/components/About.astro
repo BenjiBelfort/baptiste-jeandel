@@ -1,26 +1,52 @@
 ---
 import FunkyButton from "@/components/FunkyButton.astro";
-
-import SectionTitle from "@/components/SectionTitle.astro"
+import SectionTitle from "@/components/SectionTitle.astro";
 ---
-<section class="max-w-6xl mx-auto px-4 py-16 scroll-mt-12"  id="a-propos">
-    <SectionTitle
-        title="À propos"
-        subtitle="Découvrez mon parcours et mon approche."
-    />
-    <div class="mt-6 grid md:grid-cols-2 gap-8 items-start">
-        <p class="text-stone-700 leading-relaxed">
-            J’accompagne <strong>la petite enfance</strong> et les <strong>EHPAD</strong> à travers la musique : ateliers, spectacles,
-            médiation et formations. Mon approche met l’accent sur l’<em>écoute</em>, la <em>joie partagée</em> et la
-            <em>transmission</em>, pour des expériences sensibles adaptées à chaque public.
-        </p>
-        <ul class="space-y-3 text-stone-700">
-            <li>• Ateliers musicaux adaptés</li>
-            <li>• Spectacles participatifs</li>
-            <li>• Formations pour équipes éducatives et soignantes</li>
-        </ul>
-    </div>
-    <div class="mt-8">
-        <FunkyButton href="/contact" label="Me contacter" color="bg-stone-300" />
-    </div>
+
+<section class="max-w-5xl mx-auto px-4 py-16 scroll-mt-12" id="a-propos">
+  <SectionTitle
+    title="À propos de moi"
+    subtitle="Découvrez mon parcours et mon approche."
+  />
+
+  <!-- Mobile: colonne / Desktop: rangée -->
+    <div class="mt-8 flex flex-col md:flex-row md:items-center md:justify-center gap-12 md:gap-24">
+        <!-- Photo à gauche -->
+        <figure class="w-full md:w-auto md:max-w-sm">
+            <div class="relative w-full overflow-hidden shadow-sm/20 -rotate-1">
+            <img
+                src="/images/about-Baptiste.webp"
+                alt="Baptiste Jeandel — musicien & intervenant"
+                class="block w-full h-auto"
+                loading="lazy"
+            />
+            </div>
+        </figure>
+
+        <!-- Texte + boutons à droite -->
+        <div class="max-w-md">
+            <p class="text-stone-800 leading-relaxed">
+            J’accompagne <strong>la petite enfance</strong> et les <strong>EHPAD</strong> à travers la musique :
+            ateliers, spectacles, médiation et formations. Mon approche met l’accent sur
+            l’<em>écoute</em>, la <em>joie partagée</em> et la <em>transmission</em>, pour des expériences
+            sensibles adaptées à chaque public.
+            </p>
+
+            <h3 class="mt-4 text-xl font-semibold">Découvrez mes services</h3>
+
+            <!-- Boutons empilés -->
+            <div class="mt-6 flex flex-col gap-3 w-full max-w-sm">
+            <FunkyButton href="/services/eveil-musical" label="Éveil musical" color="bg-violet-300" />
+            <FunkyButton href="/services/musicotherapie" label="Musicothérapie" color="bg-violet-300" />
+            <FunkyButton href="/services/relaxations-sonores" label="Relaxations sonores" color="bg-violet-300" />
+            </div>
+        </div>
+        </div>
+
+
+
+  <!-- CTA contact centré -->
+  <div class="mt-10 flex justify-center">
+    <FunkyButton href="/contact" label="Me contacter" color="bg-stone-300" />
+  </div>
 </section>

@@ -1,0 +1,187 @@
+---
+/** Sous-formulaire : Cours de batterie / Handpan
+ * S’affiche quand le domaine = "Handpan"
+ * - Champs visibles avec data-reg-id="<id du hidden>"
+ * - Registre hidden (names Netlify) désactivé par défaut
+ */
+---
+<section
+  data-domain-form="Cours de batterie / Handpan"
+  class="hidden border border-stone-900 bg-violet-50/70 p-4 md:p-5"
+  aria-label="Questions spécifiques — Cours de batterie / Handpan"
+>
+  <h2 class="hand text-3xl mb-6 text-center">Cours de batterie / Handpan</h2>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <!-- Date de naissance -->
+    <label class="block">
+      <span class="text-sm">Date de naissance</span>
+      <input
+        data-reg-id="reg-naissanceHp"
+        type="date"
+        class="mt-1 w-full border bg-white p-2"
+      />
+    </label>
+
+    <!-- Niveau -->
+    <label class="block">
+      <span class="text-sm">Niveau *</span>
+      <select
+        data-reg-id="reg-niveauHp"
+        required
+        class="mt-1 w-full border bg-white p-2"
+      >
+        <option value="">— Sélectionner —</option>
+        <option value="debutant">Débutant(e)</option>
+        <option value="avance">Avancé(e)</option>
+        <option value="confirme">Confirmé(e)</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Instrument à la maison -->
+  <label class="block mt-4">
+    <span class="text-sm">Quel instrument as-tu à la maison ? *</span>
+    <select
+      data-reg-id="reg-instruMaisonHp"
+      required
+      class="mt-1 w-full border bg-white p-2"
+    >
+      <option value="">— Sélectionner —</option>
+      <option value="batterie-acoustique">Batterie acoustique</option>
+      <option value="batterie-electronique">Batterie électronique</option>
+      <option value="les-deux">Les deux</option>
+      <option value="aucun">Aucun</option>
+    </select>
+  </label>
+
+  <!-- Genres / écoute / applis -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block md:col-span-2">
+      <span class="text-sm">Quelles musiques écoutes-tu le plus souvent ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-genresHp"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Styles/artistes préférés…"
+      ></textarea>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Comment écoutes-tu la musique le plus souvent ?</span>
+      <select
+        data-reg-id="reg-ecouteMethodeHp"
+        class="mt-1 w-full border bg-white p-2"
+      >
+        <option value="">— Sélectionner —</option>
+        <option value="enceinte">Avec une enceinte connectée</option>
+        <option value="casque">Avec un casque</option>
+        <option value="ecouteurs">Avec des écouteurs</option>
+      </select>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Quelles applis utilises-tu pour écouter de la musique ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-applisHp"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Spotify, YouTube, Deezer, Apple Music…"
+      ></textarea>
+    </label>
+
+    <label class="block md:col-span-2">
+      <span class="text-sm">As-tu des playlists à partager ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-playlistsHp"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Colle ici les liens de playlists (facultatif)"
+      ></textarea>
+    </label>
+  </div>
+
+  <!-- Latéralité -->
+  <label class="block mt-4">
+    <span class="text-sm">Tu es… *</span>
+    <select
+      data-reg-id="reg-lateraliteHp"
+      required
+      class="mt-1 w-full border bg-white p-2"
+    >
+      <option value="">— Sélectionner —</option>
+      <option value="droitier">Droitier(ère)</option>
+      <option value="gaucher">Gaucher(ère)</option>
+      <option value="ambidextre">Ambidextre</option>
+    </select>
+  </label>
+
+  <!-- Morceaux & inspirations -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block md:col-span-2">
+      <span class="text-sm">Quels morceaux rêves-tu de jouer ? (au moins 3)</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-morceauxHp"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Ex. 1) …  2) …  3) …"
+      ></textarea>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Connais-tu les noms des batteurs que tu aimes ? Lesquels ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-batteursHp"
+        class="mt-1 w-full border bg-white p-2"
+      ></textarea>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Sur les réseaux sociaux, qui suis-tu dans le domaine de la batterie ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-reseauxHp"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="@comptes, chaînes YouTube, etc."
+      ></textarea>
+    </label>
+  </div>
+
+  <!-- Temps hebdo -->
+  <label class="block mt-4">
+    <span class="text-sm">Combien de temps peux-tu consacrer à la pratique chaque semaine ? *</span>
+    <select
+      data-reg-id="reg-tempsHebdoHp"
+      required
+      class="mt-1 w-full border bg-white p-2"
+    >
+      <option value="">— Sélectionner —</option>
+      <option value="15min-jour">~15 min / jour</option>
+      <option value="30min-jour">~30 min / jour</option>
+      <option value="1h-jour">~1 h / jour</option>
+      <option value="2-3h-semaine">2–3 h / semaine</option>
+      <option value="4-6h-semaine">4–6 h / semaine</option>
+      <option value="7h-plus-semaine">≥ 7 h / semaine</option>
+    </select>
+  </label>
+
+  <!-- 🔒 Registre hidden -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Date de naissance" id="reg-naissanceHp" disabled />
+    <input type="hidden" name="Niveau (cours)" id="reg-niveauHp" disabled />
+    <input type="hidden" name="Instrument à la maison" id="reg-instruMaisonHp" disabled />
+
+    <input type="hidden" name="Genres / musiques écoutées" id="reg-genresHp" disabled />
+    <input type="hidden" name="Écoute la plus fréquente" id="reg-ecouteMethodeHp" disabled />
+    <input type="hidden" name="Applis musique" id="reg-applisHp" disabled />
+    <input type="hidden" name="Playlists à partager" id="reg-playlistsHp" disabled />
+
+    <input type="hidden" name="Latéralité" id="reg-lateraliteHp" disabled />
+    <input type="hidden" name="Morceaux rêvés" id="reg-morceauxHp" disabled />
+    <input type="hidden" name="Batteurs préférés" id="reg-batteursHp" disabled />
+    <input type="hidden" name="Références réseaux sociaux (batterie)" id="reg-reseauxHp" disabled />
+
+    <input type="hidden" name="Temps hebdomadaire disponible" id="reg-tempsHebdoHp" disabled />
+  </div>
+</section>

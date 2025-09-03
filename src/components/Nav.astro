@@ -17,7 +17,7 @@ const services = [
 const formations = [
   { href: '/formations/atelier-ehpad', label: 'Atelier EHPAD' },
   { href: '/formations/atelier-petite-enfance', label: 'Atelier petite enfance' },
-  { href: '/formations/handpan', label: 'Handpan' },
+  { href: '/formations/cours', label: 'Cours de batterie / Handpan' },
 ];
 
 const socials = [
@@ -58,13 +58,14 @@ const socials = [
 
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <!-- Sous-menu collé à l’entête -->
-          <div
-            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-violet-300 border border-stone-900 shadow-lg 
-                  opacity-0 pointer-events-none transition
-                  group-hover:opacity-100 group-hover:pointer-events-auto
-                  group-[data-open='1']:opacity-100 group-[data-open='1']:pointer-events-auto"
-            role="menu"
-          >
+        <div
+          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-violet-300 border border-stone-900 shadow-lg
+                opacity-0 -translate-y-2 pointer-events-none
+                transition duration-300 ease-in-out
+                group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+                group-[data-open='1']:opacity-100 group-[data-open='1']:translate-y-0 group-[data-open='1']:pointer-events-auto"
+          role="menu"
+        >
           <ul class="py-2">
             {services.map((s) => (
               <li><a href={s.href} class="block px-6 py-2 hover:bg-violet-400">{s.label}</a></li>
@@ -88,12 +89,13 @@ const socials = [
         </a>
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <div
-            class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-green-300 border border-stone-900 shadow-lg 
-                  opacity-0 pointer-events-none transition
-                  group-hover:opacity-100 group-hover:pointer-events-auto
-                  group-[data-open='1']:opacity-100 group-[data-open='1']:pointer-events-auto"
-            role="menu"
-          >
+          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-green-300 border border-stone-900 shadow-lg
+                opacity-0 -translate-y-2 pointer-events-none
+                transition duration-300 ease-in-out
+                group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+                group-[data-open='1']:opacity-100 group-[data-open='1']:translate-y-0 group-[data-open='1']:pointer-events-auto"
+          role="menu"
+        >
           <ul class="py-2">
             {formations.map((f) => (
               <li><a href={f.href} class="block px-6 py-2 hover:bg-green-400">{f.label}</a></li>
