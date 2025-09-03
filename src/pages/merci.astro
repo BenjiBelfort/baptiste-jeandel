@@ -1,5 +1,6 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
+import FunkyButton from '@/components/FunkyButton.astro';
 ---
 
 <Site title="Merci — Message envoyé" description="Votre demande a bien été envoyée.">
@@ -8,12 +9,7 @@ import Site from '@/layouts/SiteLayout.astro';
     <p class="text-stone-700">Votre message a bien été envoyé. Je reviens vers vous rapidement.</p>
 
     <div class="mt-8">
-      <a 
-        href="/" 
-        class="inline-flex items-center px-6 py-3 rounded-lg border bg-stone-800 text-white hover:bg-stone-700 transition"
-      >
-        Retour à l’accueil
-      </a>
+      <FunkyButton href="/" label="Retour à l’accueil" color="bg-stone-300" />
     </div>
   </section>
 

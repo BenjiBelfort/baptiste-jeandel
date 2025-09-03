@@ -13,6 +13,13 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 ---
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
+
+    <!-- Anti-FOUC pour les champs conditionnels -->
+  <style is:inline>
+    [data-show-if] { display: none; }
+    [data-show-if].__show { display: block; }
+  </style>
+
   <section class="max-w-3xl mx-auto px-4 py-10">
     <div class="mb-6">
       <a id="back-link" href="/" class="text-sm underline">← Retour</a>
@@ -102,68 +109,133 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
   </section>
 
   <script is:inline>
-// -- Affichage du bon sous-formulaire
-const domainSelect = document.getElementById('domain');
-const blocks = document.querySelectorAll('[data-domain-form]');
+    // -- Gestion des sous-formulaires (comme tu as déjà)
+    const domainSelect = document.getElementById('domain');
+    const blocks = document.querySelectorAll('[data-domain-form]');
 
-function setBlockActive(block, isActive) {
-  // montrer / cacher
-  block.classList.toggle('hidden', !isActive);
-
-  // activer seulement les champs visibles (sauf les hidden du registre)
-  block.querySelectorAll('input, select, textarea').forEach(el => {
-    if (el.type === 'hidden') return;       // on laisse les hidden gérés au submit
-    el.disabled = !isActive;                // <- clef : désactive les champs invisibles
-    if (!isActive) {
-      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
-      else el.value = '';                   // reset propre quand on masque
+    function setBlockActive(block, isActive) {
+      block.classList.toggle('hidden', !isActive);
+      block.querySelectorAll('input, select, textarea').forEach(el => {
+        if (el.type === 'hidden') return; // le registre est géré au submit
+        el.disabled = !isActive;
+        if (!isActive) {
+          if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+          else el.value = '';
+          el.removeAttribute('required'); // par sécurité
+        }
+      });
+      if (isActive) setupConditions(block); // <-- (re)branche la logique conditionnelle
     }
-  });
-}
 
-function showBlock(value) {
-  blocks.forEach(b => {
-    const isActive = b.getAttribute('data-domain-form') === value;
-    setBlockActive(b, isActive);
-  });
-}
+    function showBlock(value) {
+      blocks.forEach(b => setBlockActive(b, b.getAttribute('data-domain-form') === value));
+    }
 
-// 🔁 mapping legacy -> libellé exact du select
-const LEGACY_TO_FR = {
-  'EVEIL MUSICAL': 'Éveil musical',
-  'MUSICO THERAPIE': 'Musicothérapie',
-  'MUSICO-THERAPIE': 'Musicothérapie',
-  'Relaxations sonores': 'Relaxations sonores',
-  'Spectacles': 'Spectacles',
-  'Atelier EHPAD': 'Atelier EHPAD',
-  'Atelier Petite Enfance': 'Atelier Petite Enfance',
-  'Handpan': 'Handpan',
-  'ME CONTACTER': 'Me contacter',
-  'Me contacter uniquement': 'Me contacter',
-};
-function canonicalize(raw) {
-  if (!raw) return '';
-  return LEGACY_TO_FR[raw] || LEGACY_TO_FR[raw.toUpperCase()] || raw;
-}
-function optionExists(select, value) {
-  return [...select.options].some(o => o.value === value);
-}
+    // Mapping legacy -> libellé
+    const LEGACY_TO_FR = {
+      'EVEIL MUSICAL': 'Éveil musical',
+      'MUSICO THERAPIE': 'Musicothérapie',
+      'MUSICO-THERAPIE': 'Musicothérapie',
+      'Relaxations sonores': 'Relaxations sonores',
+      'Spectacles': 'Spectacles',
+      'Atelier EHPAD': 'Atelier EHPAD',
+      'Atelier Petite Enfance': 'Atelier Petite Enfance',
+      'Handpan': 'Handpan',
+      'ME CONTACTER': 'Me contacter',
+      'Me contacter uniquement': 'Me contacter',
+    };
+    const params = new URLSearchParams(location.search);
+    const canonicalize = (raw) => raw ? (LEGACY_TO_FR[raw] || LEGACY_TO_FR[raw.toUpperCase()] || raw) : '';
+    const mapped = canonicalize(params.get('domain') || '');
 
-// init depuis l’URL (puis fallback à la valeur actuelle du select)
-const params = new URLSearchParams(location.search);
-const raw = params.get('domain') || '';
-const mapped = canonicalize(raw);
+    function optionExists(select, value) {
+      return [...select.options].some(o => o.value === value);
+    }
 
-if (domainSelect) {
-  if (mapped && optionExists(domainSelect, mapped)) {
-    domainSelect.value = mapped;   // pré-sélectionne
-    showBlock(mapped);             // active le bon sous-form
-  } else {
-    showBlock(domainSelect.value);
-  }
-  domainSelect.addEventListener('change', () => showBlock(domainSelect.value));
-}
-</script>
+    if (domainSelect) {
+      if (mapped && optionExists(domainSelect, mapped)) {
+        domainSelect.value = mapped;
+        showBlock(mapped);
+      } else {
+        showBlock(domainSelect.value);
+      }
+      domainSelect.addEventListener('change', () => showBlock(domainSelect.value));
+    }
 
+    // -- Logique conditionnelle par sous-formulaire
+    function setupConditions(container) {
+      const wrappers = Array.from(container.querySelectorAll('[data-show-if]'));
+      if (!wrappers.length) return;
 
+      // Utilitaires
+      function toggleWrapper(wrap, show) {
+        // Visuel
+        if (show) { wrap.classList.add('__show'); wrap.classList.remove('hidden'); }
+        else { wrap.classList.remove('__show'); wrap.classList.add('hidden'); }
+
+        // Accessibilité + validation
+        wrap.querySelectorAll('input, select, textarea').forEach(el => {
+          const wasDataRequired = el.hasAttribute('data-required'); // opt-in "required si visible"
+          if (show) {
+            el.disabled = false;
+            if (wasDataRequired) el.setAttribute('required', 'true');
+          } else {
+            el.disabled = true;
+            el.removeAttribute('required');
+            // reset doux
+            if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+            else el.value = '';
+          }
+        });
+      }
+
+      function evaluateOne(wrap) {
+        const depKey    = wrap.getAttribute('data-show-if') || '';
+        const equals    = wrap.getAttribute('data-show-eq');
+        const equalsAny = (wrap.getAttribute('data-show-any') || '').split(',').map(s => s.trim()).filter(Boolean);
+
+        const depCtrl = container.querySelector(`[data-reg-id="${depKey}"]`);
+        if (!depCtrl) { toggleWrapper(wrap, true); return; } // si on ne trouve pas le pilote, on montre par défaut
+
+        const val = (depCtrl.value || '').trim();
+        let show = true;
+        if (equals !== null && equals !== undefined) show = (val === equals);
+        if (equalsAny.length) show = equalsAny.includes(val);
+
+        toggleWrapper(wrap, show);
+      }
+
+      function evaluateAll() { wrappers.forEach(evaluateOne); }
+
+      // Écoute les contrôles pilotes (input/change)
+      const pilots = new Set(wrappers.map(w => w.getAttribute('data-show-if')).filter(Boolean));
+      pilots.forEach(key => {
+        const ctl = container.querySelector(`[data-reg-id="${key}"]`);
+        if (ctl && !ctl.__tc_bound) {
+          ctl.addEventListener('input', evaluateAll);
+          ctl.addEventListener('change', evaluateAll);
+          ctl.__tc_bound = true; // évite le double-binding si on re-call setupConditions
+        }
+      });
+
+      // Évaluation initiale (supprime le flash grâce au CSS + bascule proprement)
+      evaluateAll();
+    }
+
+    // -- Retour intelligemment (inchangé)
+    const originParam = new URLSearchParams(location.search).get('origin');
+    const backBtn = document.getElementById('back-btn');
+    const backLink = document.getElementById('back-link');
+    const fallbackHref = originParam ? `/${originParam}` : '/';
+    function goBack() {
+      try {
+        if (document.referrer && new URL(document.referrer).origin === location.origin) { history.back(); return; }
+      } catch(e){}
+      location.href = fallbackHref;
+    }
+    backBtn?.addEventListener('click', goBack);
+    backLink?.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
+
+    // -- Submit (ton code existant) : ne copie que le bloc actif, inutile de changer
+  </script>
 </Site>
