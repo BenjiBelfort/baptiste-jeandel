@@ -43,17 +43,17 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       <!-- Domaine -->
       <label class="block">
         <span>Domaine *</span>
-        <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
-          <option value="">— Sélectionner —</option>
-          <option selected={domainFromQuery === 'Éveil musical'}>Éveil musical</option>
-          <option selected={domainFromQuery === 'Musicothérapie'}>Musicothérapie</option>
-          <option selected={domainFromQuery === 'Relaxations sonores'}>Relaxations sonores</option>
-          <option selected={domainFromQuery === 'Spectacles'}>Spectacles</option>
-          <option selected={domainFromQuery === 'Atelier EHPAD'}>Atelier EHPAD</option>
-          <option selected={domainFromQuery === 'Atelier Petite Enfance'}>Atelier Petite Enfance</option>
-          <option selected={domainFromQuery === 'Handpan'}>Handpan</option>
-          <option selected={domainFromQuery === 'Me contacter'}>Me contacter</option>
-        </select>
+          <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
+            <option value="">— Sélectionner —</option>
+            <option>Éveil musical</option>
+            <option>Musicothérapie</option>
+            <option>Relaxations sonores</option>
+            <option>Spectacles</option>
+            <option>Atelier EHPAD</option>
+            <option>Atelier Petite Enfance</option>
+            <option>Handpan</option>
+            <option>Me contacter</option>
+          </select>
       </label>
 
       <!-- Bloc spécifique domaine -->
@@ -102,113 +102,68 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
   </section>
 
   <script is:inline>
-    // -- Affichage du bon sous-formulaire
-    const domainSelect = document.getElementById('domain');
-    const blocks = document.querySelectorAll('[data-domain-form]');
-    function showBlock(val) {
-      blocks.forEach(b => {
-        b.classList.toggle('hidden', b.getAttribute('data-domain-form') !== val);
-      });
+// -- Affichage du bon sous-formulaire
+const domainSelect = document.getElementById('domain');
+const blocks = document.querySelectorAll('[data-domain-form]');
+
+function setBlockActive(block, isActive) {
+  // montrer / cacher
+  block.classList.toggle('hidden', !isActive);
+
+  // activer seulement les champs visibles (sauf les hidden du registre)
+  block.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'hidden') return;       // on laisse les hidden gérés au submit
+    el.disabled = !isActive;                // <- clef : désactive les champs invisibles
+    if (!isActive) {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+      else el.value = '';                   // reset propre quand on masque
     }
-    if (domainSelect) {
-      showBlock(domainSelect.value);
-      domainSelect.addEventListener('change', () => showBlock(domainSelect.value));
-    }
-    // si un domain est passé en query
-    const initDomain = new URLSearchParams(location.search).get('domain');
-    if (initDomain) showBlock(initDomain);
+  });
+}
 
-    // -- Retour intelligemment
-    const originParam = new URLSearchParams(location.search).get('origin');
-    const backBtn = document.getElementById('back-btn');
-    const backLink = document.getElementById('back-link');
-    const fallbackHref = originParam ? `/${originParam}` : '/';
-    function goBack() {
-      try {
-        if (document.referrer && new URL(document.referrer).origin === location.origin) {
-          history.back(); return;
-        }
-      } catch(e){}
-      location.href = fallbackHref;
-    }
-    backBtn?.addEventListener('click', goBack);
-    backLink?.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
+function showBlock(value) {
+  blocks.forEach(b => {
+    const isActive = b.getAttribute('data-domain-form') === value;
+    setBlockActive(b, isActive);
+  });
+}
 
-    // -- Conditions internes (showIf) pour chaque sous-form
-    function setupConditions(container) {
-      const wrappers = [...container.querySelectorAll('[data-show-if]')];
-      if (!wrappers.length) return;
+// 🔁 mapping legacy -> libellé exact du select
+const LEGACY_TO_FR = {
+  'EVEIL MUSICAL': 'Éveil musical',
+  'MUSICO THERAPIE': 'Musicothérapie',
+  'MUSICO-THERAPIE': 'Musicothérapie',
+  'Relaxations sonores': 'Relaxations sonores',
+  'Spectacles': 'Spectacles',
+  'Atelier EHPAD': 'Atelier EHPAD',
+  'Atelier Petite Enfance': 'Atelier Petite Enfance',
+  'Handpan': 'Handpan',
+  'ME CONTACTER': 'Me contacter',
+  'Me contacter uniquement': 'Me contacter',
+};
+function canonicalize(raw) {
+  if (!raw) return '';
+  return LEGACY_TO_FR[raw] || LEGACY_TO_FR[raw.toUpperCase()] || raw;
+}
+function optionExists(select, value) {
+  return [...select.options].some(o => o.value === value);
+}
 
-      function evalOne(wrap) {
-        const depKey    = wrap.getAttribute('data-show-if');
-        const equals    = wrap.getAttribute('data-show-eq'); // string ou ''
-        const equalsAny = (wrap.getAttribute('data-show-any') || '').split(',').filter(Boolean);
-        const depCtrl   = container.querySelector(`[data-reg-id="${depKey}"]`);
+// init depuis l’URL (puis fallback à la valeur actuelle du select)
+const params = new URLSearchParams(location.search);
+const raw = params.get('domain') || '';
+const mapped = canonicalize(raw);
 
-        if (!depCtrl) { wrap.classList.remove('hidden'); return; }
+if (domainSelect) {
+  if (mapped && optionExists(domainSelect, mapped)) {
+    domainSelect.value = mapped;   // pré-sélectionne
+    showBlock(mapped);             // active le bon sous-form
+  } else {
+    showBlock(domainSelect.value);
+  }
+  domainSelect.addEventListener('change', () => showBlock(domainSelect.value));
+}
+</script>
 
-        const val = (depCtrl.value || '').trim();
-        let show = true;
-        if (equals) show = (val === equals);
-        if (equalsAny.length) show = equalsAny.includes(val);
 
-        wrap.classList.toggle('hidden', !show);
-        if (!show) {
-          const input = wrap.querySelector('input, textarea, select');
-          if (input) input.value = '';
-        }
-      }
-
-      function evalAll(){ wrappers.forEach(evalOne); }
-
-      const keys = new Set(wrappers.map(w => w.getAttribute('data-show-if')).filter(Boolean));
-      keys.forEach(k => {
-        const ctl = container.querySelector(`[data-reg-id="${k}"]`);
-        if (ctl) { ctl.addEventListener('input', evalAll); ctl.addEventListener('change', evalAll); }
-      });
-      evalAll();
-    }
-
-    // initialiser les conditions pour chaque sous-form une fois monté
-    document.querySelectorAll('[data-domain-form]').forEach(setupConditions);
-
-    // -- Submit : copie visible -> hidden (SEULEMENT pour le bloc visible)
-    const form = document.getElementById('contact-form');
-    form?.addEventListener('submit', () => {
-      const active = [...document.querySelectorAll('[data-domain-form]')].find(b => !b.classList.contains('hidden'));
-      if (!active) return;
-
-      // reset tous les hidden de tous les sous-forms
-      document.querySelectorAll('[data-registry] input[type="hidden"]').forEach(inp => {
-        inp.disabled = true; inp.value = '';
-      });
-
-      // copier les valeurs du bloc actif
-      const visibles = active.querySelectorAll('[data-reg-id]');
-      visibles.forEach(src => {
-        const id = src.getAttribute('data-reg-id');
-        const hidden = active.querySelector(`#${id}`);
-        if (!hidden) return;
-
-        let val = (src.value || '').trim();
-
-        // Ex: “frequence=autre” → récupérer précision si présente
-        if (id === 'reg-frequence' && (src.value || '') === 'autre') {
-          const other = active.querySelector('[data-reg-id="frequenceAutre"]');
-          val = (other?.value || '').trim();
-        }
-
-        if (val) {
-          hidden.value = val;
-          hidden.disabled = false;
-        }
-      });
-
-      // Redirection /merci?origin=...
-      const originVal = originParam || document.getElementById('Provenance')?.value || '';
-      const current = new URL(form.getAttribute('action') || '/merci', location.origin);
-      if (originVal) current.searchParams.set('origin', originVal);
-      form.setAttribute('action', current.pathname + current.search);
-    });
-  </script>
 </Site>
