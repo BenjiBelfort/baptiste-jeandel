@@ -3,15 +3,25 @@ import FunkyButton from '@/components/FunkyButton.astro';
 
 type Props = {
   domain?: string;
-  origin?: string;       // ex: "formations/handpan"
-  color?: string;        // override optionnel ("bg-sky-300", etc.)
-  label?: string;        // override du libellé
+  origin?: string;     // ex: "formations/handpan"
+  color?: string;      // "bg-sky-300", etc.
+  label?: string;      // libellé du bouton
+  message?: string;    // ✅ texte depuis le frontmatter
 };
 
-const { domain = '', origin = '', color, label = 'Demander un devis' } = Astro.props;
+const {
+  domain = '',
+  origin = '',
+  color,
+  label = 'Demander un devis',
+  message,
+} = Astro.props;
 
 // URL contact (avec paramètres)
 const contactHref = `/contact?domain=${encodeURIComponent(domain)}&origin=${encodeURIComponent(origin)}`;
+
+// Fallback si pas de message fourni
+const finalMessage = message ?? "Besoin d’un devis ? Je vous réponds rapidement";
 ---
 
 <section
@@ -24,10 +34,16 @@ const contactHref = `/contact?domain=${encodeURIComponent(domain)}&origin=${enco
            rounded-none"
   >
     <p class="hidden md:block text-stone-900 font-medium">
-      Besoin d’un devis ? Réponse rapide.
+      {finalMessage}
+        <span
+            aria-hidden="true"
+            class="inline-block ml-1 motion-safe:animate-[wiggle_1.6s_ease-in-out_infinite]"
+        >
+            →
+        </span>
     </p>
 
-    <div class="flex-shrink-0"> <!-- petit espace sous le bouton -->
+    <div class="flex-shrink-0">
       <FunkyButton
         href={contactHref}
         label={label}

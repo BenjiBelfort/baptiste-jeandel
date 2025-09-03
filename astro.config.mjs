@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import rehypeExternalLinks from 'rehype-external-links';
 import { EnumChangefreq } from 'sitemap';
 
 const SITE = process.env.URL || process.env.PUBLIC_SITE || 'http://localhost:4321';
@@ -18,7 +19,12 @@ export default defineConfig({
   site: SITE,
   trailingSlash: 'never', // évite les doublons /page/ vs /page
   integrations: [
-    mdx(),
+    mdx({
+      // 👇 ici : tous les liens externes des MDX ouvrent en nouvel onglet
+      rehypePlugins: [
+        [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],
+      ],
+    }),
     sitemap({
       filter: (page) => ![
         '/404',

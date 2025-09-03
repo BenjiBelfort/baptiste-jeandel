@@ -7,12 +7,12 @@ type Props = { title: string; subtitle?: string };
 const { title, subtitle } = Astro.props as Props;
 const path = Astro.url.pathname;
 
-let bgClass = 'bg-stone-600';
+let bgClass = 'bg-stone-200';
 if (path.startsWith('/services'))   bgClass = 'bg-violet-200';
 if (path.startsWith('/formations')) bgClass = 'bg-green-200';
 
 ---
-<section class={` relative w-full min-h-[35vh] flex items-center ${bgClass}`}>
+<section class={` relative w-full min-h-[35vh] flex items-center ${bgClass}`} data-page-title>
   <div class="w-full max-w-6xl mx-auto px-4 text-center text-black">
     <h1 class="text-5xl md:text-7xl font-bold hand drop-shadow-xs/30">{title}</h1>
     {subtitle && <h2 class="mt-3 text-xl md:text-2xl text-black">{subtitle}</h2>}

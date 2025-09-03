@@ -1,8 +1,7 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
-import PageTitle from '@/components/PageTitle.astro';
-import StickyDevis from '@/components/StickyDevis.astro';
 import { getCollection } from 'astro:content';
+import MdxDetailLayout from '@/layouts/MdxDetailLayout.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('formations');
@@ -16,21 +15,21 @@ const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await entry.render();
 ---
+
 <Site
   title={data.seoTitle ?? data.title}
   description={data.seoDescription ?? data.excerpt}
   image="/og.jpg"
   type="article"
 >
-  <PageTitle title={data.title} subtitle={data.excerpt} />
-
-  <article class="prose max-w-3xl mx-auto px-4 py-12 pb-28">
-    <!-- pb-28 pour laisser la place au CTA sticky -->
+  <MdxDetailLayout
+    title={data.title}
+    excerpt={data.excerpt}
+    domain={data.domain}
+    slug={entry.slug}
+    ctaMessage={data.ctaMessage}
+    stickyColor="bg-green-300"
+  >
     <Content />
-  </article>
-
-  <StickyDevis
-    domain={data.domain ?? 'Formations'}
-    origin={`formations/${entry.slug}`}
-  />
+  </MdxDetailLayout>
 </Site>

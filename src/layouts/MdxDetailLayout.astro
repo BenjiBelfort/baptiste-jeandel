@@ -1,0 +1,54 @@
+---
+import PageTitle from "@/components/PageTitle.astro";
+import StickyDevis from "@/components/StickyDevis.astro";
+import StickySectionHint from "@/components/StickySectionHint.astro";
+
+/** Props attendues
+ * - title: string
+ * - excerpt?: string
+ * - domain: string        (ex: "EVEIL MUSICAL" ou "Atelier EHPAD")
+ * - slug: string          (ex: "eveil-musical")
+ * - ctaMessage?: string   (message custom pour StickyDevis)
+ * - ctaLabel?: string     (libellé du bouton — optionnel)
+ * - stickyColor?: string  (classe Tailwind pour la couleur FunkyButton — optionnel)
+ */
+type Props = {
+  title: string;
+  excerpt?: string;
+  domain: string;
+  slug: string;
+  ctaMessage?: string;
+  ctaLabel?: string;
+  stickyColor?: string;
+};
+
+const {
+  title,
+  excerpt,
+  domain,
+  slug,
+  ctaMessage,
+  ctaLabel = "Demander un devis",
+  stickyColor, // ex: "bg-green-300" ou "bg-violet-300"
+} = Astro.props;
+---
+
+<!-- Bandeau titre (couleur auto par route via PageTitle) -->
+<PageTitle title={title} subtitle={excerpt} />
+
+<!-- Bandeau contextuel sous la nav, auto-couleur par route -->
+<StickySectionHint title={title} />
+
+<!-- Contenu rich text -->
+<article class="prose max-w-3xl mx-auto px-4 py-12 pb-28 mdx">
+  <slot />
+</article>
+
+<!-- CTA sticky bas de page -->
+<StickyDevis
+  domain={domain}
+  origin={`${Astro.url.pathname.startsWith('/services') ? 'services' : 'formations'}/${slug}`}
+  message={ctaMessage}
+  label={ctaLabel}
+  color={stickyColor}
+/>

@@ -1,0 +1,104 @@
+---
+type Props = {
+  title: string;
+  color?: string;
+
+  // Positions en px (valeurs par défaut raisonnables)
+  topMobile?: number;      // top mobile
+  topDesktop?: number;     // top md+
+  startMobile?: number;    // translateY mobile (au repos = caché)
+  startDesktop?: number;   // translateY md+ (au repos = caché)
+  endMobile?: number;      // translateY mobile (visible)
+  endDesktop?: number;     // translateY md+ (visible)
+};
+
+const {
+  title,
+  color,
+
+  topMobile = 56,
+  topDesktop = 60,
+  startMobile = -105,     // remonte hors écran (px)
+  startDesktop = -110,     // petit décalage sous la nav en md
+  endMobile = 0,          // pleinement visible en mobile
+  endDesktop = 0,         // pleinement visible en md
+} = Astro.props;
+
+// Couleur auto selon la route (overridable via `color`)
+const path = Astro.url.pathname;
+let autoBg = 'bg-stone-200';
+if (path.startsWith('/services'))   autoBg = 'bg-violet-300';
+if (path.startsWith('/formations')) autoBg = 'bg-green-300';
+const bgClass = color ?? autoBg;
+---
+
+<!-- Bandeau FIXED, contrôlé par variables -->
+<div
+  id="sticky-section-hint"
+  class="
+    fixed left-0 right-0 z-40
+    transition-transform duration-300 ease-out
+    pointer-events-none
+  "
+  style={`
+    --top-mobile:${topMobile}px;
+    --top-desktop:${topDesktop}px;
+    --start-mobile:${startMobile}px;
+    --start-desktop:${startDesktop}px;
+    --end-mobile:${endMobile}px;
+    --end-desktop:${endDesktop}px;
+  `}
+  aria-hidden="true"
+>
+  <div class="max-w-6xl mx-auto px-4">
+    <div class={`inline-flex items-center gap-3 border border-stone-900 -rotate-1 ${bgClass} px-3 py-1.5 shadow-sm/30 pointer-events-auto`}>
+      <span class="text-2xl font-medium hand">{title}</span>
+    </div>
+  </div>
+</div>
+
+<style is:inline>
+  /* Mobile par défaut */
+  #sticky-section-hint {
+    top: var(--top-mobile);
+    transform: translateY(var(--start-mobile));
+  }
+  #sticky-section-hint.is-open {
+    transform: translateY(var(--end-mobile));
+  }
+
+  /* md+ */
+  @media (min-width: 768px) {
+    #sticky-section-hint {
+      top: var(--top-desktop);
+      transform: translateY(var(--start-desktop));
+    }
+    #sticky-section-hint.is-open {
+      transform: translateY(var(--end-desktop));
+    }
+  }
+</style>
+
+<script is:inline>
+  // Montre/cache le bandeau selon la visibilité du H1
+  const hint = document.getElementById('sticky-section-hint');
+  const target =
+    document.querySelector('[data-page-title]') ||
+    document.querySelector('main h1') ||
+    document.querySelector('h1');
+
+  if (hint && target) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          hint.classList.remove('is-open'); // caché (position de départ)
+        } else {
+          hint.classList.add('is-open');    // visible (position d’arrivée)
+        }
+      },
+      { rootMargin: '-20% 0px 0px 0px', threshold: 0 }
+    );
+    io.observe(target);
+    window.addEventListener('pagehide', () => io.disconnect());
+  }
+</script>
