@@ -1,41 +1,143 @@
 ---
+type ArticleMeta = { publishedTime?: string; modifiedTime?: string; author?: string[] };
+
 const {
   title = 'Baptiste Jeandel',
   description = 'Musique, accompagnement et formations',
-  image = '/og.jpg',
-  type = 'website', // 'article' sur les pages détail
-} = Astro.props;
+  image = '/og.webp', // ← par défaut en webp
+  type = 'website',
+  robots = 'index,follow',
+  siteName = 'Baptiste Jeandel',
+  locale = 'fr_FR',
+  article,
+} = Astro.props as {
+  title?: string; description?: string; image?: string; type?: 'website' | 'article';
+  robots?: string; siteName?: string; locale?: string; article?: ArticleMeta;
+};
 
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const path = Astro.url.pathname + (Astro.url.search ?? '');
+const canonical = site ? `${site}${path}` : Astro.url.toString();
 
-// JSON-LD basique (Organisation/Person)
-const ld = {
+// utilitaires
+const toAbs = (u: string) => {
+  try { return new URL(u, site || Astro.url).toString(); } catch { return u; }
+};
+const guessMime = (u: string) => {
+  const low = u.split('?')[0].toLowerCase();
+  if (low.endsWith('.webp')) return 'image/webp';
+  if (low.endsWith('.png'))  return 'image/png';
+  return 'image/jpeg';
+};
+
+const absImage = toAbs(image);
+const ogImageType = guessMime(absImage);
+const fullTitle = title === siteName ? title : `${title} · ${siteName}`;
+const origin = new URL(canonical).origin; // ← garantit une base absolue même sans site
+
+const authors: string[] = (article?.author && article.author.length)
+  ? article.author
+  : ['Baptiste Jeandel'];
+
+// JSON-LD
+const personLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Baptiste Jeandel",
   "url": canonical,
+  "jobTitle": "Musicothérapeute, médiateur musical et formateur",
+  "sameAs": [
+    "https://www.youtube.com/@baptistejeandel",
+    "https://www.facebook.com/bat.lebatt.1",
+    "https://www.instagram.com/baptiste_jeandel_pro",
+    "https://www.linkedin.com/in/baptiste-jeandel-musicien-musicotherapeute/"
+  ]
 };
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": siteName,
+  "url": site || canonical,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": `${origin}/recherche?q={search_term_string}`, // ← absolu
+    "query-input": "required name=search_term_string"
+  }
+};
+
+const articleLd = (type === 'article' && article) ? {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "image": [absImage],
+  "author": authors.map((a: string) => ({ "@type": "Person", "name": a })),
+  "datePublished": article.publishedTime,
+  "dateModified": article.modifiedTime ?? article.publishedTime,
+  "mainEntityOfPage": canonical
+} : null;
 ---
 <head>
+  <!-- Charset en tout premier -->
   <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Canonical + robots -->
   <link rel="canonical" href={canonical} />
+  <meta name="robots" content={robots} />
+
+  <!-- Title + Description -->
+  <title>{fullTitle}</title>
   <meta name="description" content={description} />
 
+  <!-- Open Graph -->
   <meta property="og:type" content={type} />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:locale" content={locale} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
-  <meta property="og:image" content={image} />
+  <meta property="og:image" content={absImage} />
+  <meta property="og:image:type" content={ogImageType} />
+  <meta property="og:image:alt" content="Baptiste Jeandel" />
+  
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="851" />
 
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={image} />
+  <meta name="twitter:image" content={absImage} />
 
-  <!-- Manifest + favicon (tu as déjà favicon.svg) -->
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- UX / PWA -->
+  <meta name="theme-color" content="#facc15" />
+  <meta name="color-scheme" content="light" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Icônes & manifest -->
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Baptiste Jeandel" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  {type === 'article' && article?.publishedTime && (
+    <>
+      <meta property="article:published_time" content={article.publishedTime} />
+      {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
+      {authors.map((a: string) => (
+        <meta property="article:author" content={a} />
+      ))}
+    </>
+  )}
+
+  <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
+  {articleLd && <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />}
 </head>

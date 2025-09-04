@@ -9,7 +9,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
       <h2 class="text-3xl font-semibold text-stone-100 hand">Baptiste Jeandel</h2>
       <p class="mt-2">
         Musicothérapeute, médiateur musical et formateur.<br />
-        Basé à Rougemont-le-Château, j’interviens en petite enfance, EHPAD et structures spécialisées.
+        Basé à Rougemont-le-Château, j’interviens en <strong>petite enfance</strong>, <strong>EHPAD</strong> et structures spécialisées.
       </p>
     </div>
 
@@ -44,6 +44,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
         <li><a href="https://www.youtube.com/@baptistejeandel" target="_blank" rel="noopener noreferrer" class="hover:underline">YouTube</a></li>
         <li><a href="https://www.facebook.com/bat.lebatt.1" target="_blank" rel="noopener noreferrer" class="hover:underline">Facebook</a></li>
         <li><a href="https://www.instagram.com/baptiste_jeandel_pro" target="_blank" rel="noopener noreferrer" class="hover:underline">Instagram</a></li>
+        <li><a href="https://www.linkedin.com/in/baptiste-jeandel-4b4b2920b/" target="_blank" rel="noopener noreferrer" class="hover:underline">LinkedIn</a></li>
       </ul>
     </div>
 
@@ -52,35 +53,37 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
   </div>
 
-  <!-- Bas du footer -->
+    <!-- Bas du footer -->
     <div class="border-t mt-8 text-sm bg-yellow-300 text-slate-800">
       <div
         class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-center md:text-left"
       >
-        <!-- Gauche -->
+        <!-- Gauche (mobile: 1 / desktop: 1) -->
         <p class="order-1 md:order-1">
           © {new Date().getFullYear()} Baptiste Jeandel — Tous droits réservés.
         </p>
 
-        <!-- Centre -->
-        <nav class="order-3 md:order-2 flex justify-center gap-4">
+        <!-- Centre (mobile: 2 / desktop: 2) -->
+        <nav class="order-2 md:order-2 flex justify-center gap-4">
           <a href="/mentions-legales" class="hover:text-slate-600 hover:underline hover:underline-offset-2">Mentions légales</a>
           <a href="/sitemap.xml" class="hover:text-slate-600 hover:underline hover:underline-offset-2">Plan du site</a>
           <a href="/humans.txt" class="hover:text-slate-600 hover:underline hover:underline-offset-2">humans.txt</a>
         </nav>
 
-        <!-- Droite -->
-        <p class="order-2 md:order-3">
+        <!-- Droite (mobile: 3 + petite marge / desktop: 3) -->
+        <p class="order-3 md:order-3 mb-8 md:mb-0">
           <a
             href="https://benji-belfort-portfolio.netlify.app/"
-            class="hover:text-slate-600 hover:underline hover:underline-offset-2"
+            class="flex items-center justify-center md:justify-start gap-2 hover:text-slate-600 hover:underline hover:underline-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >
             Dev by Benji Belfort
+            <img src="/logos/logo-CPEP.png" alt="Logo CPEP" class="h-5 w-auto" />
           </a>
         </p>
       </div>
     </div>
+
 
 </footer>

@@ -32,21 +32,26 @@ import SectionTitle from "@/components/SectionTitle.astro";
             sensibles adaptées à chaque public.
             </p>
 
-            <h3 class="mt-4 text-xl font-semibold">Découvrez mes services</h3>
+            <h3 class="mt-4 text-xl font-semibold text-center">Découvrez mes services</h3>
 
             <!-- Boutons empilés -->
-            <div class="mt-6 flex flex-col gap-3 w-full max-w-sm">
+            <div class="mt-6 flex flex-col gap-3 w-full max-w-xs mx-auto">
             <FunkyButton href="/services/eveil-musical" label="Éveil musical" color="bg-violet-300" />
             <FunkyButton href="/services/musicotherapie" label="Musicothérapie" color="bg-violet-300" />
             <FunkyButton href="/services/relaxations-sonores" label="Relaxations sonores" color="bg-violet-300" />
             </div>
         </div>
-        </div>
+    </div>
 
 
 
-  <!-- CTA contact centré -->
-  <div class="mt-10 flex justify-center">
-    <FunkyButton href="/contact" label="Me contacter" color="bg-stone-300" />
-  </div>
+    <!-- CTA contact centré -->
+    <div class="mt-10 flex justify-center">
+        <FunkyButton href="/contact" label="Me contacter" color="bg-slate-300" />
+    </div>
+
+    <div>
+      <img src="/logos/gong.webp" alt="Logo gong" class="mt-8 mx-auto drop-shadow-xl" />
+    </div>
+
 </section>

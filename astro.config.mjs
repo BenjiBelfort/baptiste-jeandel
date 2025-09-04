@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import rehypeExternalLinks from 'rehype-external-links';
 import { EnumChangefreq } from 'sitemap';
 
-const SITE = process.env.URL || process.env.PUBLIC_SITE || 'http://localhost:4321';
+const SITE = process.env.PUBLIC_SITE || process.env.URL || 'http://localhost:4321';
 
 function getPriority(p) {
   if (p === '/') return 1.0;
