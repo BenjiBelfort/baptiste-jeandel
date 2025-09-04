@@ -4,11 +4,32 @@ const {
   alt = "",
   height = "60vh",
   overlay = "bg-black/20", // classe Tailwind pour l’overlay
+  fallbackSrc = src,       // image de secours (peut être différente)
+  parallaxFrom = "md",     // "md" | "lg" | "xl" — seuil d’activation du parallax
 } = Astro.props;
+
+// util petit: maps pour classes responsive
+const showParallax = parallaxFrom === "lg" ? "hidden lg:block" :
+                     parallaxFrom === "xl" ? "hidden xl:block" :
+                     /* md par défaut */     "hidden md:block";
+const showFallback = parallaxFrom === "lg" ? "block lg:hidden" :
+                     parallaxFrom === "xl" ? "block xl:hidden" :
+                                             "block md:hidden";
 ---
 
+<!-- Fallback (mobile) : pas de parallax -->
 <div
-  class="relative w-full bg-fixed bg-center bg-cover"
+  class={`${showFallback} relative w-full bg-center bg-cover`}
+  style={`background-image: url(${fallbackSrc}); height: ${height};`}
+  role="img"
+  aria-label={alt}
+>
+  <div class={`absolute inset-0 ${overlay}`}></div>
+</div>
+
+<!-- Parallax (desktop et +) -->
+<div
+  class={`${showParallax} relative w-full bg-fixed bg-center bg-cover`}
   style={`background-image: url(${src}); height: ${height};`}
   role="img"
   aria-label={alt}

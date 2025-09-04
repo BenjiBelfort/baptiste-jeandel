@@ -2,39 +2,51 @@
 import FunkyButton from '@/components/FunkyButton.astro';
 
 const {
-  image = '/images/baptiste-jeandel.webp',
+  image = '/images/baptiste-jeandel.webp',          // desktop
+  mobileImage = '/images/baptiste-jeandel-alt.webp', // mobile
   title = 'Baptiste Jeandel',
   subtitle = 'Musique, médiation et transmission pour tous les âges et tous les publics.',
 } = Astro.props;
+
+// coupe le titre après le premier espace (fallback: tout sur la 1ère ligne si pas d'espace)
+const [firstWord, ...restWords] = title.split(' ');
+const secondLine = restWords.join(' ');
 ---
 <section
   class="relative w-full min-h-screen flex items-center"
-  style={{ '--hero': `url(${image})` }}
+  style={{ '--hero-desktop': `url(${image})`, '--hero-mobile': `url(${mobileImage})` }}
 >
   <!-- Calque image -->
-  <div class="absolute inset-0 bg-[image:var(--hero)] sepia-25 bg-fixed bg-cover bg-center"></div>
+  <div
+    class="absolute inset-0
+           bg-[image:var(--hero-mobile)] md:bg-[image:var(--hero-desktop)]
+           bg-cover bg-center bg-no-repeat
+           bg-scroll md:bg-fixed
+           sepia-25">
+  </div>
 
-  <!-- Overlay gradient : de blanc (à droite) vers transparent (à gauche) -->
   <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white to-transparent"></div>
 
-  <!-- Contenu centré verticalement -->
   <div class="relative z-10 w-full">
     <div class="max-w-6xl mx-auto px-4">
-      <div class="grid md:grid-cols-2 items-center">
-        <!-- Colonne texte (1/2 largeur du conteneur) -->
-        <div   class="p-6">
-          <h1 class="text-5xl md:text-7xl font-bold hand drop-shadow-xs/30 text-stone-900">{title}</h1>
+      <div class="grid sm:grid-cols-2 items-center">
+        <div class="p-6">
+          <h1 class="text-5xl md:text-7xl font-bold hand drop-shadow-xs/30 text-stone-900 leading-tight">
+            {firstWord}
+            {secondLine && (
+              <span class="block sm:inline">{' '}{secondLine}</span>
+            )}
+          </h1>
+
           {subtitle && (
             <h2 class="mt-4 text-xl font-bold text-stone-900 pr-12">{subtitle}</h2>
           )}
+
           <div class="mt-6 flex flex-col md:flex-row gap-3">
             <FunkyButton href="/services" label="Découvrir les services" color="bg-violet-300" />
             <FunkyButton href="/formations" label="Voir les formations" color="bg-green-300" />
           </div>
-
         </div>
-
-        <!-- Colonne vide (1/2 largeur du conteneur) -->
         <div></div>
       </div>
     </div>
