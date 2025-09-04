@@ -3,108 +3,39 @@ title: "Relaxations Sonores"
 slug: "relaxations-sonores"
 excerpt: "Profitez d'un moment de détente unique."
 domain: "Relaxations sonores"
-ctaMessage: "Vous souhaitez organiser une relaxation sonore ? Contactez-moi"
+ctaMessage: "Vous souhaitez organiser une relaxation sonore dans votre établissement ? Contactez-moi"
 sort: 4
 seoTitle: "Relaxations sonores — Baptiste Jeandel"
 seoDescription: "Relaxations sonores."
 ---
+import RelaxDatesBtn from '@/components/RelaxDatesBtn.astro';
+
 ## Dates des prochaines relaxations sonores
 à la cravanchoise
 
 
-<iframe width="100%" height="400" src="https://www.youtube.com/embed/4NSYIl8WeUg?si=vrE6o5TYyBuupONf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-Mon instrumentarium pour une détente maximum
 
-<table class="w-full border border-stone-300 text-left bg-white">
-  <thead class="bg-stone-100">
-    <tr>
-      <th class="border-b border-stone-300 px-3 py-2">Année</th>
-      <th class="border-b border-stone-300 px-3 py-2">Date</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="scroll-mt-24 mb-12 flex flex-row justify-evenly items-start gap-6 flex-wrap" id="dates-relax">
+  <div class="flex flex-col items-center gap-3">
+    <h3>2025</h3>
+    <RelaxDatesBtn label="9 septembre"  color="bg-stone-700" size="md" />
+    <RelaxDatesBtn label="14 octobre"   color="bg-stone-700" size="md" />
+    <RelaxDatesBtn label="4 novembre"   color="bg-stone-700" size="md" />
+    <RelaxDatesBtn label="2 décembre"   color="bg-stone-700" size="md" />
+  </div>
 
-    {/* 2025 */}
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2025</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2025-08-10">
-        10 août
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2025</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2025-09-09">
-        9 septembre
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2025</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2025-10-14">
-        14 octobre
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2025</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2025-11-04">
-        4 novembre
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2025</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2025-12-02">
-        2 décembre
-      </td>
-    </tr>
-
-    {/* 2026 (inclut le 13 janvier) */}
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-01-13">
-        13 janvier
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-02-03">
-        3 février
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-03-10">
-        10 mars
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-04-21">
-        21 avril
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-05-19">
-        19 mai
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-06-16">
-        16 juin
-      </td>
-    </tr>
-    <tr>
-      <td class="align-top border-t border-stone-200 px-3 py-2">2026</td>
-      <td class="align-top border-t border-stone-200 px-3 py-2" data-date="2026-07-07">
-        7 juillet
-      </td>
-    </tr>
-
-  </tbody>
-</table>
-
-![photo spectacles](/images/cravanchoise.webp)
-
+  <div class="flex flex-col items-center gap-3">
+    <h3>2026</h3>
+    <RelaxDatesBtn label="13 janvier"   color="bg-teal-800" size="md" />
+    <RelaxDatesBtn label="3 février"    color="bg-teal-800" size="md" />
+    <RelaxDatesBtn label="10 mars"      color="bg-teal-800" size="md" />
+    <RelaxDatesBtn label="21 avril"     color="bg-teal-800" size="md" />
+    <RelaxDatesBtn label="19 mai"     color="bg-teal-800" size="md" />
+    <RelaxDatesBtn label="16 juin"     color="bg-teal-800" size="md" />
+    <RelaxDatesBtn label="7 juillet"     color="bg-teal-800" size="md" />
+  </div>
+</div>
+<br/ >
 RDV au 6, rue Aristide Briand 90300 CRAVANCHE (salle la cravanchoise)
 
 Les relaxations sonores ont lieu de 20h à 21h avec un accueil à 19h45
@@ -112,3 +43,10 @@ Les relaxations sonores ont lieu de 20h à 21h avec un accueil à 19h45
 Participation financière : 15 € / séance ou carte 5 séances à 60 €.
 
 Apportez votre tapis de sol / lit de camp / chaise longue. Prévoir aussi un petit oreiller, un petit plaid
+
+<br/ >
+
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/4NSYIl8WeUg?si=vrE6o5TYyBuupONf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Mon instrumentarium pour une détente maximum
+<br/ >
+![photo spectacles](/images/cravanchoise.webp)

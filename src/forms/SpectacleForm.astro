@@ -1,0 +1,120 @@
+---
+/** Sous-formulaire : Spectacle */
+---
+<section
+  data-domain-form="Spectacles"
+  class="hidden border border-stone-900 bg-violet-100 p-4 md:p-5"
+  aria-label="Questions spécifiques — Spectacle"
+>
+  <h2 class="hand text-3xl mb-6 text-center">Spectacle</h2>
+
+  <!-- Téléphone -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">N° de téléphone *</span>
+      <input
+        data-reg-id="reg-tel"
+        type="tel"
+        required
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="03… / 06…"
+        inputmode="tel"
+      />
+    </label>
+  </div>
+
+  <!-- Nombre de personnes -->
+  <label class="block mt-4">
+    <span class="text-sm">Nombre de personnes participant(e)s *</span>
+    <input
+      data-reg-id="reg-nbParticipants"
+      type="number"
+      required
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Ex. 40"
+      min="1"
+      step="1"
+      inputmode="numeric"
+    />
+  </label>
+
+  <!-- Accompagnement -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">Les enfants seront-ils accompagnés ? *</span>
+      <select
+        data-reg-id="reg-accompagnement"
+        required
+        class="mt-1 w-full border bg-white p-2"
+      >
+        <option value="">— Sélectionner —</option>
+        <option value="parents">Par les parents</option>
+        <option value="assistantes">Par des assistant(e)s maternel(le)s</option>
+        <option value="les-deux">Les deux</option>
+        <option value="aucun">Non</option>
+        <option value="autre">Autre (préciser)</option>
+      </select>
+    </label>
+
+    <label class="block" data-show-if="reg-accompagnement" data-show-eq="autre">
+      <span class="text-sm">Précisez l’accompagnement *</span>
+      <input
+        data-reg-id="reg-accompagnementAutre"
+        data-required
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Ex. enseignants, bénévoles…"
+      />
+    </label>
+  </div>
+
+  <!-- Âges des enfants -->
+  <label class="block mt-4">
+    <span class="text-sm">Âges des enfants *</span>
+    <input
+      data-reg-id="reg-agesEnfants"
+      required
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Ex. 2–3 ans / 4–6 ans"
+    />
+  </label>
+
+  <!-- Adresse exacte du lieu -->
+  <label class="block mt-4">
+    <span class="text-sm">Adresse exacte du lieu où le spectacle aura lieu *</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-lieuSpectacle"
+      required
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Nom de la structure, rue, code postal, ville…"
+    ></textarea>
+  </label>
+
+  <!-- Date + horaires -->
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <label class="block">
+            <span class="text-sm">Date *</span>
+            <input data-reg-id="reg-date" required class="mt-1 w-full border bg-white p-2" type="date" />
+        </label>
+
+        <label class="block">
+            <span class="text-sm">Horaire *</span>
+            <input data-reg-id="reg-horaire" required class="mt-1 w-full border bg-white p-2" type="text" />
+        </label>
+    </div>
+
+  <!-- 🔒 Registre hidden (ids identiques aux data-reg-id) -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Téléphone" id="reg-tel" disabled />
+    <input type="hidden" name="Nombre de personnes" id="reg-nbParticipants" disabled />
+
+    <input type="hidden" name="Accompagnement enfants" id="reg-accompagnement" disabled />
+    <input type="hidden" name="Accompagnement (précision)" id="reg-accompagnementAutre" disabled />
+
+    <input type="hidden" name="Âges des enfants" id="reg-agesEnfants" disabled />
+    <input type="hidden" name="Adresse (lieu du spectacle)" id="reg-lieuSpectacle" disabled />
+
+    <input type="hidden" name="Date souhaitée" id="reg-date" disabled />
+    <input type="hidden" name="Heure de début" id="reg-horaire" disabled />
+  </div>
+</section>

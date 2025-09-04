@@ -1,0 +1,68 @@
+---
+/** Sous-formulaire : Relaxations Sonores
+ * - Champs visibles avec data-reg-id="<id du hidden>"
+ * - Registre hidden (names Netlify) désactivé par défaut
+ */
+---
+
+<section
+  data-domain-form="Relaxations sonores"
+  class="hidden border border-stone-900 bg-violet-100 p-4 md:p-5"
+  aria-label="Questions spécifiques — Relaxations sonores"
+>
+  <h2 class="hand text-3xl mb-6 text-center">Relaxations sonores</h2>
+
+    <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+            <span class="text-sm">N° de téléphone *</span>
+            <input data-reg-id="reg-tel" type="tel" required class="mt-1 w-full border bg-white p-2" placeholder="03… / 06…" inputmode="tel" />
+        </label>
+    </div>
+
+    <label class="block mt-4">
+        <span class="text-sm">Structure et adresse *</span>
+        <textarea rows="3" data-reg-id="reg-structure" required class="mt-1 w-full border bg-white p-2" placeholder="Nom et adresse de la structure"></textarea>
+    </label>
+
+    <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <label class="block">
+            <span class="text-sm">Code postal *</span>
+            <input data-reg-id="reg-cp" required class="mt-1 w-full border bg-white p-2" placeholder="90000" inputmode="numeric" pattern="\d{5}" />
+        </label>
+
+        <label class="block">
+            <span class="text-sm">Ville *</span>
+            <input data-reg-id="reg-ville" required class="mt-1 w-full border bg-white p-2" />
+        </label>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <label class="block">
+            <span class="text-sm">Nombre de participants *</span>
+            <input data-reg-id="reg-nbParticipants" required class="mt-1 w-full border bg-white p-2" placeholder="Nombre de personnes (minimum 3)" min="3" step="1" inputmode="numeric" type="number" />
+        </label>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <label class="block">
+            <span class="text-sm">Date *</span>
+            <input data-reg-id="reg-date" required class="mt-1 w-full border bg-white p-2" type="date" />
+        </label>
+
+        <label class="block">
+            <span class="text-sm">Horaire *</span>
+            <input data-reg-id="reg-horaire" required class="mt-1 w-full border bg-white p-2" type="text" />
+        </label>
+    </div>
+
+  <!-- 🔒 Registre hidden de ce sous-form -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Téléphone" id="reg-tel" disabled />
+    <input type="hidden" name="Structure (adresse)" id="reg-structure" disabled />
+    <input type="hidden" name="Code postal" id="reg-cp" disabled />
+    <input type="hidden" name="Ville" id="reg-ville" disabled />
+    <input type="hidden" name="Nombre de participants" id="reg-nbParticipants" disabled />
+    <input type="hidden" name="Date" id="reg-date" disabled />
+    <input type="hidden" name="Horaire" id="reg-horaire" disabled />
+  </div>
+</section>

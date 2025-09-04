@@ -3,27 +3,16 @@
 ---
 <section
   data-domain-form="Éveil musical"
-  class="hidden border border-stone-900 bg-violet-50/70 p-4 md:p-5"
+  class="hidden border border-stone-900 bg-violet-100 p-4 md:p-5"
   aria-label="Questions spécifiques — Éveil musical"
 >
   <h2 class="hand text-3xl mb-6 text-center">Éveil musical</h2>
 
-  <!-- Identité de la structure -->
-  <div class="grid md:grid-cols-2 gap-4">
-    <label class="block">
-      <span class="text-sm">Représentant de la structure *</span>
-      <input
-        data-reg-id="reg-structureEm"
-        required
-        class="mt-1 w-full border bg-white p-2"
-        placeholder="Nom & fonction"
-      />
-    </label>
-
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
       <span class="text-sm">N° de téléphone *</span>
       <input
-        data-reg-id="reg-telEm"
+        data-reg-id="reg-tel"
         type="tel"
         required
         class="mt-1 w-full border bg-white p-2"
@@ -37,10 +26,10 @@
     <span class="text-sm">Structure et adresse *</span>
     <textarea
       rows="3"
-      data-reg-id="reg-addrEm"
+      data-reg-id="reg-structure"
       required
       class="mt-1 w-full border bg-white p-2"
-      placeholder="Nom de la structure et adresse"
+      placeholder="Nom et adresse de la structure"
     ></textarea>
   </label>
 
@@ -48,7 +37,7 @@
     <label class="block">
       <span class="text-sm">Code postal *</span>
       <input
-        data-reg-id="reg-cpEm"
+        data-reg-id="reg-cp"
         required
         class="mt-1 w-full border bg-white p-2"
         placeholder="90000"
@@ -60,7 +49,7 @@
     <label class="block">
       <span class="text-sm">Ville *</span>
       <input
-        data-reg-id="reg-villeEm"
+        data-reg-id="reg-ville"
         required
         class="mt-1 w-full border bg-white p-2"
       />
@@ -87,7 +76,7 @@
     <label class="block">
       <span class="text-sm">Fréquence souhaitée *</span>
       <select
-        data-reg-id="reg-frequenceEm"
+        data-reg-id="reg-frequence"
         required
         class="mt-1 w-full border bg-white p-2"
       >
@@ -99,10 +88,10 @@
       </select>
     </label>
 
-    <label class="block" data-show-if="reg-frequenceEm" data-show-eq="autre">
-      <span class="text-sm">Précisez la fréquence</span>
+    <label class="block" data-show-if="reg-frequence" data-show-eq="autre">
+      <span class="text-sm">Précisez la fréquence *</span>
       <input
-        data-reg-id="frequenceAutreEm"
+        data-reg-id="frequenceAutre"
         data-required
         class="mt-1 w-full border bg-white p-2"
         placeholder="Ex. toutes les 3 semaines"
@@ -115,7 +104,7 @@
     <label class="block">
       <span class="text-sm">Âge des enfants *</span>
       <input
-        data-reg-id="reg-ageEm"
+        data-reg-id="reg-age"
         required
         class="mt-1 w-full border bg-white p-2"
         placeholder="Ex. 2–3 ans"
@@ -125,7 +114,7 @@
     <label class="block">
       <span class="text-sm">Nombre de participants *</span>
       <input
-        data-reg-id="reg-nbParticipantsEm"
+        data-reg-id="reg-nbParticipants"
         type="number"
         required
         class="mt-1 w-full border bg-white p-2"
@@ -145,7 +134,7 @@
     <label class="block md:col-span-2">
       <span class="text-sm">Date souhaitée</span>
       <input
-        data-reg-id="reg-dateSouhaiteeEm"
+        data-reg-id="reg-dateSouhaitee"
         type="date"
         class="mt-1 w-full border bg-white p-2"
       />
@@ -154,20 +143,19 @@
 
   <!-- 🔒 Registre hidden -->
   <div data-registry class="hidden" aria-hidden="true">
-    <input type="hidden" name="Structure (représentant)" id="reg-structureEm" disabled />
-    <input type="hidden" name="Téléphone" id="reg-telEm" disabled />
-    <input type="hidden" name="Structure (adresse)" id="reg-addrEm" disabled />
-    <input type="hidden" name="Code postal" id="reg-cpEm" disabled />
-    <input type="hidden" name="Ville" id="reg-villeEm" disabled />
+    <input type="hidden" name="Téléphone" id="reg-tel" disabled />
+    <input type="hidden" name="Structure (adresse)" id="reg-structure" disabled />
+    <input type="hidden" name="Code postal" id="reg-cp" disabled />
+    <input type="hidden" name="Ville" id="reg-ville" disabled />
 
     <input type="hidden" name="Type de demande (éveil)" id="reg-typeEveil" disabled />
 
-    <input type="hidden" name="Fréquence (éveil)" id="reg-frequenceEm" disabled />
-    <input type="hidden" name="Fréquence (précision)" id="frequenceAutreEm" disabled />
+    <input type="hidden" name="Fréquence (éveil)" id="reg-frequence" disabled />
+    <input type="hidden" name="Fréquence (précision)" id="frequenceAutre" disabled />
 
-    <input type="hidden" name="Âge des enfants" id="reg-ageEm" disabled />
-    <input type="hidden" name="Nombre de participants" id="reg-nbParticipantsEm" disabled />
-    <input type="hidden" name="Lieu" id="reg-lieuEm" disabled />
-    <input type="hidden" name="Date souhaitée" id="reg-dateSouhaiteeEm" disabled />
+    <input type="hidden" name="Âge des enfants" id="reg-age" disabled />
+    <input type="hidden" name="Nombre de participants" id="reg-nbParticipants" disabled />
+    <input type="hidden" name="Lieu" id="reg-lieu" disabled />
+    <input type="hidden" name="Date souhaitée" id="reg-dateSouhaitee" disabled />
   </div>
 </section>

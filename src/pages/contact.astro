@@ -5,7 +5,9 @@ import FunkyButton from '@/components/FunkyButton.astro';
 // Domain subforms
 import MusicoForm from '@/forms/MusicoForm.astro';
 import EveilForm from '@/forms/EveilForm.astro';
+import RelaxForm from '@/forms/RelaxForm.astro';
 import CoursForm from '@/forms/CoursForm.astro';
+import SpectacleForm from '@/forms/SpectacleForm.astro';
 
 const url = new URL(Astro.request.url);
 const originFromQuery = url.searchParams.get('origin') ?? '';
@@ -80,6 +82,8 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         <MusicoForm />
         <EveilForm />
         <CoursForm />
+        <RelaxForm />
+        <SpectacleForm />
         <!-- tu pourras ajouter d'autres sous-formulaires ici -->
       </div>
 

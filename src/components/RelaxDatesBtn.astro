@@ -1,0 +1,22 @@
+---
+const {
+  label = 'Relaxation',
+  color = 'bg-amber-300',
+  textColor = 'text-white',
+  size = 'md',          // 'sm' | 'md' | 'lg'
+  class: extra = '',
+} = Astro.props;
+
+const sizeClasses = (
+  size === 'sm' ? 'h-10 w-40 text-base' :      // 2.5rem x 10rem
+  size === 'lg' ? 'h-14 w-56 text-lg'  :       // 3.5rem x 14rem
+                  'h-12 w-48 text-base'        // 3rem x 12rem (par défaut)
+);
+---
+<span
+  class={`inline-flex items-center justify-center whitespace-nowrap
+          ${sizeClasses} border border-black px-4 py-0 font-bold
+          ${color} ${textColor} ${extra}`}
+>
+  {label}
+</span>
