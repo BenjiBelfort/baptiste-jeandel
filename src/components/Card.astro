@@ -4,18 +4,17 @@ import FunkyButton from '@/components/FunkyButton.astro';
 const {
   title,
   excerpt,
-  href,                     
+  href,
   ctaLabel = 'En savoir plus',
-  secondaryHref,            
+  secondaryHref,
   secondaryLabel = 'Demander un devis',
   icon,
+  image, // <- nouvelle prop
 } = Astro.props;
 
-// On récupère le path actuel
 const currentPath = Astro.url.pathname;
 
-// Couleur du bouton CTA en fonction de la route
-let ctaColor = 'bg-sky-300'; // par défaut
+let ctaColor = 'bg-sky-300';
 if (currentPath.startsWith('/services')) {
   ctaColor = 'bg-violet-300';
 } else if (currentPath.startsWith('/formations')) {
@@ -31,10 +30,19 @@ if (currentPath.startsWith('/services')) {
          focus-within:ring-2 focus-within:ring-stone-400"
 >
   <div class="relative flex h-full flex-col">
-    <h3 class="my-6 mx-auto text-4xl hand font-bold text-stone-900 flex items-start gap-2">
+    <h3 class="my-6 mx-auto text-4xl hand font-bold text-stone-900 flex items-start gap-2 text-center">
       {icon && <span aria-hidden="true" class="mt-0.5">{icon}</span>}
       {title}
     </h3>
+
+    {image && (
+      <img 
+        src={image} 
+        alt={`Illustration pour ${title}`} 
+        class="mx-auto mb-4 max-h-32 object-contain drop-shadow-xl"
+        loading="lazy"
+      />
+    )}
 
     {excerpt && <p class="mt-2 text-stone-700">{excerpt}</p>}
 

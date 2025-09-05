@@ -23,6 +23,7 @@ const items = (await getCollection('formations')).sort((a,b)=>a.data.sort - b.da
         secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`formations/${entry.slug}`)}`}
         secondaryLabel="Demander un devis"
         debug={entry.slug}
+        image={entry.data.image}
       />
     ))}
   </section>

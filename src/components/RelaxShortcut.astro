@@ -6,22 +6,39 @@ const showRelaxShortcut =
   path === "/" ||
   path === "/services" ||
   path === "/formations";
+
+// Offsets sous la nav (peut s'ajuster si ta nav change de hauteur)
+const topMobile = 72;   // px
+const topDesktop = 72;  // px
 ---
 
 {showRelaxShortcut && (
   <div
-    class="fixed z-40 pointer-events-none"
-    style="top:72px; left:12px;"
+    id="relax-shortcut"
+    class="fixed left-0 right-0 z-40 pointer-events-none"
+    style={`--top-mobile:${topMobile}px; --top-desktop:${topDesktop}px;`}
+    aria-hidden="false"
   >
-    <a
-      href="/services/relaxations-sonores#dates-relax"
-      class="relative inline-flex items-center gap-2 px-3 py-1.5 border border-stone-900 bg-red-300
-             font-semibold -rotate-1 pointer-events-auto shadow-sm/30
-             rounded-none cursor-pointer select-none touch-manipulation
-          transform transition-all duration-200
-          hover:shadow-md/30"
-    >
-      <span class="relative z-10 text-sm text-left">Voir les dates des<br> relaxations sonores</span>
-    </a>
+    <div class="max-w-6xl mx-auto px-4">
+      <a
+        href="/services/relaxations-sonores#dates-relax"
+        class="relative inline-flex items-center gap-2 px-3 py-1.5 border border-stone-900 bg-red-300
+               font-semibold -rotate-1 pointer-events-auto shadow-sm/30
+               rounded-none cursor-pointer select-none touch-manipulation
+               transform transition-all duration-200 hover:shadow-md/30"
+      >
+        <span class="relative z-10 text-sm text-left">
+          Voir les dates des<br />relaxations sonores
+        </span>
+      </a>
+    </div>
   </div>
 )}
+
+<style is:inline>
+  /* Position collée sous la nav, mais contrainte au container du site */
+  #relax-shortcut { top: var(--top-mobile); }
+  @media (min-width: 768px) {
+    #relax-shortcut { top: var(--top-desktop); }
+  }
+</style>

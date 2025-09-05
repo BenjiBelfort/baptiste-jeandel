@@ -1,0 +1,119 @@
+---
+/** Sous-formulaire : Atelier Petite Enfance (Formation)
+ * - Champs visibles avec data-reg-id="<id du hidden>"
+ * - Registre hidden (names Netlify) désactivé par défaut
+ */
+---
+
+<section
+  data-domain-form="Atelier petite enfance"
+  class="hidden border border-stone-900 bg-green-100 p-4 md:p-5"
+  aria-label="Questions spécifiques — Atelier petite enfance"
+>
+  <h2 class="hand text-3xl mb-6 text-center">Créer et mener un atelier musical — Petite Enfance</h2>
+
+  <!-- Coordonnées -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <label class="block">
+      <span class="text-sm">N° de téléphone *</span>
+      <input
+        data-reg-id="reg-tel"
+        type="tel"
+        required
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="03… / 06…"
+        inputmode="tel"
+      />
+    </label>
+  </div>
+
+  <label class="block mt-4">
+    <span class="text-sm">Structure *</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-structure"
+      required
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Nom de la structure et adresse"
+    ></textarea>
+  </label>
+
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">Code postal *</span>
+      <input
+        data-reg-id="reg-cp"
+        required
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="90000"
+        inputmode="numeric"
+      />
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Ville *</span>
+      <input data-reg-id="reg-ville" required class="mt-1 w-full border bg-white p-2" />
+    </label>
+  </div>
+
+  <!-- Participants & profil -->
+
+    <label class="block mt-4">
+      <span class="text-sm">Combien de personnes sont intéressées par la formation ? *</span>
+      <input
+        data-reg-id="reg-nbPersonnes"
+        type="number"
+        min="1"
+        step="1"
+        required
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="ex : 6"
+        inputmode="numeric"
+      />
+    </label>
+
+    <label class="block mt-4">
+      <span class="text-sm">Quel est leur profil ? (type de poste, missions) *</span>
+      <input
+        data-reg-id="reg-profil"
+        required
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Auxiliaire, EJE, AS, AMP, IDE, animateur·rice…"
+      />
+    </label>
+
+
+  <!-- Matériel -->
+  <label class="block mt-4">
+    <span class="text-sm">Avez-vous déjà du matériel sur place ? Si oui, précisez</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-matos"
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Listez le matériel (incl. matériel de diffusion musicale)…"
+    ></textarea>
+  </label>
+
+  <!-- Thématiques à renforcer -->
+  <label class="block mt-4">
+    <span class="text-sm">Sur quelles thématiques les personnes à former souhaitent-elles monter en compétences en particulier ?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-themes"
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Ex : éveil musical 0–3 ans, gestion de groupe, instruments adaptés, structuration de séance…"
+    ></textarea>
+  </label>
+
+  <!-- 🔒 Registre hidden de ce sous-form -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Téléphone" id="reg-tel" disabled />
+    <input type="hidden" name="Structure" id="reg-structure" disabled />
+    <input type="hidden" name="Code postal" id="reg-cp" disabled />
+    <input type="hidden" name="Ville" id="reg-ville" disabled />
+    <input type="hidden" name="Nombre de personnes intéressées" id="reg-nbPersonnes" disabled />
+    <input type="hidden" name="Profil des apprenant(e)s" id="reg-profil" disabled />
+    <input type="hidden" name="Matériel sur place (précisions)" id="reg-matos" disabled />
+    <input type="hidden" name="Thématiques à renforcer" id="reg-themes" disabled />
+  </div>
+</section>

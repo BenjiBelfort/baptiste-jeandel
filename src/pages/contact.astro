@@ -8,6 +8,8 @@ import EveilForm from '@/forms/EveilForm.astro';
 import RelaxForm from '@/forms/RelaxForm.astro';
 import CoursForm from '@/forms/CoursForm.astro';
 import SpectacleForm from '@/forms/SpectacleForm.astro';
+import AtelierEhpadForm from '@/forms/AtelierEhpadForm.astro';
+import AtelierPeForm from '@/forms/AtelierPeForm.astro';
 
 const url = new URL(Astro.request.url);
 const originFromQuery = url.searchParams.get('origin') ?? '';
@@ -59,7 +61,7 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
             <option>Relaxations sonores</option>
             <option>Spectacles</option>
             <option>Atelier EHPAD</option>
-            <option>Atelier Petite Enfance</option>
+            <option>Atelier petite enfance</option>
             <option>Cours de batterie / Handpan</option>
             <option>Me contacter</option>
           </select>
@@ -84,6 +86,8 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         <CoursForm />
         <RelaxForm />
         <SpectacleForm />
+        <AtelierEhpadForm />
+        <AtelierPeForm />
         <!-- tu pourras ajouter d'autres sous-formulaires ici -->
       </div>
 
@@ -148,9 +152,10 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       'Relaxations sonores': 'Relaxations sonores',
       'Spectacles': 'Spectacles',
       'Atelier EHPAD': 'Atelier EHPAD',
-      'Atelier Petite Enfance': 'Atelier Petite Enfance',
+      'Atelier petite enfance': 'Atelier petite enfance',
+      'ATELIER PETITE ENFANCE': 'Atelier petite enfance',
+      'Atelier Petite Enfance': 'Atelier petite enfance',
       'Cours': 'Cours de batterie / Handpan',
-      'cours': 'Cours de batterie / Handpan',
       'ME CONTACTER': 'Me contacter',
       'Me contacter uniquement': 'Me contacter',
     };

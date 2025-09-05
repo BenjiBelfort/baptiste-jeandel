@@ -7,6 +7,7 @@ const baseFields = {
   sort: z.number().default(0),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
+  image: z.string().optional(),
   ctaMessage: z.string().optional(),
 };
 

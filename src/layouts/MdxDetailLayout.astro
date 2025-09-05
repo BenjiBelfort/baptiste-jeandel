@@ -6,11 +6,12 @@ import StickySectionHint from "@/components/StickySectionHint.astro";
 /** Props attendues
  * - title: string
  * - excerpt?: string
- * - domain: string        (ex: "EVEIL MUSICAL" ou "Atelier EHPAD")
- * - slug: string          (ex: "eveil-musical")
- * - ctaMessage?: string   (message custom pour StickyDevis)
- * - ctaLabel?: string     (libellé du bouton — optionnel)
- * - stickyColor?: string  (classe Tailwind pour la couleur FunkyButton — optionnel)
+ * - domain: string
+ * - slug: string
+ * - ctaMessage?: string
+ * - ctaLabel?: string
+ * - image?: string
+ * - stickyColor?: string
  */
 type Props = {
   title: string;
@@ -19,6 +20,7 @@ type Props = {
   slug: string;
   ctaMessage?: string;
   ctaLabel?: string;
+  image?: string;
   stickyColor?: string;
 };
 
@@ -29,7 +31,8 @@ const {
   slug,
   ctaMessage,
   ctaLabel = "Demander un devis",
-  stickyColor, // ex: "bg-green-300" ou "bg-violet-300"
+  image,
+  stickyColor,
 } = Astro.props;
 ---
 
@@ -39,8 +42,24 @@ const {
 <!-- Bandeau contextuel sous la nav, auto-couleur par route -->
 <StickySectionHint title={title} />
 
+<!-- Illustration chevauchante (pile au px) -->
+{image && (
+  <div class="relative z-10 h-48 -mt-6">  <!-- hauteur fixe + chevauchement -->
+    <img
+      src={image}
+      alt={`Illustration — ${title}`}
+      class="h-48 max-h-48 w-auto max-w-[75vw] mx-auto object-contain drop-shadow-xl
+             absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+    />
+  </div>
+)}
+
+
 <!-- Contenu rich text -->
-<article class="prose max-w-3xl mx-auto px-4 py-12 pb-28 mdx">
+<article class="prose max-w-3xl mx-auto px-4 pb-28 mdx">
   <slot />
 </article>
 

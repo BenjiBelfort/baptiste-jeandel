@@ -24,6 +24,7 @@ const items = (await getCollection('services')).sort((a,b)=>a.data.sort - b.data
         secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`services/${entry.slug}`)}`}
         secondaryLabel="Demander un devis"
         debug={entry.slug}
+        image={entry.data.image}
       />
     ))}
   </section>
