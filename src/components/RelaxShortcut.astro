@@ -2,14 +2,12 @@
 const path = Astro.url.pathname;
 
 // Autorisé uniquement sur "/", "/services" ou "/formations"
-const showRelaxShortcut =
-  path === "/" ||
-  path === "/services" ||
-  path === "/formations";
+const showRelaxShortcut = ["/", "/services", "/formations", "/cours"].includes(path);
+
 
 // Offsets sous la nav (peut s'ajuster si ta nav change de hauteur)
-const topMobile = 72;   // px
-const topDesktop = 72;  // px
+const topMobile = 50;   // px
+const topDesktop = 69;  // px
 ---
 
 {showRelaxShortcut && (

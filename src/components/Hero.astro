@@ -1,54 +1,54 @@
 ---
 import FunkyButton from '@/components/FunkyButton.astro';
-
-const {
-  image = '/images/instruments.webp',          // desktop
-  mobileImage = '/images/baptiste-jeandel-alt.webp', // mobile
-  title = 'Baptiste Jeandel',
-  subtitle = 'Musique, médiation et transmission pour tous les âges et tous les publics.',
-} = Astro.props;
-
-// coupe le titre après le premier espace (fallback: tout sur la 1ère ligne si pas d'espace)
-const [firstWord, ...restWords] = title.split(' ');
-const secondLine = restWords.join(' ');
 ---
+
 <section
   class="relative w-full min-h-screen flex items-center"
-  style={{ '--hero-desktop': `url(${image})`, '--hero-mobile': `url(${mobileImage})` }}
+  style="
+    --hero-bg: url('/images/instruments.webp');
+    --hero-content-w: 760px; /* règle la largeur du container central */
+  "
 >
-  <!-- Calque image -->
+  <!-- Image de fond SANS blur -->
   <div
     class="absolute inset-0
-           bg-[image:var(--hero-mobile)] md:bg-[image:var(--hero-desktop)]
-           bg-cover bg-center bg-no-repeat
-           bg-scroll md:bg-fixed
-           sepia-25">
+          bg-[image:var(--hero-bg)]
+          bg-cover bg-center bg-no-repeat
+          bg-scroll md:bg-fixed
+          sepia-25"
+    aria-hidden="true">
   </div>
 
-  <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-white to-transparent"></div>
+  <!-- Voile blanc semi-transparent avec flou sur le fond -->
+  <div class="absolute inset-0 bg-white/50 backdrop-blur-sm md:backdrop-blur" aria-hidden="true"></div>
 
+
+  <!-- Contenu centré au premier plan -->
   <div class="relative z-10 w-full">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="grid sm:grid-cols-2 items-center">
-        <div class="p-6">
-          <h1 class="text-5xl md:text-7xl font-bold hand drop-shadow-xs/30 text-stone-900 leading-tight">
-            {firstWord}
-            {secondLine && (
-              <span class="block sm:inline">{' '}{secondLine}</span>
-            )}
-          </h1>
+    <div class="mx-auto px-4">
+      <div
+        class="mx-auto text-center p-6"
+        style="max-width: var(--hero-content-w);"
+      >
+        <h1 class="text-7xl md:text-9xl font-bold hand text-black">
+          Baptiste Jeandel
+        </h1>
 
-          {subtitle && (
-            <h2 class="mt-4 text-xl font-bold text-stone-900 pr-12">{subtitle}</h2>
-          )}
-
-          <div class="mt-6 flex flex-col md:flex-row gap-3">
-            <FunkyButton href="/services" label="Découvrir les services" color="redBJ" />
-            <FunkyButton href="/formations" label="Voir les formations" color="bleuBJ" />
-          </div>
-        </div>
-        <div></div>
+        <!-- Mets tes <br /> où tu veux -->
+        <h2
+          class="mt-4 text-lg sm:text-xl md:text-3xl font-bold text-black"
+        >
+          Musique, médiation et transmission<br />pour tous les âges et tous les publics.
+        </h2>
       </div>
     </div>
+  </div>
+
+  <!-- Bouton centré en bas (pas collé) -->
+  <div
+    class="pointer-events-auto absolute left-1/2 -translate-x-1/2 bottom-8 md:bottom-12 z-10"
+    aria-label="Aller à la section suivante"
+  >
+    <FunkyButton href="/#value-props" label="Découvrir" color="bg-slate-300" />
   </div>
 </section>

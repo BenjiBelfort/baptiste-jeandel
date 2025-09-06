@@ -3,16 +3,15 @@ import FunkyButton from '@/components/FunkyButton.astro';
 
 type Props = {
   domain?: string;
-  origin?: string;     // ex: "formations/handpan"
-  color?: string;      // "bg-sky-300", etc.
-  label?: string;      // libellé du bouton
-  message?: string;    // ✅ texte depuis le frontmatter
+  origin?: string;
+  color?: string;
+  label?: string;
+  message?: string; // <- reçoit ctaMessage du MDX
 };
 
 const {
   domain = '',
   origin = '',
-  color,
   label = 'Demander un devis',
   message,
 } = Astro.props;
@@ -20,34 +19,27 @@ const {
 // URL contact (avec paramètres)
 const contactHref = `/contact?domain=${encodeURIComponent(domain)}&origin=${encodeURIComponent(origin)}`;
 
-// Fallback si pas de message fourni
-const finalMessage = message ?? "Besoin d’un devis ? Je vous réponds rapidement";
+// Ne pas afficher si le MDX a ctaMessage: "" (ou espaces)
+const hideCTA = typeof message === 'string' && message.trim() === '';
+
+// Fallback seulement quand message est undefined/null
+const finalMessage = message ?? 'Besoin d’un devis ? Je vous réponds rapidement';
 ---
 
-<section
-  aria-label="Demander un devis"
-  class="sticky bottom-6 mb-6 z-30 flex justify-center"
->
-  <div
-    class="bg-white/80 backdrop-blur border border-stone-900 shadow-sm/30 rounded-lg
-           px-6 py-4 max-w-4xl w-full flex flex-col md:flex-row items-center justify-between gap-4"
-  >
-    <p class="hidden md:block text-stone-900 font-medium">
-      {finalMessage}
-        <span
-            aria-hidden="true"
-            class="inline-block ml-1 motion-safe:animate-[wiggle_1.6s_ease-in-out_infinite]"
-        >
-            →
-        </span>
-    </p>
+{!hideCTA && (
+  <section aria-label="Demander un devis" class="sticky bottom-6 mb-6 z-30 flex justify-center">
+    <div
+      class="bg-white/80 backdrop-blur border border-stone-900 shadow-sm/30 rounded-none md:rounded-lg
+             px-6 py-4 max-w-4xl w-full flex flex-col md:flex-row items-center justify-between gap-4"
+    >
+      <p class="hidden md:block text-stone-900 font-medium">
+        {finalMessage}
+        <span aria-hidden="true" class="inline-block ml-1 motion-safe:animate-[wiggle_1.6s_ease-in-out_infinite]">→</span>
+      </p>
 
-    <div class="flex-shrink-0">
-      <FunkyButton
-        href={contactHref}
-        label={label}
-        color="bg-slate-300"
-      />
+      <div class="flex-shrink-0">
+        <FunkyButton href={contactHref} label={label} color="bg-slate-300" />
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+)}

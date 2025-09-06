@@ -31,8 +31,9 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
       <h3 class="text-xl font-semibold text-stone-100">Navigation</h3>
       <ul class="mt-2 space-y-1">
         <li><a href="/#a-propos" class="hover:underline">À propos</a></li>
-        <li><a href="/services" class="hover:underline">Services</a></li>
-        <li><a href="/formations" class="hover:underline">Formations</a></li>
+        <li><a href="/services" class="hover:underline">Services autour de la musique</a></li>
+        <li><a href="/formations" class="hover:underline">Formations atelier musical</a></li>
+        <li><a href="/cours" class="hover:underline">Cours de batterie et handpan</a></li>
         <li><a href="/contact" class="hover:underline">Contact</a></li>
       </ul>
     </div>
@@ -54,7 +55,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
   </div>
 
     <!-- Bas du footer -->
-    <div class=" mt-8 text-sm bg-slate-900 text-stone-300/90">
+    <div class=" mt-8 text-sm bg-slate-900 text-stone-300">
       <div
         class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-center md:text-left"
       >
@@ -65,16 +66,16 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
         <!-- Centre (mobile: 2 / desktop: 2) -->
         <nav class="order-2 md:order-2 flex justify-center gap-4">
-          <a href="/mentions-legales" class="hover:text-slate-600 hover:underline hover:underline-offset-2">Mentions légales</a>
-          <a href="/sitemap.xml" class="hover:text-slate-600 hover:underline hover:underline-offset-2">Plan du site</a>
-          <a href="/humans.txt" class="hover:text-slate-600 hover:underline hover:underline-offset-2">humans.txt</a>
+          <a href="/mentions-legales" class="hover:text-slate-400 hover:underline hover:underline-offset-2">Mentions légales</a>
+          <a href="/sitemap.xml" class="hover:text-slate-400 hover:underline hover:underline-offset-2">Plan du site</a>
+          <a href="/humans.txt" class="hover:text-slate-400 hover:underline hover:underline-offset-2">humans.txt</a>
         </nav>
 
         <!-- Droite (mobile: 3 + petite marge / desktop: 3) -->
         <p class="order-3 md:order-3 mb-8 md:mb-0">
           <a
             href="https://benji-belfort-portfolio.netlify.app/"
-            class="flex items-center justify-center md:justify-start gap-2 hover:text-slate-600 hover:underline hover:underline-offset-2"
+            class="flex items-center justify-center md:justify-start gap-2 hover:text-slate-400 hover:underline hover:underline-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >

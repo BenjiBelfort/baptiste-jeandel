@@ -12,13 +12,18 @@ const services = [
   { href: '/services/musico-therapie', label: 'Musicothérapie' },
   { href: '/services/spectacles', label: 'Spectacles' },
   { href: '/services/relaxations-sonores', label: 'Relaxations Sonores' },
+  { href: '/services/ceremonies-handpan', label: 'Cérémonies handpan' },
+  { href: '/services/archives-sonores', label: 'Archives Sonores' },
 ];
 
 const formations = [
   { href: '/formations/atelier-ehpad', label: 'Atelier EHPAD' },
   { href: '/formations/atelier-petite-enfance', label: 'Atelier petite enfance' },
-  { href: '/formations/cours-handpan', label: 'Cours de handpan' },
-  { href: '/formations/cours-batterie', label: 'Cours de batterie' },
+];
+
+const cours = [
+  { href: '/cours/handpan', label: 'Cours de handpan' },
+  { href: '/cours/batterie', label: 'Cours de batterie' },
 ];
 
 const socials = [
@@ -39,10 +44,10 @@ const socials = [
     <!-- Logo -->
     <a href="/" class="flex items-center gap-4" aria-label="Accueil — Baptiste Jeandel">
       <!-- Logo -->
-      <img src="/logos/mini-logo.webp" alt="logo Baptiste Jeandel" class="w-16 h-auto"/>
+      <img src="/logos/mini-logo.webp" alt="logo Baptiste Jeandel" class="w-12 h-auto"/>
 
       <!-- Texte -->
-      <span class="font-semibold text-3xl md:text-4xl hand whitespace-nowrap">
+      <span class="font-semibold text-2xl md:text-3xl hand whitespace-nowrap">
         Baptiste Jeandel
       </span>
     </a>
@@ -67,8 +72,8 @@ const socials = [
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <!-- Sous-menu collé à l’entête -->
         <div
-          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-violet-300 border border-stone-900 shadow-lg
-                opacity-0 -translate-y-2 pointer-events-none
+          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-redBJ border border-black shadow-lg
+                opacity-0 -translate-y-2 pointer-events-none rounded-b-lg
                 transition duration-300 ease-in-out
                 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
                 group-[data-open='1']:opacity-100 group-[data-open='1']:translate-y-0 group-[data-open='1']:pointer-events-auto"
@@ -76,10 +81,10 @@ const socials = [
         >
           <ul class="py-2">
             {services.map((s) => (
-              <li><a href={s.href} class="block px-6 py-2 hover:bg-violet-400">{s.label}</a></li>
+              <li><a href={s.href} class="block px-6 py-2 hover:font-bold">{s.label}</a></li>
             ))}
-            <li class="border-t border-stone-700 mt-2">
-              <a href="/services" class="block px-6 py-2 font-medium hover:bg-violet-400">Tous les services →</a>
+            <li class="border-t border-black mt-2">
+              <a href="/services" class="block px-6 py-2 font-medium hover:font-bold">Tous les services →</a>
             </li>
           </ul>
         </div>
@@ -97,8 +102,8 @@ const socials = [
         </a>
         <div class="absolute left-0 right-0 h-2 top-full"></div>
         <div
-          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-green-300 border border-stone-900 shadow-lg
-                opacity-0 -translate-y-2 pointer-events-none
+          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-bleuBJ border border-black shadow-lg
+                opacity-0 -translate-y-2 pointer-events-none rounded-b-lg
                 transition duration-300 ease-in-out
                 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
                 group-[data-open='1']:opacity-100 group-[data-open='1']:translate-y-0 group-[data-open='1']:pointer-events-auto"
@@ -106,10 +111,40 @@ const socials = [
         >
           <ul class="py-2">
             {formations.map((f) => (
-              <li><a href={f.href} class="block px-6 py-2 hover:bg-green-400">{f.label}</a></li>
+              <li><a href={f.href} class="block px-6 py-2 hover:font-bold">{f.label}</a></li>
             ))}
-            <li class="border-t border-stone-700 mt-2">
-              <a href="/formations" class="block px-6 py-2 font-medium hover:bg-green-400">Toutes les formations →</a>
+            <li class="border-t border-black mt-2">
+              <a href="/formations" class="block px-6 py-2 font-medium hover:font-bold">Toutes les formations →</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Cours -->
+      <div class="relative group has-menu" data-open="0">
+        <a href="/cours" class="menu-head inline-flex items-center gap-2 px-1 py-1">
+          <svg class="w-3.5 h-3.5 transition-transform duration-150 origin-center group-[data-open='1']:rotate-90 group-hover:rotate-90"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+          Cours
+        </a>
+        <div class="absolute left-0 right-0 h-2 top-full"></div>
+        <div
+          class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-orangeBJ border border-black shadow-lg
+                opacity-0 -translate-y-2 pointer-events-none rounded-b-lg
+                transition duration-300 ease-in-out
+                group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+                group-[data-open='1']:opacity-100 group-[data-open='1']:translate-y-0 group-[data-open='1']:pointer-events-auto"
+          role="menu"
+        >
+          <ul class="py-2">
+            {cours.map((f) => (
+              <li><a href={f.href} class="block px-6 py-2 hover:font-bold">{f.label}</a></li>
+            ))}
+            <li class="border-t border-black mt-2">
+              <a href="/cours" class="block px-6 py-2 font-medium hover:font-bold">Toutes les formations →</a>
             </li>
           </ul>
         </div>
@@ -118,44 +153,15 @@ const socials = [
 
     <!-- Droite : Réseaux + Contact -->
     <div class="hidden lg:flex items-center gap-3">
-      <div class="flex items-center gap-2">
-        {socials.map(s => (
-          <a
-            href={s.href}
-            aria-label={s.label}
-            class="inline-flex w-9 h-9 items-center justify-center rounded-lg"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {s.key === 'yt' ? (
-              // YouTube
-              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
-                <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/>
-              </svg>
-            ) : s.key === 'fb' ? (
-              // Facebook
-              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
-                <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.7V12h2.7V9.8c0-2.7 1.6-4.2 4-4.2 1.2 0 2.4.2 2.4.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 2.9h-2.5v7A10 10 0 0 0 22 12"/>
-              </svg>
-            ) : s.key === 'ig' ? (
-              // Instagram
-              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
-                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.7A5.3 5.3 0 1 1 6.7 13 5.3 5.3 0 0 1 12 7.7zm0 2A3.3 3.3 0 1 0 15.3 13 3.3 3.3 0 0 0 12 9.7zM18 6.8a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.8z"/>
-              </svg>
-            ) : s.key === 'li' ? (
-              // LinkedIn
-            <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true">
-              <path d="M22.225 0H1.771A1.77 1.77 0 0 0 0 1.74v20.52C0 23.4.79 24 1.771 24h20.454C23.21 24 24 23.4 24 22.26V1.74A1.77 1.77 0 0 0 22.225 0zM7.05 20.452H3.9V9h3.15v11.452zM5.475 7.433a1.82 1.82 0 1 1 0-3.64 1.82 1.82 0 0 1 0 3.64zM20.452 20.452h-3.15V14.84c0-1.34-.027-3.06-1.995-3.06-1.995 0-2.3 1.47-2.3 2.98v5.693H9.857V9h3.02v1.56h.042c.42-.79 1.447-1.62 2.976-1.62 3.18 0 3.557 2.09 3.557 4.81v6.702z"/>
-            </svg>
-            ) : null}
-          </a>
-        ))}
-      </div>
+      <a href="/#reseaux" class="px-1 py-1 hover:underline underline-offset-6">
+        Mes internets
+      </a>
 
-      <a href="/contact" class="inline-flex text-sm px-5 py-2 border hover:bg-stone-400">
+      <a href="/contact" class="inline-flex text-sm w-20 py-2 justify-center border hover:bg-stone-200 hover:font-bold hover:text-black rounded-full">
         Contact
       </a>
-    </div>
+    </div>  
+
 
     <!-- Toggle mobile -->
     <button
@@ -182,20 +188,18 @@ const socials = [
     id="mobile-menu"
     class="lg:hidden fixed inset-x-0 top-0 -z-10 translate-y-[-100%] aria-[hidden=false]:translate-y-0 transition-transform duration-300 ease-out"
     aria-hidden="true"
-    >
-    <!-- On pousse le contenu sous la nav pour que le bouton reste visible -->
-    <div class="pt-[64px] lg:pt-[72px] bg-stone-900 shadow">
+  >
+    <div class="pt-[64px] lg:pt-[72px] bg-black shadow">
       <div class="max-w-6xl mx-auto px-4 pb-4">
         <nav class="flex flex-col gap-2 py-3">
           <a href="/#a-propos" class="px-2 py-2 text-base hover:underline underline-offset-4">À propos</a>
-          
 
           <!-- Services (accordion) -->
           <div class="mt-2">
-            <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="services">
+            <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="services" aria-expanded="false">
               <span>Services</span>
               <svg class="acc-icon w-4 h-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                   stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 l-6-6 l6-6"/></svg>
+                  stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 l-6-6 l6-6"/></svg>
             </button>
             <div class="pl-3 hidden" id="acc-services">
               {services.map(s => (<a href={s.href} class="block py-2 text-base hover:underline underline-offset-4">{s.label}</a>))}
@@ -205,10 +209,10 @@ const socials = [
 
           <!-- Formations (accordion) -->
           <div class="mt-2">
-            <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="formations">
+            <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="formations" aria-expanded="false">
               <span>Formations</span>
               <svg class="acc-icon w-4 h-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                   stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 l-6-6 l6-6"/></svg>
+                  stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 l-6-6 l6-6"/></svg>
             </button>
             <div class="pl-3 hidden" id="acc-formations">
               {formations.map(f => (<a href={f.href} class="block py-2 text-base hover:underline underline-offset-4">{f.label}</a>))}
@@ -216,50 +220,41 @@ const socials = [
             </div>
           </div>
 
-          <!-- Réseaux -->
-          <div class="mt-3 flex justify-center items-center gap-3">
-            {socials.map(s => (
-              <a href={s.href} aria-label={s.label} class="inline-flex w-10 h-10 items-center justify-center rounded-lg"
-              target="_blank" rel="noopener noreferrer">
-              {s.key === 'yt' ? (
-                /* YouTube */
-                <svg viewBox="0 0 24 24" class="w-8 h-8" fill="currentColor" aria-hidden="true">
-                  <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/>
-                </svg>
-              ) : s.key === 'fb' ? (
-                /* Facebook */
-                <svg viewBox="0 0 24 24" class="w-8 h-8" fill="currentColor" aria-hidden="true">
-                  <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.7V12h2.7V9.8c0-2.7 1.6-4.2 4-4.2 1.2 0 2.4.2 2.4.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 2.9h-2.5v7A10 10 0 0 0 22 12"/>
-                </svg>
-              ) : s.key === 'ig' ? (
-                /* Instagram */
-                <svg viewBox="0 0 24 24" class="w-8 h-8" fill="currentColor" aria-hidden="true">
-                  <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.7A5.3 5.3 0 1 1 6.7 13 5.3 5.3 0 0 1 12 7.7zm0 2A3.3 3.3 0 1 0 15.3 13 3.3 3.3 0 0 0 12 9.7zM18 6.8a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.8z"/>
-                </svg>
-              ) : s.key === 'li' ? (
-                /* LinkedIn */
-              <svg viewBox="0 0 24 24" class="w-8 h-8" fill="currentColor" aria-hidden="true">
-                <path d="M22.225 0H1.771A1.77 1.77 0 0 0 0 1.74v20.52C0 23.4.79 24 1.771 24h20.454C23.21 24 24 23.4 24 22.26V1.74A1.77 1.77 0 0 0 22.225 0zM7.05 20.452H3.9V9h3.15v11.452zM5.475 7.433a1.82 1.82 0 1 1 0-3.64 1.82 1.82 0 0 1 0 3.64zM20.452 20.452h-3.15V14.84c0-1.34-.027-3.06-1.995-3.06-1.995 0-2.3 1.47-2.3 2.98v5.693H9.857V9h3.02v1.56h.042c.42-.79 1.447-1.62 2.976-1.62 3.18 0 3.557 2.09 3.557 4.81v6.702z"/>
-              </svg>
-              ) : null}
-              </a>
-            ))}
+          <!-- Cours (accordion) -->
+          <div class="mt-2">
+            <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="cours" aria-expanded="false">
+              <span>Cours</span>
+              <svg class="acc-icon w-4 h-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 l-6-6 l6-6"/></svg>
+            </button>
+            <div class="pl-3 hidden" id="acc-cours">
+              {cours.map(c => (<a href={c.href} class="block py-2 text-base hover:underline underline-offset-4">{c.label}</a>))}
+              <a href="/cours" class="block py-2 text-base font-medium">Tous les cours →</a>
+            </div>
           </div>
-          <a href="/contact" class="px-2 py-2 border text-base text-center">Contact</a>
+
+          <!-- Réseaux (lien texte, plus d’icônes) -->
+          <a href="/#reseaux" class="mt-2 px-2 py-2 text-base hover:underline underline-offset-4">
+            Réseaux sociaux
+          </a>
+
+          <!-- Contact (rounded-full) -->
+          <a href="/contact" class="mt-2 px-2 py-2 border text-base text-center rounded-full">
+            Contact
+          </a>
         </nav>
       </div>
     </div>
   </div>
+
 </header>
 
 <script is:inline>
   // --- Desktop dropdowns ---
   document.querySelectorAll('.has-menu').forEach((box) => {
     const head = box.querySelector('.menu-head');
-    // hover open/close
     box.addEventListener('mouseenter', () => box.setAttribute('data-open', '1'));
     box.addEventListener('mouseleave', () => box.setAttribute('data-open', '0'));
-    // 1er clic ouvre, 2e clic laisse naviguer
     head?.addEventListener('click', (ev) => {
       const isOpen = box.getAttribute('data-open') === '1';
       if (!isOpen) {
@@ -286,21 +281,50 @@ const socials = [
     const isOpen = mm.getAttribute('aria-hidden') === 'false';
     setOpen(!isOpen);
   });
-  // Fermer après clic lien
   mm?.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (a) setOpen(false);
   });
 
-  // --- Accordéons mobile (fermés par défaut) ---
-  document.querySelectorAll('[data-acc]').forEach(btn => {
+  // --- Accordéons mobile : un seul ouvert à la fois ---
+  const accButtons = Array.from(document.querySelectorAll('[data-acc]'));
+  const panels = {
+    services: document.getElementById('acc-services'),
+    formations: document.getElementById('acc-formations'),
+    cours: document.getElementById('acc-cours'),
+  };
+
+  function closeAll(exceptKey = null) {
+    accButtons.forEach(btn => {
+      const key = btn.getAttribute('data-acc');
+      const panel = panels[key];
+      const icon = btn.querySelector('.acc-icon');
+      const isExcept = key === exceptKey;
+      const open = isExcept ? !panel.classList.contains('hidden') : false;
+
+      if (!isExcept || !open) {
+        panel.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        icon?.classList.remove('-rotate-90');
+      }
+    });
+  }
+
+  accButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.getAttribute('data-acc');
-      const panel = document.getElementById(`acc-${key}`);
+      const panel = panels[key];
       const icon = btn.querySelector('.acc-icon');
-      const willOpen = panel.classList.contains('hidden'); // si hidden -> on ouvre
-      panel.classList.toggle('hidden', !willOpen);         // false => montre, true => cache
+      const willOpen = panel.classList.contains('hidden');
+
+      // ferme tous les autres d’abord
+      closeAll(key);
+
+      // toggle celui-ci
+      panel.classList.toggle('hidden', !willOpen);
+      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
       icon?.classList.toggle('-rotate-90', willOpen);
     });
   });
 </script>
+

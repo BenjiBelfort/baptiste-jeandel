@@ -27,8 +27,9 @@ const {
 // Couleur auto selon la route (overridable via `color`)
 const path = Astro.url.pathname;
 let autoBg = 'bg-stone-200';
-if (path.startsWith('/services'))   autoBg = 'bg-violet-300';
-if (path.startsWith('/formations')) autoBg = 'bg-green-300';
+if (path.startsWith('/services'))   autoBg = 'bg-redBJ';
+if (path.startsWith('/formations')) autoBg = 'bg-bleuBJ';
+if (path.startsWith('/cours')) autoBg = 'bg-orangeBJ';
 const bgClass = color ?? autoBg;
 ---
 

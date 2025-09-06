@@ -1,6 +1,7 @@
 ---
 import Site from '@/layouts/SiteLayout.astro';
 import FunkyButton from '@/components/FunkyButton.astro';
+import PigeonEasterEgg from '@/components/PigeonEasterEgg.astro';
 
 // Domain subforms
 import MusicoForm from '@/forms/MusicoForm.astro';
@@ -97,21 +98,35 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       </label>
 
       <!-- Consentement RGPD -->
-      <label class="flex items-start gap-2 text-sm">
-        <input type="checkbox" name="Consentement RGPD" value="Oui" required class="mt-1" />
-        <span>
+      <div class="flex items-start gap-2 text-sm">
+        <input 
+          type="checkbox" 
+          id="consentement" 
+          name="Consentement RGPD" 
+          value="Oui" 
+          required 
+          class="mt-1" 
+        />
+        <label for="consentement" class="cursor-default select-text">
           J’accepte que mes informations soient utilisées par <strong>Baptiste Jeandel</strong> et son équipe afin d’être recontacté.
           <br />
           <span class="text-stone-600">
             Vos données ne sont jamais revendues. En savoir plus :
             <a href="/mentions-legales" class="underline">Mentions légales</a>.
           </span>
-        </span>
-      </label>
+        </label>
+      </div>
+
 
       <div class="flex items-center justify-between pt-2">
         <FunkyButton id="back-btn" as="button" type="button" label="Retour" color="bg-white" />
-        <FunkyButton as="button" type="submit" label="Envoyer" color="bg-green-300" />
+
+        <!-- wrapper relatif pour poser le pigeon au-dessus du bouton -->
+        <div class="relative">
+          <FunkyButton as="button" type="submit" label="Envoyer" color="bg-green-300" />
+          <!-- Easter egg -->
+          <PigeonEasterEgg />
+        </div>
       </div>
     </form>
   </section>

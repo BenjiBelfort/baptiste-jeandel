@@ -9,9 +9,16 @@ if (path.startsWith('/services'))   bgClass = 'bg-redBJ';
 if (path.startsWith('/formations')) bgClass = 'bg-bleuBJ';
 if (path.startsWith('/cours'))      bgClass = 'bg-orangeBJ';
 ---
-<section class={`relative w-full min-h-[35vh] flex items-center ${bgClass}`} data-page-title>
-  <div class="w-full max-w-6xl mx-auto px-4 text-center text-black">
+<section 
+  class={`relative w-full min-h-[35vh] flex items-center ${bgClass}`} 
+  data-page-title
+>
+  <!-- Dégradé radial -->
+  <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(255,255,255,0.5)_80%,rgba(255,255,255,0.2)_0%)] md:bg-[radial-gradient(circle,rgba(255,255,255,0.5)_60%,rgba(255,255,255,0.2)_0%)]"></div>
+
+  <div class="relative w-full max-w-6xl mx-auto px-4 text-center text-black">
     <h1 class="text-5xl md:text-7xl font-bold hand">{title}</h1>
     {subtitle && <h2 class="mt-3 text-xl md:text-2xl text-black">{subtitle}</h2>}
   </div>
 </section>
+
