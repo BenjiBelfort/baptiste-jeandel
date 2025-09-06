@@ -26,4 +26,11 @@ export const collections = {
       domain: z.string(),
     }),
   }),
+  cours: defineCollection({
+    type: 'content',
+    schema: z.object({
+      ...baseFields,
+      domain: z.string(),
+    }),
+  }),
 };

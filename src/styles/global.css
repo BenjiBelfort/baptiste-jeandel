@@ -7,6 +7,31 @@ html { scroll-behavior: smooth; }
   50%      { transform: translateX(4px); }
 }
 
+
+:root {
+  --redBJ: #ff5757;
+  --redBJ-shadow: #cc4646;
+  --bleuBJ: #5ce1e6;
+  --bleuBJ-shadow: #41adb1;
+  --orangeBJ: #ffbd59;
+  --orangeBJ-shadow: #cc9747;
+}
+
+.bg-redBJ    { background-color: var(--redBJ); }
+.bg-bleuBJ   { background-color: var(--bleuBJ); }
+.bg-orangeBJ { background-color: var(--orangeBJ); }
+
+/* :root {
+  --redBJ: #ff5757;
+  --redBJ-shadow: #cc4646;
+
+  --bleuBJ: #5ce1e6;
+  --bleuBJ-shadow: #41adb1;
+
+  --orangeBJ: #ffbd59;
+  --orangeBJ-shadow: #cc9747;
+} */
+
 /* Conteneur typographique MDX */
 .prose h2 { @apply mt-8 mb-4 text-2xl font-semibold; }
 .prose h3 { @apply mt-6 mb-3 text-xl font-medium; }

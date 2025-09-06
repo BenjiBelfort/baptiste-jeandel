@@ -1,0 +1,36 @@
+---
+import Site from '@/layouts/SiteLayout.astro';
+import { getCollection } from 'astro:content';
+import MdxDetailLayout from '@/layouts/MdxDetailLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('cours');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await entry.render();
+---
+
+<Site
+  title={data.seoTitle ?? data.title}
+  description={data.seoDescription ?? data.excerpt}
+  image="/og.jpg"
+  type="article"
+>
+  <MdxDetailLayout
+    title={data.title}
+    excerpt={data.excerpt}
+    domain={data.domain}
+    slug={entry.slug}
+    ctaMessage={data.ctaMessage}
+    image={data.image}
+    stickyColor="bg-green-300"
+  >
+    <Content />
+  </MdxDetailLayout>
+</Site>

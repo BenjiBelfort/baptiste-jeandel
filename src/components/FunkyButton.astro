@@ -1,42 +1,78 @@
 ---
 type Props = {
   label: string;
-  color?: string;           // ex: "bg-sky-300"
-  href?: string;            // si as="a"
-  as?: 'a' | 'button';      // défaut: 'a'
-  type?: 'button' | 'submit' | 'reset'; // si as="button"
-  id?: string;              // pour les hooks (ex: back-btn)
-  class?: string;           // classes additionnelles optionnelles
+  color?: string;           // ex: "bg-violet-300" OU "redBJ"
+  href?: string;
+  as?: 'a' | 'button';
+  type?: 'button' | 'submit' | 'reset';
+  id?: string;
+  class?: string;
+};
+
+// mapping pour les couleurs Tailwind standard (300 → 500)
+const shadowMap: Record<string, string> = {
+  "bg-violet-300": "rgb(139 92 246)", // violet-500
+  "bg-green-300": "rgb(34 197 94)",   // green-500
+  "bg-sky-300": "rgb(14 165 233)",    // sky-500
+  "bg-yellow-300": "rgb(234 179 8)",  // yellow-500
+  "bg-slate-300": "rgb(71 85 105)",   // slate-500
+};
+
+// mapping pour tes couleurs custom
+const customColors: Record<string, {bg: string; shadow: string}> = {
+  redBJ: { bg: "var(--redBJ)", shadow: "var(--redBJ-shadow)" },
+  bleuBJ: { bg: "var(--bleuBJ)", shadow: "var(--bleuBJ-shadow)" },
+  orangeBJ: { bg: "var(--orangeBJ)", shadow: "var(--orangeBJ-shadow)" },
 };
 
 const {
   label,
-  color = 'bg-sky-300',
-  href = '#',
-  as = 'a',
-  type = 'button',
+  color = "bg-sky-300",
+  href = "#",
+  as = "a",
+  type = "button",
   id,
-  class: extra = '',
+  class: extra = "",
 } = Astro.props;
 
-const base =
-  `relative w-full max-w-[460px] md:w-auto inline-flex items-center justify-center
-          ${color} text-black px-6 py-3 text-base md:text-xl
-          rounded-none cursor-pointer select-none touch-manipulation
-          transform transition-all duration-200
-          after:content-[''] after:absolute after:border after:border-black after:bottom-1 after:left-1
-          after:w-[calc(100%-1px)] after:h-[calc(100%-1px)]
-          hover:after:bottom-0.5 hover:after:left-0.5
-          hover:shadow-md/30 hover:-translate-y-0.5`;
+// check si c’est une couleur custom
+let bgClass = color;
+let shadowColor = "rgba(0,0,0,0.25)";
 
+if (customColors[color]) {
+  // couleur custom
+  bgClass = ""; // on va appliquer le bg via style
+  shadowColor = customColors[color].shadow;
+} else {
+  // couleur Tailwind classique
+  shadowColor = shadowMap[color] ?? "rgba(0,0,0,0.25)";
+}
+
+const base = `
+  relative w-full max-w-[460px] md:w-auto inline-flex items-center justify-center rounded-full
+  ${bgClass} text-black px-6 py-3 text-base md:text-xl
+  cursor-pointer select-none touch-manipulation
+  transform transition-all duration-200
+  hover:shadow-md/30
+  shadow-[0_4px_0_var(--shadow-color)]
+`;
 ---
-
 {as === 'button' ? (
-  <button id={id} type={type} class={base}>
+  <button
+    id={id}
+    type={type}
+    class={`${base} ${extra}`}
+    style={customColors[color] ? `background-color: ${customColors[color].bg}; --shadow-color: ${shadowColor};` : `--shadow-color: ${shadowColor};`}
+  >
     <span class="relative z-10">{label}</span>
   </button>
 ) : (
-  <a id={id} href={href} class={base}>
+  <a
+    id={id}
+    href={href}
+    class={`${base} ${extra}`}
+    style={customColors[color] ? `background-color: ${customColors[color].bg}; --shadow-color: ${shadowColor};` : `--shadow-color: ${shadowColor};`}
+  >
     <span class="relative z-10">{label}</span>
   </a>
 )}

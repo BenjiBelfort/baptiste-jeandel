@@ -1,0 +1,30 @@
+---
+import Site from '@/layouts/SiteLayout.astro';
+import PageTitle from '@/components/PageTitle.astro';
+import Card from '@/components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const items = (await getCollection('cours')).sort((a,b)=>a.data.sort - b.data.sort);
+---
+<Site title="Cours — Baptiste Jeandel" description="Cours proposées.">
+  <PageTitle
+    title="Cours"
+    subtitle="Cours de batterie et de handpan"
+  />
+
+  <section class="max-w-6xl mx-auto px-4 py-12 grid gap-6 md:grid-cols-2">
+    {items.map((entry) => (
+      <Card
+        title={entry.data.title}
+        excerpt={entry.data.excerpt}
+        eyebrow={entry.data.domain}
+        href={`/cours/${entry.slug}`}
+        ctaLabel="En savoir plus"
+        secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`cours/${entry.slug}`)}`}
+        secondaryLabel="Demander un devis"
+        debug={entry.slug}
+        image={entry.data.image}
+      />
+    ))}
+  </section>
+</Site>
