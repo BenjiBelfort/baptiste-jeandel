@@ -19,7 +19,7 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
 
-  <!-- Anti-FOUC pour les champs conditionnels -->
+    <!-- Anti-FOUC pour les champs conditionnels -->
   <style is:inline>
     [data-show-if] { display: none; }
     [data-show-if].__show { display: block; }
@@ -35,35 +35,40 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       Choisissez un domaine pour afficher les questions adaptées. Tous les champs marqués * sont requis.
     </p>
 
-    <!-- === Formulaire VISIBLE (pas de data-netlify ici) === -->
     <form
       id="contact-form"
       method="POST"
+      name="devis-v2"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
       action="/merci"
       class="space-y-6"
       autocomplete="off"
-      accept-charset="UTF-8"
     >
+      <!-- Netlify Forms -->
+      <input type="hidden" name="form-name" value="devis-v2" />
+      <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
+
       <!-- Provenance -->
       <input type="hidden" id="Provenance" name="Provenance" value={originFromQuery} />
 
       <!-- Domaine -->
       <label class="block">
         <span>Domaine *</span>
-        <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
-          <option value="">— Sélectionner —</option>
-          <option>Éveil musical</option>
-          <option>Musicothérapie</option>
-          <option>Relaxations sonores</option>
-          <option>Spectacles</option>
-          <option>Atelier EHPAD</option>
-          <option>Atelier petite enfance</option>
-          <option>Cours de batterie / Handpan</option>
-          <option>Me contacter</option>
-        </select>
+          <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
+            <option value="">— Sélectionner —</option>
+            <option>Éveil musical</option>
+            <option>Musicothérapie</option>
+            <option>Relaxations sonores</option>
+            <option>Spectacles</option>
+            <option>Atelier EHPAD</option>
+            <option>Atelier petite enfance</option>
+            <option>Cours de batterie / Handpan</option>
+            <option>Me contacter</option>
+          </select>
       </label>
 
-      <!-- Coordonnées (communs) -->
+            <!-- Coordonnées (communs) -->
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Prénom Nom *</span>
@@ -112,31 +117,17 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         </label>
       </div>
 
+
       <div class="flex items-center justify-between pt-2">
         <FunkyButton id="back-btn" as="button" type="button" label="Retour" color="bg-white" />
+
+        <!-- wrapper relatif pour poser le pigeon au-dessus du bouton -->
         <div class="relative">
           <FunkyButton as="button" type="submit" label="Envoyer" color="bg-green-300" />
+          <!-- Easter egg -->
           <PigeonEasterEgg />
         </div>
       </div>
-    </form>
-
-    <!-- === Formulaire FANTÔME Netlify (détection statique uniquement) === -->
-    <form
-      id="shadow-detection"
-      name="devis-v2"
-      data-netlify="true"
-      netlify-honeypot="bot-field"
-      action="/merci"
-      method="POST"
-      class="hidden"
-      aria-hidden="true"
-    >
-      <input type="hidden" name="form-name" value="devis-v2" />
-      <div style="display:none;">
-        <label>Ne pas remplir: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
-      </div>
-      <!-- Aucun autre champ ici -->
     </form>
   </section>
 
@@ -287,7 +278,7 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
     backBtn?.addEventListener('click', goBack);
     backLink?.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // ---------- Submit : collecte sélective + envoi via fetch à Netlify ----------
+    // ---------- Submit : copie visible -> registre hidden (Netlify) ----------
     const form = $('#contact-form');
 
     function groupByDataRegId(nodeList) {
@@ -303,13 +294,16 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
     function valueForGroup(els) {
       if (!els || !els.length) return '';
+
       const sample = els[0];
 
+      // Radios (groupe partageant 'name' et même data-reg-id)
       if (sample instanceof HTMLInputElement && sample.type === 'radio') {
         const checked = els.find(e => e.checked);
         return checked ? (checked.value || '').trim() : '';
       }
 
+      // Checkboxes
       if (sample instanceof HTMLInputElement && sample.type === 'checkbox') {
         if (els.length > 1) {
           return els.filter(e => e.checked).map(e => (e.value || '').trim()).join(', ');
@@ -317,92 +311,53 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         return sample.checked ? (sample.value || 'Oui') : '';
       }
 
+      // Select / Text / Textarea (un seul contrôle attendu par clé)
       return (sample.value || '').trim();
     }
 
-    function encode(data) {
-      return Object.keys(data)
-        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
-        .join('&');
-    }
-
-    form?.addEventListener('submit', async (e) => {
-      // Validations natives HTML5
-      if (!form.checkValidity()) {
-        e.preventDefault();
-        form.reportValidity();
-        return;
-      }
-
-      e.preventDefault(); // on gère l’envoi
-
-      // 1) Construire l'objet payload avec uniquement les champs non vides
-      const payload = {
-        'form-name': 'devis-v2',
-      };
-
-      // Champs communs
-      const prov = $('#Provenance')?.value?.trim();
-      const dom  = $('#domain')?.value?.trim();
-      const nom  = form.querySelector('[name="Nom"]')?.value?.trim();
-      const mail = form.querySelector('[name="Email"]')?.value?.trim();
-      const msg  = form.querySelector('[name="Message"]')?.value?.trim();
-      const rgpd = $('#consentement')?.checked ? 'Oui' : '';
-
-      if (prov) payload['Provenance'] = prov;
-      if (dom)  payload['Domaine'] = dom;
-      if (nom)  payload['Nom'] = nom;
-      if (mail) payload['Email'] = mail;
-      if (msg)  payload['Message'] = msg;
-      if (rgpd) payload['Consentement RGPD'] = rgpd;
-
-      // Champs du sous-form actif
+    form?.addEventListener('submit', () => {
+      // 1) quel sous-form est actif ?
       const active = $$('[data-domain-form]').find(b => !b.classList.contains('hidden'));
-      if (active) {
-        const groups = groupByDataRegId($$('[data-reg-id]', active));
-        groups.forEach((els, key) => {
-          let val = valueForGroup(els);
-          if (!val) return;
+      if (!active) return;
 
-          if (key === 'reg-frequence' && val === 'autre') {
-            const other = active.querySelector('[data-reg-id="frequenceAutre"]');
-            const otherVal = other ? valueForGroup([other]) : '';
-            val = otherVal || 'autre';
-          }
+      // 2) reset de tous les registres des sous-forms
+      $$('[data-domain-form] [data-registry] input[type="hidden"]').forEach(h => {
+        h.disabled = true;
+        h.value = '';
+      });
 
-          // Nom final du champ : si le registre #key existe et a name/data-name, on l'utilise
-          const hiddenReg = active.querySelector(`#${key}`);
-          const fieldName =
-            hiddenReg?.getAttribute?.('name') ||
-            hiddenReg?.dataset?.name ||
-            key;
+      // 3) regrouper les contrôles visibles par clé data-reg-id
+      const groups = groupByDataRegId($$('[data-reg-id]', active));
 
-          payload[fieldName] = val;
-        });
-      }
+      // 4) pour chaque groupe → valeur → hidden correspondant (#reg-xxx)
+      groups.forEach((els, key) => {
+        const hidden = active.querySelector(`#${key}`); // id du registre
+        if (!hidden) return;
 
-      // 2) URL de redirection (/merci?origin=...)
-      const detectionForm = $('#shadow-detection');
-      const baseAction = detectionForm?.getAttribute('action') || '/merci';
-      const current = new URL(baseAction, location.origin);
+        let val = valueForGroup(els);
+
+        // cas particulier : fréquence = "autre" → précision
+        if (key === 'reg-frequence' && val === 'autre') {
+          const other = active.querySelector('[data-reg-id="frequenceAutre"]');
+          const otherVal = other ? valueForGroup([other]) : '';
+          val = otherVal || 'autre';
+        }
+
+        if (val) {
+          hidden.value = val;
+          hidden.disabled = false;
+        }
+      });
+
+      // 5) Ajouter origin dans l'URL de redirection si présent (vers /merci)
+      const action = form.getAttribute('action') || '/merci';
+      const current = new URL(action, location.origin);
       const originVal = originParam || ($('#Provenance')?.value || '');
       if (originVal) current.searchParams.set('origin', originVal);
-
-      // 3) Envoi à Netlify (POST url-encoded vers la racine)
-      try {
-        await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: encode(payload),
-        });
-        // 4) Redirection
-        window.location.assign(`${current.pathname}${current.search}`);
-      } catch (err) {
-        console.error('Netlify form submit error:', err);
-        // Fallback : on tente une navigation simple (pas idéal mais évite de bloquer l’utilisateur)
-        window.location.assign(`${current.pathname}${current.search}`);
-      }
+      form.setAttribute('action', `${current.pathname}${current.search}`);
+      // ⚠️ Pas de preventDefault → Netlify soumet le formulaire
     });
   </script>
 
 </Site>
+
