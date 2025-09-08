@@ -140,6 +140,19 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
     const domainSelect = $('#domain');
     const blocks = $$('[data-domain-form]');
 
+    function stripNamesIn(container) {
+      $$('input, select, textarea', container).forEach(el => {
+        if (el.type === 'hidden') return; // on ne touche pas aux registres
+        if (el.hasAttribute('name')) {
+          // on garde une trace éventuelle au cas où (debug), mais on retire le name
+          el.dataset.origName = el.getAttribute('name');
+          el.removeAttribute('name');
+        }
+      });
+    }
+    // Appliquer dès le départ à tous les sous-formulaires
+    blocks.forEach(b => stripNamesIn(b));
+
     function setBlockActive(block, isActive) {
       block.classList.toggle('hidden', !isActive);
       // (dés)activer uniquement les champs visibles (pas le registre hidden)
