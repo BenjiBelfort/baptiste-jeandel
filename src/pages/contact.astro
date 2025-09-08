@@ -334,9 +334,11 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       if (!active) return;
 
       // 2) reset de tous les registres des sous-forms
+      //    -> on enlève name ET on disable (pour que Netlify ne les voie pas s'ils sont vides)
       $$('[data-domain-form] [data-registry] input[type="hidden"]').forEach(h => {
         h.disabled = true;
         h.value = '';
+        h.removeAttribute('name');        // <= clé
       });
 
       // 3) regrouper les contrôles visibles par clé data-reg-id
@@ -358,7 +360,13 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
         if (val) {
           hidden.value = val;
+          hidden.name = hidden.dataset.name || key; // <= on assigne le `name` SEULEMENT si non vide
           hidden.disabled = false;
+        } else {
+          // rester sans name + disabled
+          hidden.value = '';
+          hidden.removeAttribute('name');
+          hidden.disabled = true;
         }
       });
 
