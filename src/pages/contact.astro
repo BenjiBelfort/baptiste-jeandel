@@ -19,7 +19,7 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
 
-    <!-- Anti-FOUC pour les champs conditionnels -->
+  <!-- Anti-FOUC pour les champs conditionnels -->
   <style is:inline>
     [data-show-if] { display: none; }
     [data-show-if].__show { display: block; }
@@ -35,40 +35,34 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       Choisissez un domaine pour afficher les questions adaptées. Tous les champs marqués * sont requis.
     </p>
 
+    <!-- === Formulaire VISIBLE (sans Netlify) === -->
     <form
       id="contact-form"
       method="POST"
-      name="devis-v2"
-      data-netlify="true"
-      netlify-honeypot="bot-field"
       action="/merci"
       class="space-y-6"
       autocomplete="off"
     >
-      <!-- Netlify Forms -->
-      <input type="hidden" name="form-name" value="devis-v2" />
-      <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
-
       <!-- Provenance -->
       <input type="hidden" id="Provenance" name="Provenance" value={originFromQuery} />
 
       <!-- Domaine -->
       <label class="block">
         <span>Domaine *</span>
-          <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
-            <option value="">— Sélectionner —</option>
-            <option>Éveil musical</option>
-            <option>Musicothérapie</option>
-            <option>Relaxations sonores</option>
-            <option>Spectacles</option>
-            <option>Atelier EHPAD</option>
-            <option>Atelier petite enfance</option>
-            <option>Cours de batterie / Handpan</option>
-            <option>Me contacter</option>
-          </select>
+        <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
+          <option value="">— Sélectionner —</option>
+          <option>Éveil musical</option>
+          <option>Musicothérapie</option>
+          <option>Relaxations sonores</option>
+          <option>Spectacles</option>
+          <option>Atelier EHPAD</option>
+          <option>Atelier petite enfance</option>
+          <option>Cours de batterie / Handpan</option>
+          <option>Me contacter</option>
+        </select>
       </label>
 
-            <!-- Coordonnées (communs) -->
+      <!-- Coordonnées (communs) -->
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Prénom Nom *</span>
@@ -117,16 +111,29 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         </label>
       </div>
 
-
       <div class="flex items-center justify-between pt-2">
         <FunkyButton id="back-btn" as="button" type="button" label="Retour" color="bg-white" />
-
-        <!-- wrapper relatif pour poser le pigeon au-dessus du bouton -->
         <div class="relative">
           <FunkyButton as="button" type="submit" label="Envoyer" color="bg-green-300" />
-          <!-- Easter egg -->
           <PigeonEasterEgg />
         </div>
+      </div>
+    </form>
+
+    <!-- === Formulaire FANTÔME Netlify (invisible) === -->
+    <form
+      id="shadow-netlify"
+      name="devis-v2"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      action="/merci"
+      method="POST"
+      class="hidden"
+      aria-hidden="true"
+    >
+      <input type="hidden" name="form-name" value="devis-v2" />
+      <div style="display:none;">
+        <label>Ne pas remplir: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
       </div>
     </form>
   </section>
@@ -139,19 +146,6 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
     // ---------- Sous-formulaires par domaine ----------
     const domainSelect = $('#domain');
     const blocks = $$('[data-domain-form]');
-
-    function stripNamesIn(container) {
-      $$('input, select, textarea', container).forEach(el => {
-        if (el.type === 'hidden') return; // on ne touche pas aux registres
-        if (el.hasAttribute('name')) {
-          // on garde une trace éventuelle au cas où (debug), mais on retire le name
-          el.dataset.origName = el.getAttribute('name');
-          el.removeAttribute('name');
-        }
-      });
-    }
-    // Appliquer dès le départ à tous les sous-formulaires
-    blocks.forEach(b => stripNamesIn(b));
 
     function setBlockActive(block, isActive) {
       block.classList.toggle('hidden', !isActive);
@@ -291,8 +285,9 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
     backBtn?.addEventListener('click', goBack);
     backLink?.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // ---------- Submit : copie visible -> registre hidden (Netlify) ----------
-    const form = $('#contact-form');
+    // ---------- Submit : construire et envoyer le formulaire fantôme ----------
+    const form   = $('#contact-form');
+    const shadow = $('#shadow-netlify');
 
     function groupByDataRegId(nodeList) {
       const map = new Map();
@@ -307,15 +302,13 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
     function valueForGroup(els) {
       if (!els || !els.length) return '';
-
       const sample = els[0];
 
-      // Radios (groupe partageant 'name' et même data-reg-id)
+      // Radios
       if (sample instanceof HTMLInputElement && sample.type === 'radio') {
         const checked = els.find(e => e.checked);
         return checked ? (checked.value || '').trim() : '';
       }
-
       // Checkboxes
       if (sample instanceof HTMLInputElement && sample.type === 'checkbox') {
         if (els.length > 1) {
@@ -323,60 +316,79 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         }
         return sample.checked ? (sample.value || 'Oui') : '';
       }
-
-      // Select / Text / Textarea (un seul contrôle attendu par clé)
+      // Select / Text / Textarea
       return (sample.value || '').trim();
     }
 
-    form?.addEventListener('submit', () => {
-      // 1) quel sous-form est actif ?
+    form?.addEventListener('submit', (e) => {
+      // Laisser le navigateur vérifier les "required"
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        form.reportValidity();
+        return;
+      }
+
+      // On prend la main sur l'envoi
+      e.preventDefault();
+
+      // 1) Quel sous-form est actif ?
       const active = $$('[data-domain-form]').find(b => !b.classList.contains('hidden'));
-      if (!active) return;
 
-      // 2) reset de tous les registres des sous-forms
-      //    -> on enlève name ET on disable (pour que Netlify ne les voie pas s'ils sont vides)
-      $$('[data-domain-form] [data-registry] input[type="hidden"]').forEach(h => {
-        h.disabled = true;
-        h.value = '';
-        h.removeAttribute('name');        // <= clé
-      });
-
-      // 3) regrouper les contrôles visibles par clé data-reg-id
-      const groups = groupByDataRegId($$('[data-reg-id]', active));
-
-      // 4) pour chaque groupe → valeur → hidden correspondant (#reg-xxx)
-      groups.forEach((els, key) => {
-        const hidden = active.querySelector(`#${key}`); // id du registre
-        if (!hidden) return;
-
-        let val = valueForGroup(els);
-
-        // cas particulier : fréquence = "autre" → précision
-        if (key === 'reg-frequence' && val === 'autre') {
-          const other = active.querySelector('[data-reg-id="frequenceAutre"]');
-          const otherVal = other ? valueForGroup([other]) : '';
-          val = otherVal || 'autre';
-        }
-
-        if (val) {
-          hidden.value = val;
-          hidden.name = hidden.dataset.name || key; // <= on assigne le `name` SEULEMENT si non vide
-          hidden.disabled = false;
-        } else {
-          // rester sans name + disabled
-          hidden.value = '';
-          hidden.removeAttribute('name');
-          hidden.disabled = true;
-        }
-      });
-
-      // 5) Ajouter origin dans l'URL de redirection si présent (vers /merci)
-      const action = form.getAttribute('action') || '/merci';
-      const current = new URL(action, location.origin);
+      // 2) Construire l'URL d'action du shadow (/merci?origin=...)
+      const baseAction = shadow.getAttribute('action') || '/merci';
+      const current = new URL(baseAction, location.origin);
       const originVal = originParam || ($('#Provenance')?.value || '');
       if (originVal) current.searchParams.set('origin', originVal);
-      form.setAttribute('action', `${current.pathname}${current.search}`);
-      // ⚠️ Pas de preventDefault → Netlify soumet le formulaire
+      shadow.setAttribute('action', `${current.pathname}${current.search}`);
+
+      // 3) Nettoyer le shadow (on garde seulement form-name + bot-field)
+      Array.from(shadow.querySelectorAll('input'))
+        .filter(i => !['form-name', 'bot-field'].includes(i.name))
+        .forEach(i => i.remove());
+
+      // Helper pour ajouter un champ rempli
+      function addField(name, value) {
+        const val = (value || '').trim();
+        if (!name || !val) return;
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = val;
+        shadow.appendChild(input);
+      }
+
+      // 4) Copier les champs COMMUNS non vides
+      addField('Provenance', $('#Provenance')?.value);
+      addField('Domaine', $('#domain')?.value);
+      addField('Nom', form.querySelector('[name="Nom"]')?.value);
+      addField('Email', form.querySelector('[name="Email"]')?.value);
+      addField('Message', form.querySelector('[name="Message"]')?.value);
+      addField('Consentement RGPD', $('#consentement')?.checked ? 'Oui' : '');
+
+      // 5) Copier les champs du SOUS-FORM actif (via "registry" si présent)
+      if (active) {
+        // a) Lire les valeurs visibles par data-reg-id
+        const groups = groupByDataRegId($$('[data-reg-id]', active));
+
+        // b) Pour chaque groupe, retrouver le "registre" (#reg-xxx) pour obtenir le VRAI nom de champ (name ou data-name)
+        groups.forEach((els, key) => {
+          const val = valueForGroup(els);
+          if (!val) return;
+
+          const hiddenReg = active.querySelector(`#${key}`);
+          // Nom du champ : priorité à l'attribut name du registre, sinon data-name, sinon fallback clé
+          const fieldName =
+            hiddenReg?.getAttribute?.('name') ||
+            hiddenReg?.dataset?.name ||
+            key;
+
+          addField(fieldName, val);
+        });
+      }
+
+      // 6) Envoyer le formulaire fantôme (Netlify)
+      if (shadow.requestSubmit) shadow.requestSubmit();
+      else shadow.submit();
     });
   </script>
 
