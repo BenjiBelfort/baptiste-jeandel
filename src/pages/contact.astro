@@ -35,13 +35,14 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       Choisissez un domaine pour afficher les questions adaptées. Tous les champs marqués * sont requis.
     </p>
 
-    <!-- === Formulaire VISIBLE (sans Netlify) === -->
+    <!-- === Formulaire VISIBLE (pas de data-netlify ici) === -->
     <form
       id="contact-form"
       method="POST"
       action="/merci"
       class="space-y-6"
       autocomplete="off"
+      accept-charset="UTF-8"
     >
       <!-- Provenance -->
       <input type="hidden" id="Provenance" name="Provenance" value={originFromQuery} />
@@ -120,9 +121,9 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       </div>
     </form>
 
-    <!-- === Formulaire FANTÔME Netlify (invisible) === -->
+    <!-- === Formulaire FANTÔME Netlify (détection statique uniquement) === -->
     <form
-      id="shadow-netlify"
+      id="shadow-detection"
       name="devis-v2"
       data-netlify="true"
       netlify-honeypot="bot-field"
@@ -135,6 +136,7 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       <div style="display:none;">
         <label>Ne pas remplir: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
       </div>
+      <!-- Aucun autre champ ici -->
     </form>
   </section>
 
@@ -285,9 +287,8 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
     backBtn?.addEventListener('click', goBack);
     backLink?.addEventListener('click', (e) => { e.preventDefault(); goBack(); });
 
-    // ---------- Submit : construire et envoyer le formulaire fantôme ----------
-    const form   = $('#contact-form');
-    const shadow = $('#shadow-netlify');
+    // ---------- Submit : collecte sélective + envoi via fetch à Netlify ----------
+    const form = $('#contact-form');
 
     function groupByDataRegId(nodeList) {
       const map = new Map();
@@ -304,91 +305,103 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       if (!els || !els.length) return '';
       const sample = els[0];
 
-      // Radios
       if (sample instanceof HTMLInputElement && sample.type === 'radio') {
         const checked = els.find(e => e.checked);
         return checked ? (checked.value || '').trim() : '';
       }
-      // Checkboxes
+
       if (sample instanceof HTMLInputElement && sample.type === 'checkbox') {
         if (els.length > 1) {
           return els.filter(e => e.checked).map(e => (e.value || '').trim()).join(', ');
         }
         return sample.checked ? (sample.value || 'Oui') : '';
       }
-      // Select / Text / Textarea
+
       return (sample.value || '').trim();
     }
 
-    form?.addEventListener('submit', (e) => {
-      // Laisser le navigateur vérifier les "required"
+    function encode(data) {
+      return Object.keys(data)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
+        .join('&');
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      // Validations natives HTML5
       if (!form.checkValidity()) {
         e.preventDefault();
         form.reportValidity();
         return;
       }
 
-      // On prend la main sur l'envoi
-      e.preventDefault();
+      e.preventDefault(); // on gère l’envoi
 
-      // 1) Quel sous-form est actif ?
+      // 1) Construire l'objet payload avec uniquement les champs non vides
+      const payload = {
+        'form-name': 'devis-v2',
+      };
+
+      // Champs communs
+      const prov = $('#Provenance')?.value?.trim();
+      const dom  = $('#domain')?.value?.trim();
+      const nom  = form.querySelector('[name="Nom"]')?.value?.trim();
+      const mail = form.querySelector('[name="Email"]')?.value?.trim();
+      const msg  = form.querySelector('[name="Message"]')?.value?.trim();
+      const rgpd = $('#consentement')?.checked ? 'Oui' : '';
+
+      if (prov) payload['Provenance'] = prov;
+      if (dom)  payload['Domaine'] = dom;
+      if (nom)  payload['Nom'] = nom;
+      if (mail) payload['Email'] = mail;
+      if (msg)  payload['Message'] = msg;
+      if (rgpd) payload['Consentement RGPD'] = rgpd;
+
+      // Champs du sous-form actif
       const active = $$('[data-domain-form]').find(b => !b.classList.contains('hidden'));
-
-      // 2) Construire l'URL d'action du shadow (/merci?origin=...)
-      const baseAction = shadow.getAttribute('action') || '/merci';
-      const current = new URL(baseAction, location.origin);
-      const originVal = originParam || ($('#Provenance')?.value || '');
-      if (originVal) current.searchParams.set('origin', originVal);
-      shadow.setAttribute('action', `${current.pathname}${current.search}`);
-
-      // 3) Nettoyer le shadow (on garde seulement form-name + bot-field)
-      Array.from(shadow.querySelectorAll('input'))
-        .filter(i => !['form-name', 'bot-field'].includes(i.name))
-        .forEach(i => i.remove());
-
-      // Helper pour ajouter un champ rempli
-      function addField(name, value) {
-        const val = (value || '').trim();
-        if (!name || !val) return;
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = val;
-        shadow.appendChild(input);
-      }
-
-      // 4) Copier les champs COMMUNS non vides
-      addField('Provenance', $('#Provenance')?.value);
-      addField('Domaine', $('#domain')?.value);
-      addField('Nom', form.querySelector('[name="Nom"]')?.value);
-      addField('Email', form.querySelector('[name="Email"]')?.value);
-      addField('Message', form.querySelector('[name="Message"]')?.value);
-      addField('Consentement RGPD', $('#consentement')?.checked ? 'Oui' : '');
-
-      // 5) Copier les champs du SOUS-FORM actif (via "registry" si présent)
       if (active) {
-        // a) Lire les valeurs visibles par data-reg-id
         const groups = groupByDataRegId($$('[data-reg-id]', active));
-
-        // b) Pour chaque groupe, retrouver le "registre" (#reg-xxx) pour obtenir le VRAI nom de champ (name ou data-name)
         groups.forEach((els, key) => {
-          const val = valueForGroup(els);
+          let val = valueForGroup(els);
           if (!val) return;
 
+          if (key === 'reg-frequence' && val === 'autre') {
+            const other = active.querySelector('[data-reg-id="frequenceAutre"]');
+            const otherVal = other ? valueForGroup([other]) : '';
+            val = otherVal || 'autre';
+          }
+
+          // Nom final du champ : si le registre #key existe et a name/data-name, on l'utilise
           const hiddenReg = active.querySelector(`#${key}`);
-          // Nom du champ : priorité à l'attribut name du registre, sinon data-name, sinon fallback clé
           const fieldName =
             hiddenReg?.getAttribute?.('name') ||
             hiddenReg?.dataset?.name ||
             key;
 
-          addField(fieldName, val);
+          payload[fieldName] = val;
         });
       }
 
-      // 6) Envoyer le formulaire fantôme (Netlify)
-      if (shadow.requestSubmit) shadow.requestSubmit();
-      else shadow.submit();
+      // 2) URL de redirection (/merci?origin=...)
+      const detectionForm = $('#shadow-detection');
+      const baseAction = detectionForm?.getAttribute('action') || '/merci';
+      const current = new URL(baseAction, location.origin);
+      const originVal = originParam || ($('#Provenance')?.value || '');
+      if (originVal) current.searchParams.set('origin', originVal);
+
+      // 3) Envoi à Netlify (POST url-encoded vers la racine)
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: encode(payload),
+        });
+        // 4) Redirection
+        window.location.assign(`${current.pathname}${current.search}`);
+      } catch (err) {
+        console.error('Netlify form submit error:', err);
+        // Fallback : on tente une navigation simple (pas idéal mais évite de bloquer l’utilisateur)
+        window.location.assign(`${current.pathname}${current.search}`);
+      }
     });
   </script>
 
