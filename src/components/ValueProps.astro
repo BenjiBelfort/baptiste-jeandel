@@ -72,7 +72,7 @@ import FunkyButton from "@/components/FunkyButton.astro"
       <div class="flex flex-col h-full text-center">
         <h3 class="my-6 text-5xl hand font-bold text-stone-900">Cours</h3>
         <p class="mt-2 text-stone-700">
-          Batterie et handpan.
+          Batterie et Handpan.
         </p>
 
         <div class="mt-auto pt-6 flex justify-center">
@@ -96,7 +96,40 @@ import FunkyButton from "@/components/FunkyButton.astro"
   </div>
 
     <div>
-      <img src="/logos/bol.webp" alt="Logo bol tibétain" class="mt-8 h-24 w-auto mx-auto drop-shadow-xl" />
+      <img
+        id="bowl-img"
+        src="/logos/bol.webp"
+        alt="Logo bol tibétain"
+        class="mt-8 h-24 w-auto mx-auto drop-shadow-xl
+              cursor-pointer
+              transition-transform duration-150 will-change-transform
+              hover:scale-105 active:scale-95"
+        aria-label="Jouer un son de bol tibétain"
+      />
     </div>
 
 </section>
+
+<audio id="bowl-audio" src="/sounds/singing-bowl-hit-3-33366.mp3" preload="auto"></audio>
+
+<script is:inline>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bowlImg = document.getElementById('bowl-img');
+
+  if (prefersReduced) {
+    bowlImg.classList.remove('transition-transform', 'hover:scale-105', 'active:scale-95');
+  }
+
+  bowlImg.addEventListener('click', () => {
+    const audio = new Audio('/sounds/singing-bowl-hit-3-33366.mp3'); // chemin vers ton mp3
+    audio.play().catch(() => {/* ignore si bloqué par navigateur */});
+  });
+
+  bowlImg.setAttribute('tabindex', '0');
+  bowlImg.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      bowlImg.click();
+    }
+  });
+</script>

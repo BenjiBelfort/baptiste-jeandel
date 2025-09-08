@@ -23,19 +23,14 @@ const { title, description, image, type } = Astro.props;
 La plus juste expression de votre identité
 
 
-
 -->
   <BaseHead {title} {description} {image} {type} />
   <body class="h-full min-h-[100svh] flex flex-col antialiased text-stone-900 bg-slate-100">
-    <!-- Nav est FIXED dans son propre composant -->
     <Nav />
     <RelaxShortcut />
-    <!-- Contenu qui prend toute la place restante -->
     <main id="main" class="flex-1 pt-12">
       <slot />
     </main>
-
-
     <Footer />
   </body>
 </html>

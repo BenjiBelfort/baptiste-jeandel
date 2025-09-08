@@ -58,7 +58,37 @@ const socials: Social[] =
   </div>
 
     <div>
-      <img src="/logos/handpan.webp" alt="Logo handpan" class="my-16 h-24 w-auto mx-auto drop-shadow-xl" />
+      <img
+        id="handpan-img"
+        src="/logos/handpan.webp"
+        alt="Logo handpan"
+        class="my-16 h-24 w-auto mx-auto drop-shadow-xl
+              cursor-pointer
+              transition-transform duration-150 will-change-transform
+              hover:scale-105 active:scale-95"
+        aria-label="Jouer un son de handpan"
+      />
     </div>
-
 </section>
+
+<script is:inline>
+  const prefersReducedHandpan = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const handpanImg = document.getElementById('handpan-img');
+
+  if (prefersReducedHandpan) {
+    handpanImg.classList.remove('transition-transform', 'hover:scale-105', 'active:scale-95');
+  }
+
+  handpanImg.addEventListener('click', () => {
+    const audio = new Audio('/sounds/handpan-c-97696.mp3'); // chemin vers ton mp3
+    audio.play().catch(() => {/* ignore si bloqué par navigateur */});
+  });
+
+  handpanImg.setAttribute('tabindex', '0');
+  handpanImg.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handpanImg.click();
+    }
+  });
+</script>

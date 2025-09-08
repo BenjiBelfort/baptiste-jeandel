@@ -1,54 +1,115 @@
 ---
 import FunkyButton from '@/components/FunkyButton.astro';
+
+const notes = [
+  { file: '/hero-notes/note1.png',  label: null },
+  { file: '/hero-notes/note2.png',  label: null },
+  { file: '/hero-notes/note3.png',  label: 'Archives sonores' },
+  { file: '/hero-notes/note4.png',  label: 'Spectacle enfants' },
+  { file: '/hero-notes/note5.png',  label: 'Formation petite enfance' },
+  { file: '/hero-notes/note6.png',  label: 'Éveil musical' },
+  { file: '/hero-notes/note7.png',  label: 'Musicothérapie' },
+  { file: '/hero-notes/note8.png',  label: 'Formation EHPAD' },
+  { file: '/hero-notes/note9.png',  label: 'Secteur sanitaire et social' },
+  { file: '/hero-notes/note10.png', label: 'Concerts Handpan' },
+  { file: '/hero-notes/note11.png', label: 'Relaxations sonores' },
+  { file: '/hero-notes/note12.png', label: 'Cours de batterie' },
+  { file: '/hero-notes/note13.png', label: 'Cours de Handpan' },
+  { file: '/hero-notes/note14.png', label: null },
+  { file: '/hero-notes/note15.png', label: null },
+];
 ---
 
 <section
-  class="relative w-full min-h-screen flex items-center"
+  class="relative w-full min-h-screen flex items-start pt-20 md:pt-28 lg:pt-32 overflow-hidden"
   style="
     --hero-bg: url('/images/instruments.webp');
-    --hero-content-w: 760px; /* règle la largeur du container central */
+    --hero-content-w: 760px;
   "
 >
-  <!-- Image de fond SANS blur -->
-  <div
-    class="absolute inset-0
-          bg-[image:var(--hero-bg)]
-          bg-cover bg-center bg-no-repeat
-          bg-scroll md:bg-fixed
-          sepia-25"
-    aria-hidden="true">
-  </div>
-
-  <!-- Voile blanc semi-transparent avec flou sur le fond -->
+  <!-- Image de fond -->
+  <div class="absolute inset-0 bg-[image:var(--hero-bg)] bg-cover bg-center bg-no-repeat bg-scroll md:bg-fixed sepia-25" aria-hidden="true"></div>
+  <!-- Voile -->
   <div class="absolute inset-0 bg-white/50 backdrop-blur-sm md:backdrop-blur" aria-hidden="true"></div>
 
-
-  <!-- Contenu centré au premier plan -->
+  <!-- Contenu -->
   <div class="relative z-10 w-full">
     <div class="mx-auto px-4">
-      <div
-        class="mx-auto text-center p-6"
-        style="max-width: var(--hero-content-w);"
-      >
-        <h1 class="text-7xl md:text-9xl font-bold hand text-black">
+      <!-- ↓↓↓ pb réduit en mobile, plus grand en desktop pour loger tooltip ↓↓↓ -->
+      <div class="mx-auto text-center p-6 pb-16 md:pb-28" style="max-width: var(--hero-content-w);">
+        <h1 class="text-7xl md:text-9xl font-bold hand text-black drop-shadow">
           Baptiste Jeandel
         </h1>
 
-        <!-- Mets tes <br /> où tu veux -->
-        <h2
-          class="mt-4 text-lg sm:text-xl md:text-3xl font-bold text-black"
-        >
-          Musique, médiation et transmission<br />pour tous les âges et tous les publics.
+        <h2 class="mt-4 text-lg sm:text-xl md:text-2xl font-semibold text-black">
+          Musicothérapeute et formateur&nbsp;: ateliers, spectacles et formations pour la petite enfance, les EHPAD et le secteur sanitaire et social.
         </h2>
+
+        <!-- Bouton -->
+        <div class="mt-8 flex justify-center">
+          <FunkyButton href="/#value-props" label="Découvrir" color="bg-slate-300" />
+        </div>
+
+        <!-- Tooltip global sous le bouton : caché en mobile, visible en ≥ md -->
+        <div id="global-tooltip"
+             class="hidden md:block mt-6 md:mt-10 text-2xl md:text-4xl hand font-bold text-black drop-shadow opacity-0 transition-opacity duration-200">
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Bouton centré en bas (pas collé) -->
-  <div
-    class="pointer-events-auto absolute left-1/2 -translate-x-1/2 bottom-8 md:bottom-12 z-10"
-    aria-label="Aller à la section suivante"
-  >
-    <FunkyButton href="/#value-props" label="Découvrir" color="bg-slate-300" />
+<!-- ***** VERSION MOBILE : image collée en bas avec débordement ***** -->
+  <div class="absolute inset-x-0 bottom-0 z-10 md:hidden overflow-hidden" aria-hidden="true">
+    <img
+      src="/hero-notes/mobile-hero.png"
+      alt="Décor musical"
+      class="w-[130%] max-w-none h-auto select-none pointer-events-none relative left-1/2 -translate-x-1/2"
+      loading="eager"
+    />
+  </div>
+
+  <!-- ***** VERSION DESKTOP : bande de notes + overflow + tooltip ***** -->
+  <div class="absolute inset-x-0 bottom-0 z-10 overflow-hidden hidden md:block" aria-hidden="true">
+    <div class="flex items-end justify-center" style="gap: 5px;">
+      {notes.map((n, i) => (
+        <div
+          class="relative group transform translate-y-[20px] transition-transform duration-200 hover:translate-y-0"
+          data-label={n.label ?? ''}
+        >
+          <img
+            src={n.file}
+            alt={n.label ?? `Note ${i + 1}`}
+            class="block select-none align-bottom
+                   filter drop-shadow-sm
+                   transition-[filter] duration-200
+                   group-hover:drop-shadow-xl"
+            draggable="false"
+          />
+        </div>
+      ))}
+    </div>
   </div>
 </section>
+
+<script is:inline>
+  // Tooltip dynamique uniquement utile en desktop, mais inoffensif en mobile
+  const notes = document.querySelectorAll('[data-label]');
+  const tooltip = document.getElementById('global-tooltip');
+
+  notes.forEach((note) => {
+    const label = note.dataset.label;
+    if (!label) return; // notes décoratives => pas de tooltip
+
+    note.addEventListener('mouseenter', () => {
+      if (!tooltip) return;
+      tooltip.textContent = label;
+      tooltip.classList.remove('opacity-0');
+      tooltip.classList.add('opacity-100');
+    });
+    note.addEventListener('mouseleave', () => {
+      if (!tooltip) return;
+      tooltip.classList.remove('opacity-100');
+      tooltip.classList.add('opacity-0');
+    });
+  });
+</script>
