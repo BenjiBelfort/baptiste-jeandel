@@ -54,6 +54,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
 
   </div>
 
+
     <!-- Bas du footer -->
     <div class=" mt-8 text-sm bg-slate-900 text-stone-300">
       <div
@@ -83,8 +84,16 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
             <img src="/logos/logo-CPEP.png" alt="Logo CPEP" class="h-5 w-auto" />
           </a>
         </p>
+
+        <!-- Lien secret mobile-only, centré sous "Dev by" -->
+        <p class="order-4 md:hidden -mt-6 text-center">
+          <a href="/choucroute" class="hover:text-slate-400 hover:underline hover:underline-offset-2">
+            choucroute ?
+          </a>
+        </p>
       </div>
     </div>
+
 
 
 </footer>
