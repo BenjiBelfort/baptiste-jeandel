@@ -4,9 +4,10 @@ function safeJSON(str, fallback = null) { try { return JSON.parse(str); } catch 
 function toObjectFromQS(qs) { const out = {}; for (const [k, v] of new URLSearchParams(qs)) out[k] = v; return out; }
 function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function escapeAttr(s){return escapeHtml(s).replace(/"/g,'&quot;')}
+function splitList(s){ return (s||'').split(',').map(x=>x.trim()).filter(Boolean); }
 
 export async function handler(event) {
-  // Ping GET
+  // Ping GET (debug)
   if (event.httpMethod === 'GET') {
     return {
       statusCode: 200, headers: { 'Content-Type': 'application/json' },
@@ -19,13 +20,16 @@ export async function handler(event) {
           MAILGUN_REGION:  process.env.MAILGUN_REGION || null,
           EMAIL_TO:        !!process.env.EMAIL_TO,
           EMAIL_FROM:      !!process.env.EMAIL_FROM,
+          EMAIL_CC:        !!process.env.EMAIL_CC,
+          EMAIL_BCC:       !!process.env.EMAIL_BCC,
+          EMAIL_LOGO_URL:  !!process.env.EMAIL_LOGO_URL,
           WEBHOOK_TOKEN:   !!process.env.WEBHOOK_TOKEN,
         },
       }),
     };
   }
 
-  // Auth par token (query ou header)
+  // Auth simple via token (query ou header)
   const qsToken  = event.queryStringParameters?.token || '';
   const hdrToken = event.headers?.['x-webhook-token'] || event.headers?.['X-Webhook-Token'];
   const token = qsToken || hdrToken || '';
@@ -34,7 +38,7 @@ export async function handler(event) {
   }
 
   try {
-    // Parse body (JSON + urlencoded, base64 ok)
+    // Parse body (JSON / x-www-form-urlencoded, base64 ok)
     const ct = (event.headers?.['content-type'] || event.headers?.['Content-Type'] || '').toLowerCase();
     const raw = event.isBase64Encoded ? Buffer.from(event.body || '', 'base64').toString('utf8') : (event.body || '');
 
@@ -53,10 +57,12 @@ export async function handler(event) {
     const site_url  = payload.site_url  || '-';
     const data      = payload.data      || payload;
 
-    // Filtrage
+    // Anti-spam honeypot
     if (data['bot-field']) return { statusCode: 200, body: 'Ignored spam (honeypot).' };
+
+    // Filtrage des champs
     const IGNORE = new Set(['form-name', 'bot-field', 'payload', 'token']);
-    const DROP   = new Set(['ip', 'user_agent', 'referrer']); // 👈 champs à masquer
+    const DROP   = new Set(['ip', 'user_agent', 'referrer']); // masque ces champs
     let entries = Object.entries(data).filter(([k,v]) =>
       !IGNORE.has(k) && !DROP.has(k) && v != null && String(v).trim() !== ''
     );
@@ -67,8 +73,12 @@ export async function handler(event) {
     const ord = k => { const i = FIELD_ORDER.indexOf(k); return i === -1 ? 9999 : i; };
     entries.sort((a,b) => { const ai=ord(a[0]), bi=ord(b[0]); return ai!==bi ? ai-bi : a[0].localeCompare(b[0]); });
 
-    // Contenu email
+    // Infos utiles pour l’objet
     const when = new Intl.DateTimeFormat('fr-FR', { dateStyle:'medium', timeStyle:'short', timeZone:'Europe/Paris' }).format(new Date());
+    const domaineVal = (entries.find(([k]) => k.toLowerCase() === 'domaine') || [,''])[1] || '';
+    const subject = `Nouveau formulaire: ${form_name}${domaineVal ? ` — ${domaineVal}` : ''} — ${when}`;
+
+    // Texte fallback
     const text = `Formulaire: ${form_name}
 Site: ${site_url}
 Date: ${when}
@@ -77,11 +87,10 @@ Champs remplis:
 ${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
 
 — Fin —`;
-
-    const logo = ''; // ex: 'https://baptistejeandel.fr/logo-email.png'
+    const logo = process.env.EMAIL_LOGO_URL || 'https://baptiste-j-dev.netlify.app/logos/mini-logo.webp';
     const html = `<!doctype html><meta charset="utf-8">
 <div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;max-width:720px;margin:0">
-  ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Baptiste Jeandel" style="height:36px;vertical-align:middle"></div>` : ''}
+  ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Logo" style="height:36px;vertical-align:middle"></div>` : ''}
   <h2 style="margin:0 0 8px">Nouveau formulaire: ${escapeHtml(form_name)}</h2>
   <p style="margin:0 0 14px;color:#555">
     <strong>Site:</strong> <a href="${escapeAttr(site_url)}">${escapeHtml(site_url)}</a><br>
@@ -100,13 +109,21 @@ ${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
     // Reply-To = email saisi (si présent)
     const replyTo = (entries.find(([k]) => k.toLowerCase() === 'email') || [,''])[1] || '';
 
-    // Envoi Mailgun (EU)
+    // Envoi Mailgun
     const DOMAIN = process.env.MAILGUN_DOMAIN;
     const API_KEY = process.env.MAILGUN_API_KEY;
     const REGION  = (process.env.MAILGUN_REGION || 'EU').toUpperCase();
-    const EMAIL_TO = process.env.EMAIL_TO;
     const EMAIL_FROM = process.env.EMAIL_FROM || `Formulaire <postmaster@${DOMAIN}>`;
-    if (!DOMAIN || !API_KEY || !EMAIL_TO) return { statusCode: 500, body: 'Mailgun not configured' };
+
+    // destinataires (To, Cc, Bcc) via envs (virgule)
+    const TO  = splitList(process.env.EMAIL_TO);
+    const CC  = splitList(process.env.EMAIL_CC);
+    const BCC = splitList(process.env.EMAIL_BCC);
+
+    if (!DOMAIN || !API_KEY || TO.length === 0) {
+      console.error('[forms-webhook] Missing config', { DOMAIN: !!DOMAIN, API_KEY: !!API_KEY, TO_count: TO.length });
+      return { statusCode: 500, body: 'Mailgun not configured' };
+    }
 
     const API_BASE = REGION === 'US' ? 'https://api.mailgun.net' : 'https://api.eu.mailgun.net';
     const url  = `${API_BASE}/v3/${DOMAIN}/messages`;
@@ -114,12 +131,16 @@ ${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
 
     const form = new URLSearchParams({
       from: EMAIL_FROM,
-      to:   EMAIL_TO,
-      subject: `Nouveau formulaire: ${form_name} — ${when}`,
+      subject,
       text,
       html,
-      'o:tracking': 'no', // optionnel: coupe le tracking pour une délivrabilité max
+      'o:tracking': 'no', // bonus délivrabilité
     });
+
+    for (const addr of TO)  form.append('to',  addr);
+    for (const addr of CC)  form.append('cc',  addr);
+    for (const addr of BCC) form.append('bcc', addr);
+
     if (replyTo) form.append('h:Reply-To', replyTo);
 
     const resp = await fetch(url, {
