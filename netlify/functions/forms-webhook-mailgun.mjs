@@ -101,7 +101,7 @@ ${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
     const replyTo = (entries.find(([k]) => k.toLowerCase() === 'email') || [,''])[1] || '';
 
     // Envoi Mailgun (EU)
-    const DOMAIN = process.env.MAILGUN_DOMAIN;           // mg.baptistejeandel.fr
+    const DOMAIN = process.env.MAILGUN_DOMAIN;
     const API_KEY = process.env.MAILGUN_API_KEY;
     const REGION  = (process.env.MAILGUN_REGION || 'EU').toUpperCase();
     const EMAIL_TO = process.env.EMAIL_TO;
