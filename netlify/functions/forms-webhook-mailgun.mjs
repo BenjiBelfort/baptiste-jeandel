@@ -6,6 +6,114 @@ function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'
 function escapeAttr(s){return escapeHtml(s).replace(/"/g,'&quot;')}
 function splitList(s){ return (s||'').split(',').map(x=>x.trim()).filter(Boolean); }
 
+// ---- Formatage dates / âge -------------------------------------------------
+function formatDateFR(isoYYYYMMDD){
+  // isoYYYYMMDD = "1977-05-12"
+  const [Y,M,D] = isoYYYYMMDD.split('-').map(Number);
+  const d = new Date(Y, M-1, D);
+  return new Intl.DateTimeFormat('fr-FR', { day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' }).format(d);
+}
+function ageFromDOB(isoYYYYMMDD){
+  const [y,m,d] = isoYYYYMMDD.split('-').map(Number);
+  const today = new Date();
+  let age = today.getFullYear() - y;
+  const mm = today.getMonth() + 1;
+  const dd = today.getDate();
+  if (mm < m || (mm === m && dd < d)) age--;
+  return age;
+}
+function prettyValue(key, val){
+  if (typeof val !== 'string') return val;
+  const v = val.trim();
+  // Date de naissance: "12 mai 1977 - 48 ans"
+  if (key === 'Date de naissance' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    return `${formatDateFR(v)} - ${ageFromDOB(v)} ans`;
+  }
+  // Bonus: Date souhaitée → format FR
+  if (key === 'Date souhaitée' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    return formatDateFR(v);
+  }
+  return v;
+}
+
+// ---- Ordonnancement des champs --------------------------------------------
+// Ordre par défaut (si pas de liste spécifique au domaine)
+const DEFAULT_ORDER = [
+  'Provenance','Domaine','Nom','Email','Téléphone',
+  'Structure (adresse)','Code postal','Ville',
+  'Message','Consentement RGPD'
+];
+
+// Ordres spécifiques par domaine (tu peux en ajouter d’autres)
+const DOMAIN_ORDERS = {
+  'Cours de batterie / Handpan': [
+    'Domaine','Nom','Email','Téléphone',
+    'Niveau (cours)','Instrument à la maison',
+    'Genres / musiques écoutées','Écoute la plus fréquente',
+    'Applis musique','Playlists à partager',
+    'Latéralité','Morceaux rêvés','Batteurs préférés',
+    'Références réseaux sociaux (batterie)',
+    'Temps hebdomadaire disponible',
+    'Date de naissance',
+    'Message','Consentement RGPD'
+  ],
+  'Éveil musical': [
+    'Domaine','Nom','Email','Téléphone',
+    'Âge des enfants','Nombre de participants','Fréquence (éveil)','Fréquence (précision)',
+    'Lieu','Date souhaitée',
+    'Message','Consentement RGPD'
+  ],
+  'Musicothérapie': [
+    'Domaine','Nom','Email','Téléphone',
+    'Type de musicothérapie','Type de public ciblé',
+    'Niveau de dépendance (file active)','Séances individuelles (précisions)',
+    'Matériel sur place (précisions)','Fréquence',
+    'Message','Consentement RGPD'
+  ],
+  'Relaxations sonores': [
+    'Domaine','Nom','Email','Téléphone',
+    'Date','Horaire','Nombre de personnes','Accompagnement enfants','Accompagnement (précision)',
+    'Âges des enfants',
+    'Message','Consentement RGPD'
+  ],
+  'Spectacles': [
+    'Domaine','Nom','Email','Téléphone',
+    'Adresse (lieu du spectacle)','Heure de début','Nombre de personnes intéressées',
+    'Message','Consentement RGPD'
+  ],
+  'Atelier EHPAD': [
+    'Domaine','Nom','Email','Téléphone',
+    'Public ciblé (résident·e·s)','Niveau de dépendance (GIR)','Modalité de travail souhaitée',
+    'Structure','Thématiques à renforcer',
+    'Message','Consentement RGPD'
+  ],
+  'Atelier petite enfance': [
+    'Domaine','Nom','Email','Téléphone',
+    'Profil des apprenant(e)s',
+    'Message','Consentement RGPD'
+  ],
+};
+
+function orderEntries(entries, domaineVal){
+  const orderList = DOMAIN_ORDERS[domaineVal] || DEFAULT_ORDER;
+  const weight = (label) => {
+    const idx = orderList.indexOf(label);
+    return idx === -1 ? 10_000 : idx; // inconnus à la fin
+  };
+  // garde ordre DOM “naturel” pour les inconnus (via index initial)
+  return entries
+    .map((pair, i) => ({ pair, i }))
+    .sort((a,b) => {
+      const wa = weight(a.pair[0]); const wb = weight(b.pair[0]);
+      if (wa !== wb) return wa - wb;
+      // poids égal → conserve l'ordre d'origine
+      return a.i - b.i;
+    })
+    .map(x => x.pair);
+}
+
+// ----------------------------------------------------------------------------
+
 export async function handler(event) {
   // Ping GET (debug)
   if (event.httpMethod === 'GET') {
@@ -68,26 +176,28 @@ export async function handler(event) {
     );
     if (!entries.length) return { statusCode: 200, body: 'Empty after pruning; stored only.' };
 
-    // Ordre sympa
-    const FIELD_ORDER = ['Provenance','Domaine','Nom','Email','Téléphone','Message'];
-    const ord = k => { const i = FIELD_ORDER.indexOf(k); return i === -1 ? 9999 : i; };
-    entries.sort((a,b) => { const ai=ord(a[0]), bi=ord(b[0]); return ai!==bi ? ai-bi : a[0].localeCompare(b[0]); });
-
-    // Infos utiles pour l’objet
-    const when = new Intl.DateTimeFormat('fr-FR', { dateStyle:'medium', timeStyle:'short', timeZone:'Europe/Paris' }).format(new Date());
+    // Récup domaine (pour tri spécifique) + formatage valeurs (dates, etc.)
     const domaineVal = (entries.find(([k]) => k.toLowerCase() === 'domaine') || [,''])[1] || '';
+
+    // Tri suivant le domaine (ou défaut)
+    entries = orderEntries(entries, domaineVal);
+
+    // Applique prettyValue sur chaque valeur (date de naissance, etc.)
+    entries = entries.map(([k,v]) => [k, prettyValue(k, v)]);
+
+    // Contenu email
+    const when = new Intl.DateTimeFormat('fr-FR', { dateStyle:'medium', timeStyle:'short', timeZone:'Europe/Paris' }).format(new Date());
     const subject = `Nouveau formulaire: ${form_name}${domaineVal ? ` — ${domaineVal}` : ''} — ${when}`;
 
-    // Texte fallback
     const text = `Formulaire: ${form_name}
 Site: ${site_url}
 Date: ${when}
 
-Champs remplis:
-${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
+${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
 
 — Fin —`;
-    const logo = process.env.EMAIL_LOGO_URL || 'https://baptiste-j-dev.netlify.app/logos/mini-logo.webp';
+
+    const logo = process.env.EMAIL_LOGO_URL || '';
     const html = `<!doctype html><meta charset="utf-8">
 <div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;max-width:720px;margin:0">
   ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Logo" style="height:36px;vertical-align:middle"></div>` : ''}
@@ -115,7 +225,6 @@ ${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
     const REGION  = (process.env.MAILGUN_REGION || 'EU').toUpperCase();
     const EMAIL_FROM = process.env.EMAIL_FROM || `Formulaire <postmaster@${DOMAIN}>`;
 
-    // destinataires (To, Cc, Bcc) via envs (virgule)
     const TO  = splitList(process.env.EMAIL_TO);
     const CC  = splitList(process.env.EMAIL_CC);
     const BCC = splitList(process.env.EMAIL_BCC);
@@ -134,13 +243,11 @@ ${entries.map(([k,v]) => `• ${k}: ${v}`).join('\n')}
       subject,
       text,
       html,
-      'o:tracking': 'no', // bonus délivrabilité
+      'o:tracking': 'no',
     });
-
     for (const addr of TO)  form.append('to',  addr);
     for (const addr of CC)  form.append('cc',  addr);
     for (const addr of BCC) form.append('bcc', addr);
-
     if (replyTo) form.append('h:Reply-To', replyTo);
 
     const resp = await fetch(url, {
