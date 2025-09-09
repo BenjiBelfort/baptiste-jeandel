@@ -197,7 +197,7 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
 
 — Fin —`;
 
-    const logo = process.env.EMAIL_LOGO_URL || '';
+    const logo = process.env.EMAIL_LOGO_URL || 'https://baptiste-j-dev.netlify.app/logos/mini-logo.webp';
     const html = `<!doctype html><meta charset="utf-8">
 <div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;max-width:720px;margin:0">
   ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Logo" style="height:36px;vertical-align:middle"></div>` : ''}

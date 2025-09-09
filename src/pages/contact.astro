@@ -19,10 +19,12 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
 
-    <!-- Anti-FOUC pour les champs conditionnels -->
+  <!-- Anti-FOUC + étoile dynamique -->
   <style is:inline>
     [data-show-if] { display: none; }
     [data-show-if].__show { display: block; }
+    /* étoile comme pour les autres champs requis (couleur par défaut) */
+    .is-required::after { content: " *"; }
   </style>
 
   <section class="max-w-3xl mx-auto px-4 py-10">
@@ -55,20 +57,20 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       <!-- Domaine -->
       <label class="block">
         <span>Domaine *</span>
-          <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
-            <option value="">— Sélectionner —</option>
-            <option>Éveil musical</option>
-            <option>Musicothérapie</option>
-            <option>Relaxations sonores</option>
-            <option>Spectacles</option>
-            <option>Atelier EHPAD</option>
-            <option>Atelier petite enfance</option>
-            <option>Cours de batterie / Handpan</option>
-            <option>Me contacter</option>
-          </select>
+        <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
+          <option value="">— Sélectionner —</option>
+          <option>Éveil musical</option>
+          <option>Musicothérapie</option>
+          <option>Relaxations sonores</option>
+          <option>Spectacles</option>
+          <option>Atelier EHPAD</option>
+          <option>Atelier petite enfance</option>
+          <option>Cours de batterie</option>
+          <option>Me contacter</option>
+        </select>
       </label>
 
-            <!-- Coordonnées (communs) -->
+      <!-- Coordonnées (communs) -->
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Prénom Nom *</span>
@@ -92,9 +94,10 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         <!-- tu pourras ajouter d'autres sous-formulaires ici -->
       </div>
 
+      <!-- Message (devient requis si domaine = "Me contacter") -->
       <label class="block">
-        <span class="text-sm">Message</span>
-        <textarea name="Message" rows="5" class="mt-1 w-full border bg-white p-2"></textarea>
+        <span class="text-sm" id="message-label">Message</span>
+        <textarea id="message" name="Message" rows="5" class="mt-1 w-full border bg-white p-2"></textarea>
       </label>
 
       <!-- Consentement RGPD -->
@@ -117,14 +120,10 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
         </label>
       </div>
 
-
       <div class="flex items-center justify-between pt-2">
         <FunkyButton id="back-btn" as="button" type="button" label="Retour" color="bg-white" />
-
-        <!-- wrapper relatif pour poser le pigeon au-dessus du bouton -->
         <div class="relative">
           <FunkyButton as="button" type="submit" label="Envoyer" color="bg-green-300" />
-          <!-- Easter egg -->
           <PigeonEasterEgg />
         </div>
       </div>
@@ -142,16 +141,23 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
     function setBlockActive(block, isActive) {
       block.classList.toggle('hidden', !isActive);
+
       // (dés)activer uniquement les champs visibles (pas le registre hidden)
       $$('input, select, textarea', block).forEach(el => {
         if (el.type === 'hidden') return; // les hidden sont gérés au submit
-        el.disabled = !isActive;
+
         if (!isActive) {
+          // On désactive et on reset gentiment
+          el.disabled = true;
           if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
           else el.value = '';
-          el.removeAttribute('required');
+          // ⚠️ NE PAS toucher à required : le navigateur ignore 'required' si disabled=true
+        } else {
+          // On réactive : la contrainte 'required' re-fonctionne automatiquement
+          el.disabled = false;
         }
       });
+
       if (isActive) setupConditions(block);
     }
 
@@ -184,6 +190,19 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       return [...select.options].some(o => o.value === value);
     }
 
+    // ---------- Message requis si "Me contacter" ----------
+    const message = $('#message');
+    const messageLabel = $('#message-label');
+    function updateMessageRequirement() {
+      const need = domainSelect?.value === 'Me contacter';
+      if (!message) return;
+      message.required = need;                    // validation native
+      message.toggleAttribute('aria-required', need);
+      if (messageLabel) {
+        messageLabel.classList.toggle('is-required', need); // étoile visuelle (non rouge)
+      }
+    }
+
     // Init domaine depuis l'URL (puis fallback sur valeur actuelle)
     const params  = new URLSearchParams(location.search);
     const mapped  = canonicalize(params.get('domain') || '');
@@ -195,7 +214,11 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       } else {
         showBlock(domainSelect.value);
       }
-      domainSelect.addEventListener('change', () => showBlock(domainSelect.value));
+      updateMessageRequirement(); // appliquer la règle dès le chargement
+      domainSelect.addEventListener('change', () => {
+        showBlock(domainSelect.value);
+        updateMessageRequirement(); // re-appliquer à chaque changement
+      });
     }
 
     // ---------- Champs conditionnels (showIf) ----------
@@ -214,15 +237,13 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
           wrap.classList.remove('__show');
           wrap.classList.add('hidden');
         }
+
         // accessibilité/validation + reset doux
         $$('input, select, textarea', wrap).forEach(el => {
-          const wantsRequired = el.hasAttribute('data-required'); // opt-in
           if (show) {
-            el.disabled = false;
-            if (wantsRequired) el.setAttribute('required', 'true');
+            el.disabled = false; // required redevient actif si présent dans le markup
           } else {
-            el.disabled = true;
-            el.removeAttribute('required');
+            el.disabled = true;  // 'required' est ignoré quand disabled=true
             if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
             else el.value = '';
           }
@@ -294,7 +315,6 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
     function valueForGroup(els) {
       if (!els || !els.length) return '';
-
       const sample = els[0];
 
       // Radios (groupe partageant 'name' et même data-reg-id)
@@ -357,7 +377,17 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
       form.setAttribute('action', `${current.pathname}${current.search}`);
       // ⚠️ Pas de preventDefault → Netlify soumet le formulaire
     });
+
+    // UX : focus/scroll sur le premier champ invalide
+    form?.addEventListener('invalid', () => {}, true);
+    form?.addEventListener('submit', (e) => {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        const firstInvalid = form.querySelector(':invalid');
+        firstInvalid?.focus({ preventScroll: true });
+        firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
   </script>
 
 </Site>
-
