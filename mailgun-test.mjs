@@ -1,27 +1,24 @@
-import 'dotenv/config';
-import FormData from 'form-data';
-import Mailgun from 'mailgun.js';
+import FormData from "form-data"; // form-data v4.0.1
+import Mailgun from "mailgun.js"; // mailgun.js v11.1.0
 
-const API_KEY = process.env.MAILGUN_API_KEY;
-const DOMAIN  = process.env.MAILGUN_DOMAIN; // sandbox...
-const REGION  = (process.env.MAILGUN_REGION || 'US').toUpperCase();
-
-const mailgun = new Mailgun(FormData);
-const mg = mailgun.client({
-  username: 'api',
-  key: API_KEY,
-  url: REGION === 'US' ? 'https://api.mailgun.net' : 'https://api.eu.mailgun.net',
-});
-
-try {
-  const res = await mg.messages.create(DOMAIN, {
-    from: process.env.EMAIL_FROM, // postmaster@sandbox...
-    to: [process.env.EMAIL_TO],
-    subject: 'Test Mailgun OK',
-    text: 'Si tu reçois ce message, Mailgun fonctionne 🎉',
+async function sendSimpleMessage() {
+  const mailgun = new Mailgun(FormData);
+  const mg = mailgun.client({
+    username: "api",
+    key: process.env.API_KEY || "API_KEY",
+    // When you have an EU-domain, you must specify the endpoint:
+    url: "https://api.eu.mailgun.net"
   });
-  console.log('Mail envoyé:', res);
-} catch (err) {
-  console.error('Erreur Mailgun:', err);
-  process.exit(1);
+  try {
+    const data = await mg.messages.create("mg.baptistejeandel.fr", {
+      from: "Mailgun Sandbox <postmaster@mg.baptistejeandel.fr>",
+      to: ["Benjamin TISSERAND <benjamin.belfort@gmail.com>"],
+      subject: "Hello Benjamin TISSERAND",
+      text: "Congratulations Benjamin TISSERAND, you just sent an email with Mailgun! You are truly awesome!",
+    });
+
+    console.log(data); // logs response data
+  } catch (error) {
+    console.log(error); //logs any error
+  }
 }
