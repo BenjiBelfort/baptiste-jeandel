@@ -49,3 +49,42 @@ html { scroll-behavior: smooth; }
 .prose img,
 .prose iframe { @apply w-full rounded-none; }
 
+
+
+/* HERO — layout, hauteurs, variables */
+#hero {
+  /* Hauteur responsive fiable (prend en compte l'UI mobile) */
+  min-height: 100svh;    /* svh > vh pour iOS/Android */
+  max-height: 800px;    /* <= ta demande */
+
+  /* Grille 3 rangées : [top (nav)] [contenu] [espace lames] */
+  display: grid;
+  grid-template-rows: var(--top-pad) 1fr var(--notes-pad);
+
+  /* Variables par défaut (mobile) */
+  --hero-content-w: 760px;
+  --top-pad: 72px;     /* espace sous la nav */
+  --notes-pad: 120px;  /* espace réservé aux lames */
+}
+
+/* Desktop : plus d'espace pour respirer */
+@media (min-width: 768px) {
+  #hero {
+    --top-pad: 96px;
+    --notes-pad: 160px;
+  }
+}
+
+/* Écrans confortables : on ajoute encore du coussin */
+@media (min-height: 700px) and (min-width: 768px) {
+  #hero {
+    --top-pad: 120px;
+    --notes-pad: 200px;
+  }
+}
+
+/* Optionnel : adapter la typo si la fenêtre est très basse */
+@media (max-height: 620px) {
+  #hero h1 { font-size: clamp(2.25rem, 6vw, 4.5rem); }   /* ~text-4xl à ~text-7xl */
+  #hero h2 { font-size: clamp(1rem, 2.8vw, 1.5rem); }    /* ~text-base à ~text-2xl */
+}

@@ -1,20 +1,25 @@
 ---
 const path = Astro.url.pathname;
 
-// Autorisé uniquement sur "/", "/services" ou "/formations"
+// Autorisé uniquement sur "/", "/services", "/formations", "/cours"
 const showRelaxShortcut = ["/", "/services", "/formations", "/cours"].includes(path);
 
-
-// Offsets sous la nav (peut s'ajuster si ta nav change de hauteur)
+// Offsets sous la nav (peut s’ajuster si ta nav change de hauteur)
 const topMobile = 50;   // px
 const topDesktop = 69;  // px
+
+// Anim de glissade (départ/arrivée)
+const startMobile = -110;   // px (hors écran)
+const startDesktop = -115;  // px (hors écran)
+const endMobile = 0;        // px (visible)
+const endDesktop = 0;       // px (visible)
 ---
 
 {showRelaxShortcut && (
   <div
     id="relax-shortcut"
-    class="fixed left-0 right-0 z-40 pointer-events-none"
-    style={`--top-mobile:${topMobile}px; --top-desktop:${topDesktop}px;`}
+    class="fixed left-0 right-0 z-40 pointer-events-none transition-transform duration-700 ease-in-out will-change-transform"
+    style={`--top-mobile:${topMobile}px; --top-desktop:${topDesktop}px; --start-mobile:${startMobile}px; --start-desktop:${startDesktop}px; --end-mobile:${endMobile}px; --end-desktop:${endDesktop}px;`}
     aria-hidden="false"
   >
     <div class="max-w-6xl mx-auto px-4">
@@ -25,7 +30,7 @@ const topDesktop = 69;  // px
                rounded-md cursor-pointer select-none touch-manipulation
                transform transition-all duration-200 hover:shadow-md/30"
       >
-        <span class="relative z-10 text-sm text-left">
+        <span class="relative z-10 text-sm text-left leading-tight">
           Voir les dates des<br />relaxations sonores
         </span>
       </a>
@@ -34,9 +39,93 @@ const topDesktop = 69;  // px
 )}
 
 <style is:inline>
-  /* Position collée sous la nav, mais contrainte au container du site */
-  #relax-shortcut { top: var(--top-mobile); }
+  /* Position + glissade (mobile par défaut) */
+  #relax-shortcut {
+    top: var(--top-mobile);
+    transform: translateY(var(--start-mobile));
+  }
+  #relax-shortcut.is-open {
+    transform: translateY(var(--end-mobile));
+  }
+
   @media (min-width: 768px) {
-    #relax-shortcut { top: var(--top-desktop); }
+    #relax-shortcut {
+      top: var(--top-desktop);
+      transform: translateY(var(--start-desktop));
+    }
+    #relax-shortcut.is-open {
+      transform: translateY(var(--end-desktop));
+    }
   }
 </style>
+
+<script is:inline>
+  (function () {
+    const bar = document.getElementById('relax-shortcut');
+    if (!bar) return;
+
+    const on = () => bar.classList.add('is-open');
+    const off = () => bar.classList.remove('is-open');
+
+    // Sur /services, /formations, /cours : visible direct
+    const path = location.pathname;
+    const alwaysOpen = path.startsWith('/services') || path.startsWith('/formations') || path.startsWith('/cours');
+
+    if (alwaysOpen) {
+      on();
+      return;
+    }
+
+    // Sur la Home : visible après scroll >= hauteur de la hero
+    if (path === '/') {
+      // Essaie de trouver la hero (id/class/data-attr)
+      const hero =
+        document.querySelector('[data-hero]') ||
+        document.getElementById('hero') ||
+        document.querySelector('.hero') ||
+        document.querySelector('main > section') || // fallback "raisonnable"
+        null;
+
+      const navOffset = Math.max(
+        0,
+        parseInt(getComputedStyle(bar).getPropertyValue('--top-desktop')) || 0
+      );
+
+      const heroHeight = hero ? Math.max(0, hero.getBoundingClientRect().height) : window.innerHeight;
+      const triggerY = Math.max(0, heroHeight - navOffset);
+
+      let ticking = false;
+      const evaluate = () => {
+        const y = window.scrollY || window.pageYOffset || 0;
+        if (y >= triggerY) on();
+        else off();
+      };
+
+      const onScroll = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            evaluate();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      // Évalue tout de suite, au cas où on arrive déjà scrolleté (ancre, reload, etc.)
+      evaluate();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', evaluate, { passive: true });
+      window.addEventListener('pageshow', evaluate);
+      window.addEventListener('pagehide', () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', evaluate);
+      });
+
+      return;
+    }
+
+    // Par défaut (autres routes non prévues) : on ne l’affiche pas
+    // Mais si tu veux le forcer visible, dé-commente :
+    // on();
+  })();
+</script>
