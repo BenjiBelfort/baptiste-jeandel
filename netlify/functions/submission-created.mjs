@@ -1,6 +1,6 @@
-// Aucune dépendance externe. Utilise fetch natif (Node 18+ sur Netlify).
-exports.handler = async (event) => {
-  // Ping GET pour tester dans le navigateur
+// netlify/functions/submission-created.mjs
+export async function handler(event) {
+  // Ping GET pour test au navigateur
   if (event.httpMethod !== 'POST' || !event.body) {
     return { statusCode: 200, body: 'submission-created alive (waiting for Netlify Forms POST)' };
   }
@@ -9,12 +9,12 @@ exports.handler = async (event) => {
     const payload = JSON.parse(event.body || '{}');
     const { data = {}, form_name, site_url } = payload;
 
-    // Honeypot anti-spam
+    // honeypot anti-spam
     if (data['bot-field']) {
       return { statusCode: 200, body: 'Ignored spam (honeypot).' };
     }
 
-    // Ne garder que les champs non vides (et non techniques)
+    // Ne garder que les champs non vides et non techniques
     const IGNORE = new Set(['form-name', 'bot-field']);
     const entries = Object.entries(data).filter(
       ([k, v]) => !IGNORE.has(k) && v != null && String(v).trim() !== ''
@@ -23,10 +23,11 @@ exports.handler = async (event) => {
       return { statusCode: 200, body: 'Empty after pruning; stored only.' };
     }
 
-    // Texte de l’email
+    // Email texte
     const when = new Intl.DateTimeFormat('fr-FR', {
       dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Paris'
     }).format(new Date());
+
     const lines = entries.map(([k, v]) => `• ${k}: ${v}`);
     const subject = `Nouveau formulaire: ${form_name || 'inconnu'} — ${when}`;
     const text =
@@ -40,9 +41,9 @@ ${lines.join('\n')}
 — Fin —`;
 
     // ENV Mailgun
-    const DOMAIN = process.env.MAILGUN_DOMAIN;              // ex: sandbox...mailgun.org
+    const DOMAIN = process.env.MAILGUN_DOMAIN;              // ex: sandbox…mailgun.org
     const API_KEY = process.env.MAILGUN_API_KEY;            // Private API Key
-    const REGION  = (process.env.MAILGUN_REGION || 'US').toUpperCase(); // US pour sandbox
+    const REGION  = (process.env.MAILGUN_REGION || 'US').toUpperCase(); // sandbox = US
     const EMAIL_TO = process.env.EMAIL_TO;                  // (sandbox: destinataire autorisé)
     const EMAIL_FROM = process.env.EMAIL_FROM || `Mailgun Sandbox <postmaster@${DOMAIN}>`;
 
@@ -51,11 +52,10 @@ ${lines.join('\n')}
       return { statusCode: 500, body: 'Mailgun not configured' };
     }
 
-    // Endpoint selon région
+    // Appel HTTP direct (pas de dépendances)
     const API_BASE = REGION === 'US' ? 'https://api.mailgun.net' : 'https://api.eu.mailgun.net';
     const url = `${API_BASE}/v3/${DOMAIN}/messages`;
 
-    // Corps x-www-form-urlencoded
     const body = new URLSearchParams({
       from: EMAIL_FROM,
       to: EMAIL_TO,
@@ -85,4 +85,4 @@ ${lines.join('\n')}
     console.error('submission-created ERROR:', err);
     return { statusCode: 500, body: 'Function error' };
   }
-};
+}
