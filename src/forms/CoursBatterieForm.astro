@@ -42,7 +42,7 @@
 
   <!-- Instrument à la maison -->
   <label class="block mt-4">
-    <span class="text-sm">Quel instrument as-tu à la maison ? *</span>
+    <span class="text-sm">Quel instrument avez-vous à la maison ? *</span>
     <select
       data-reg-id="reg-instruMaisonHp"
       required aria-required="true"
@@ -57,9 +57,9 @@
   </label>
 
   <!-- Genres / écoute / applis -->
-  <div class="grid md:grid-cols-2 gap-4 mt-4">
-    <label class="block md:col-span-2">
-      <span class="text-sm">Quelles musiques écoutes-tu le plus souvent ?</span>
+
+    <label class="block mt-4">
+      <span class="text-sm">Quelles musiques écoutez-vous le plus souvent ?</span>
       <textarea
         rows="3"
         data-reg-id="reg-genresHp"
@@ -68,8 +68,8 @@
       ></textarea>
     </label>
 
-    <label class="block">
-      <span class="text-sm">Comment écoutes-tu la musique le plus souvent ?</span>
+    <label class="block mt-4">
+      <span class="text-sm">Comment écoutez-vous la musique le plus souvent ?</span>
       <select
         data-reg-id="reg-ecouteMethodeHp"
         class="mt-1 w-full border bg-white p-2"
@@ -81,8 +81,8 @@
       </select>
     </label>
 
-    <label class="block">
-      <span class="text-sm">Quelles applis utilises-tu pour écouter de la musique ?</span>
+    <label class="block mt-4">
+      <span class="text-sm">Quelles applis utilisez-vous pour écouter de la musique ?</span>
       <textarea
         rows="3"
         data-reg-id="reg-applisHp"
@@ -91,20 +91,19 @@
       ></textarea>
     </label>
 
-    <label class="block md:col-span-2">
-      <span class="text-sm">As-tu des playlists à partager ?</span>
+    <label class="block mt-4">
+      <span class="text-sm">Avez-vous des playlists à partager ?</span>
       <textarea
         rows="3"
         data-reg-id="reg-playlistsHp"
         class="mt-1 w-full border bg-white p-2"
-        placeholder="Colle ici les liens de playlists (facultatif)"
+        placeholder="Collez ici les liens de playlists (facultatif)"
       ></textarea>
     </label>
-  </div>
 
   <!-- Latéralité -->
   <label class="block mt-4">
-    <span class="text-sm">Tu es… *</span>
+    <span class="text-sm">Vous êtes… *</span>
     <select
       data-reg-id="reg-lateraliteHp"
       required aria-required="true"
@@ -118,39 +117,38 @@
   </label>
 
   <!-- Morceaux & inspirations -->
+  <label class="block mt-4">
+    <span class="text-sm">Quels morceaux rêvez-vous de jouer ? (au moins 3)</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-morceauxHp"
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Ex. 1) …  2) …  3) …"
+    ></textarea>
+  </label>
 
-    <label class="block mt-4">
-      <span class="text-sm">Quels morceaux rêves-tu de jouer ? (au moins 3)</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-morceauxHp"
-        class="mt-1 w-full border bg-white p-2"
-        placeholder="Ex. 1) …  2) …  3) …"
-      ></textarea>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Connaissez-vous les noms des batteurs que vous aimez ? Lesquels ?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-batteursHp"
+      class="mt-1 w-full border bg-white p-2"
+    ></textarea>
+  </label>
 
-    <label class="block mt-4">
-      <span class="text-sm">Connais-tu les noms des batteurs que tu aimes ? Lesquels ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-batteursHp"
-        class="mt-1 w-full border bg-white p-2"
-      ></textarea>
-    </label>
-
-    <label class="block mt-4">
-      <span class="text-sm">Sur les réseaux sociaux, qui suis-tu dans le domaine de la batterie ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-reseauxHp"
-        class="mt-1 w-full border bg-white p-2"
-        placeholder="@comptes, chaînes YouTube, etc."
-      ></textarea>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Sur les réseaux sociaux, qui suivez-vous dans le domaine de la batterie ?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-reseauxHp"
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="@comptes, chaînes YouTube, etc."
+    ></textarea>
+  </label>
 
   <!-- Temps hebdo -->
   <label class="block mt-4">
-    <span class="text-sm">Combien de temps peux-tu consacrer à la pratique chaque semaine ? *</span>
+    <span class="text-sm">Combien de temps pouvez-vous consacrer à la pratique chaque semaine ? *</span>
     <select
       data-reg-id="reg-tempsHebdoHp"
       required aria-required="true"

@@ -48,7 +48,7 @@ tree -a -L 5 -I "node_modules|.git|dist|.vercel|.astro|.vscode|.DS_Store"
 dans le terminal (régler L3 L4 L5 pour la profondeur)
 
 A faire avant mise en ligne
-- site map automatique
+- changer le nom de domaine partout
 
 A faire plus tard :
 - optimisation SEO dans le frontmatter des MDX

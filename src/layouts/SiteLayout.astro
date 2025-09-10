@@ -6,7 +6,7 @@ import Footer from '@/components/Footer.astro';
 import '@/styles/fonts.css';
 import '@/styles/global.css';
 
-const { title, description, image, type } = Astro.props;
+const { title, description, image, type, keywords } = Astro.props;
 ---
 <html lang="fr" class="scroll-smooth h-full">
 <!--
@@ -24,7 +24,7 @@ La plus juste expression de votre identité
 
 
 -->
-  <BaseHead {title} {description} {image} {type} />
+  <BaseHead {title} {description} {image} {type} {keywords} />
   <body class="h-full min-h-[100svh] flex flex-col antialiased text-stone-900 bg-slate-100">
     <Nav />
     <RelaxShortcut />

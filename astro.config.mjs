@@ -6,40 +6,46 @@ import sitemap from '@astrojs/sitemap';
 import rehypeExternalLinks from 'rehype-external-links';
 import { EnumChangefreq } from 'sitemap';
 
-const SITE = process.env.PUBLIC_SITE || process.env.URL || 'http://localhost:4321';
+// Priorités d'URL pour Netlify (prod/preview) + fallback local
+const SITE =
+  process.env.PUBLIC_SITE ||
+  process.env.URL ||
+  process.env.DEPLOY_PRIME_URL || // <-- ajouté
+  'http://localhost:4321';
 
 function getPriority(p) {
   if (p === '/') return 1.0;
-  if (p.startsWith('/services') || p.startsWith('/formations')) return 0.8;
+  if (p === '/services'   || p.startsWith('/services/'))   return 0.8;
+  if (p === '/formations' || p.startsWith('/formations/')) return 0.8;
+  if (p === '/cours'      || p.startsWith('/cours/'))      return 0.7;
   if (p === '/contact') return 0.6;
   return 0.5;
 }
 
 export default defineConfig({
   site: SITE,
-  trailingSlash: 'never', // évite les doublons /page/ vs /page
+  trailingSlash: 'never',
   integrations: [
     mdx({
-      // 👇 ici : tous les liens externes des MDX ouvrent en nouvel onglet
       rehypePlugins: [
         [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],
       ],
     }),
     sitemap({
-      filter: (page) => ![
-        '/404',
-        '/merci',
-        '/humans.txt',
-        '/site.webmanifest',
-      ].includes(page),
+      filter: (page) => {
+        const bad = [
+          '/404',
+          '/merci',
+          '/choucroute', // EE
+        ];
+        return !bad.includes(page);
+      },
       serialize(item) {
-        const url = new URL(item.url);
-        const p = url.pathname;
+        const p = new URL(item.url).pathname;
         return {
           ...item,
           changefreq: p === '/' ? EnumChangefreq.WEEKLY : EnumChangefreq.MONTHLY,
           priority: getPriority(p),
-          // Optionnel : si tu veux mettre un lastmod global au build :
           // lastmod: new Date().toISOString(),
         };
       },

@@ -46,7 +46,7 @@ const DEFAULT_ORDER = [
 
 // Ordres spécifiques par domaine (tu peux en ajouter d’autres)
 const DOMAIN_ORDERS = {
-  'Eveil musical': [
+  'Éveil musical': [
     'Domaine', 'Nom', 'Email', 'Téléphone',
     'Structure (adresse)', 'Code postal', 'Ville',
     'Type de demande (éveil)',
