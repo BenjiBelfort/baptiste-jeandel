@@ -1,0 +1,150 @@
+---
+/** Sous-formulaire : Archives sonores */
+---
+<section
+  data-domain-form="Archives sonores"
+  class="hidden border border-stone-900 bg-red-100 p-4 md:p-5 shadow-md shadow-red-300/50"
+  aria-label="Questions spécifiques — Archives sonores"
+>
+  <h2 class="hand text-3xl mb-6 text-center">Archives sonores</h2>
+
+  <!-- Téléphone -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <label class="block">
+      <span class="text-sm">N° de téléphone *</span>
+      <input
+        data-reg-id="reg-tel"
+        type="tel"
+        required aria-required="true"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="03… / 06…"
+        inputmode="tel"
+        autocomplete="tel"
+      />
+    </label>
+  </div>
+
+  <!-- Bénéficiaire & lien -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">À qui souhaitez-vous offrir l’enregistrement ? *</span>
+      <input
+        data-reg-id="reg-beneficiaire"
+        required aria-required="true"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Prénom Nom"
+        autocomplete="name"
+      />
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Votre lien avec cette personne *</span>
+      <input
+        data-reg-id="reg-lien"
+        required aria-required="true"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Ex. fille, petit-fils, ami, voisin…"
+      />
+    </label>
+  </div>
+
+  <!-- Oui/Non : déjà parlé ? -->
+  <fieldset class="mt-4">
+    <legend class="text-sm">En avez-vous déjà parlé à la personne ? *</legend>
+    <div class="mt-1 flex flex-wrap gap-6">
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="parle" value="Oui" data-reg-id="reg-parle" required />
+        <span>Oui</span>
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="parle" value="Non" data-reg-id="reg-parle" />
+        <span>Non</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <!-- Oui/Non : supports (album, etc.) -->
+  <fieldset class="mt-4">
+    <legend class="text-sm">Disposez-vous de supports pour favoriser les échanges ? *</legend>
+    <div class="mt-1 flex flex-wrap gap-6">
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="supports" value="Oui" data-reg-id="reg-supports" required />
+        <span>Oui</span>
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="supports" value="Non" data-reg-id="reg-supports" />
+        <span>Non</span>
+      </label>
+    </div>
+    <p class="text-xs text-stone-600 mt-1">Exemples : album photo, lettres, objets, carnet…</p>
+  </fieldset>
+
+  <!-- Durée imaginée -->
+  <label class="block mt-4">
+    <span class="text-sm">Durée d’enregistrement imaginée (minutes) *</span>
+    <input
+      data-reg-id="reg-duree"
+      type="number" min="15" step="5"
+      required aria-required="true"
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Ex. 60"
+      inputmode="numeric"
+    />
+  </label>
+
+  <!-- Adresse du lieu d’enregistrement -->
+  <label class="block mt-4">
+    <span class="text-sm">Adresse exacte du lieu où l’enregistrement aura lieu *</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-lieuEnregistrement"
+      required aria-required="true"
+      class="mt-1 w-full border bg-white p-2"
+      placeholder="Nom du lieu, rue, code postal, ville…"
+      autocomplete="street-address"
+    ></textarea>
+  </label>
+
+  <!-- Préférences : jour & horaire -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">Préférence jour de la semaine</span>
+      <select
+        data-reg-id="reg-jourPref"
+        class="mt-1 w-full border bg-white p-2"
+      >
+        <option value="">— Indifférent —</option>
+        <option>lundi</option>
+        <option>mardi</option>
+        <option>mercredi</option>
+        <option>jeudi</option>
+        <option>vendredi</option>
+      </select>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Préférence horaire</span>
+      <select
+        data-reg-id="reg-creneauPref"
+        class="mt-1 w-full border bg-white p-2"
+      >
+        <option value="">— Indifférent —</option>
+        <option>10h–12h</option>
+        <option>14h–16h</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- 🔒 Registre hidden -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Téléphone" id="reg-tel" disabled />
+    <input type="hidden" name="Bénéficiaire (Prénom Nom)" id="reg-beneficiaire" disabled />
+    <input type="hidden" name="Lien avec la personne" id="reg-lien" disabled />
+    <input type="hidden" name="Déjà parlé à la personne ?" id="reg-parle" disabled />
+    <input type="hidden" name="Supports disponibles" id="reg-supports" disabled />
+    <input type="hidden" name="Durée imaginée (minutes)" id="reg-duree" disabled />
+    <input type="hidden" name="Adresse (lieu de l’enregistrement)" id="reg-lieuEnregistrement" disabled />
+    <input type="hidden" name="Préférence jour" id="reg-jourPref" disabled />
+    <input type="hidden" name="Préférence horaire" id="reg-creneauPref" disabled />
+  </div>
+</section>

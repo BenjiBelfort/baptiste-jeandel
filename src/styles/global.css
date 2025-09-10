@@ -25,39 +25,31 @@ html { scroll-behavior: smooth; }
 /* Conteneur typographique MDX */
 .prose h2 { @apply mt-8 mb-4 text-2xl font-semibold text-center; }
 .prose h3 { @apply mt-6 mb-3 text-xl font-medium; }
-.prose p  { @apply mb-4 leading-relaxed text-justify; }
+.prose p  { @apply mb-4 leading-relaxed hyphens-auto text-justify; }
 
 .prose ul { @apply list-disc pl-6 mb-4; }
 .prose li > p { margin: 0; }
 .prose ol { @apply list-decimal pl-6 mb-4; }
 
 .prose blockquote { @apply border-l-4 border-stone-400 pl-4 italic text-stone-700 mb-6; }
-/* liens dans les MDX */
 .prose a { @apply underline underline-offset-2 hover:opacity-90; }
 
-/* images/iframes full width dans l’article */
 .prose img { @apply w-4/5 shadow-md/20 mx-auto my-4; }
 .prose iframe { @apply w-full rounded-none; }
+.prose summary { @apply cursor-pointer hover:opacity-80 transition; }
 
 
 
-/* HERO — layout, hauteurs, variables */
 #hero {
-  /* Hauteur responsive fiable (prend en compte l'UI mobile) */
-  min-height: 100svh;    /* svh > vh pour iOS/Android */
-  max-height: 800px;    /* <= ta demande */
-
-  /* Grille 3 rangées : [top (nav)] [contenu] [espace lames] */
+  min-height: 100svh;
+  max-height: 800px;
   display: grid;
   grid-template-rows: var(--top-pad) 1fr var(--notes-pad);
-
-  /* Variables par défaut (mobile) */
   --hero-content-w: 760px;
-  --top-pad: 72px;     /* espace sous la nav */
-  --notes-pad: 120px;  /* espace réservé aux lames */
+  --top-pad: 72px;
+  --notes-pad: 120px;
 }
 
-/* Desktop : plus d'espace pour respirer */
 @media (min-width: 768px) {
   #hero {
     --top-pad: 96px;
@@ -65,7 +57,6 @@ html { scroll-behavior: smooth; }
   }
 }
 
-/* Écrans confortables : on ajoute encore du coussin */
 @media (min-height: 700px) and (min-width: 768px) {
   #hero {
     --top-pad: 120px;
@@ -73,8 +64,7 @@ html { scroll-behavior: smooth; }
   }
 }
 
-/* Optionnel : adapter la typo si la fenêtre est très basse */
 @media (max-height: 620px) {
-  #hero h1 { font-size: clamp(2.25rem, 6vw, 4.5rem); }   /* ~text-4xl à ~text-7xl */
-  #hero h2 { font-size: clamp(1rem, 2.8vw, 1.5rem); }    /* ~text-base à ~text-2xl */
+  #hero h1 { font-size: clamp(2.25rem, 6vw, 4.5rem); }
+  #hero h2 { font-size: clamp(1rem, 2.8vw, 1.5rem); }
 }

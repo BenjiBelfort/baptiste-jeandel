@@ -46,51 +46,99 @@ const DEFAULT_ORDER = [
 
 // Ordres spécifiques par domaine (tu peux en ajouter d’autres)
 const DOMAIN_ORDERS = {
-  'Cours de Batterie / Handpan': [
-    'Domaine','Nom','Email','Téléphone',
-    'Niveau (cours)','Instrument à la maison',
-    'Genres / musiques écoutées','Écoute la plus fréquente',
-    'Applis musique','Playlists à partager',
-    'Latéralité','Morceaux rêvés','Batteurs préférés',
-    'Références réseaux sociaux (Batterie)',
-    'Temps hebdomadaire disponible',
-    'Date de naissance',
-    'Message','Consentement RGPD'
-  ],
-  'Éveil musical': [
-    'Domaine','Nom','Email','Téléphone',
-    'Âge des enfants','Nombre de participants','Fréquence (éveil)','Fréquence (précision)',
-    'Lieu','Date souhaitée',
-    'Message','Consentement RGPD'
+  'Eveil musical': [
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Structure (adresse)', 'Code postal', 'Ville',
+    'Type de demande (éveil)',
+    'Fréquence (éveil)', 'Fréquence (précision)',
+    'Âge des enfants', 'Nombre de participants',
+    'Lieu', 'Date souhaitée',
+    'Message', 'Consentement RGPD'
   ],
   'Musicothérapie': [
-    'Domaine','Nom','Email','Téléphone',
-    'Type de musicothérapie','Type de public ciblé',
-    'Niveau de dépendance (file active)','Séances individuelles (précisions)',
-    'Matériel sur place (précisions)','Fréquence',
-    'Message','Consentement RGPD'
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Structure (adresse)', 'Code postal', 'Ville',
+    'Type de musicothérapie', 'Niveau de dépendance (active/les deux)',
+    'Matériel sur place (précisions)',
+    'Fréquence (musicothérapie)', 'Fréquence (précision)',
+    'Public ciblé', 'Séances individuelles (précisions)',
+    'Message', 'Consentement RGPD'
   ],
   'Relaxations sonores': [
-    'Domaine','Nom','Email','Téléphone',
-    'Date','Horaire','Nombre de personnes','Accompagnement enfants','Accompagnement (précision)',
-    'Âges des enfants',
-    'Message','Consentement RGPD'
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Structure (adresse)', 'Code postal', 'Ville',
+    'Nombre de participants', 'Date', 'Horaire',
+    'Message', 'Consentement RGPD'
   ],
   'Spectacles': [
-    'Domaine','Nom','Email','Téléphone',
-    'Adresse (lieu du spectacle)','Heure de début','Nombre de personnes intéressées',
-    'Message','Consentement RGPD'
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Nombre de personnes',
+    'Accompagnement enfants', 'Accompagnement (précision)',
+    'Âges des enfants',
+    'Adresse (lieu du spectacle)',
+    'Date souhaitée', 'Heure de début',
+    'Message', 'Consentement RGPD'
+  ],
+  'Concert Handpan': [
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Nombre de personnes',
+    'Type d’événement', 'Événement (précision)',
+    'Adresse (lieu du concert)',
+    'Date de l’événement', 'Horaire',
+    'Message', 'Consentement RGPD'
+  ],
+  'Archives sonores': [
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Bénéficiaire (Prénom Nom)', 'Lien avec la personne',
+    'Déjà parlé à la personne ?', 'Supports disponibles',
+    'Durée imaginée (minutes)',
+    'Adresse (lieu de l’enregistrement)',
+    'Préférence jour', 'Préférence horaire',
+    'Message', 'Consentement RGPD'
   ],
   'Formation EHPAD': [
-    'Domaine','Nom','Email','Téléphone',
-    'Public ciblé (résident·e·s)','Niveau de dépendance (GIR)','Modalité de travail souhaitée',
-    'Structure','Thématiques à renforcer',
-    'Message','Consentement RGPD'
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Structure (adresse)', 'Code postal', 'Ville',
+    'Nombre de personnes intéressées', 'Profil des apprenant(e)s',
+    'Matériel sur place (précisions)',
+    'Public ciblé (résident·e·s)',
+    'Niveau de dépendance (GIR)', 'Modalité de travail souhaitée',
+    'Message', 'Consentement RGPD'
   ],
   'Formation petite enfance': [
-    'Domaine','Nom','Email','Téléphone',
-    'Profil des apprenant(e)s',
-    'Message','Consentement RGPD'
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Structure', 'Code postal', 'Ville',
+    'Nombre de personnes intéressées', 'Profil des apprenant(e)s',
+    'Matériel sur place (précisions)', 'Thématiques à renforcer',
+    'Message', 'Consentement RGPD'
+  ],
+  'Formation Handpan': [
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Structure (adresse)', 'Code postal', 'Ville',
+    'Nombre de personnes intéressées', 'Profil des apprenant(e)s',
+    'Matériel sur place (précisions)',
+    'Public ciblé (résident·e·s)',
+    'Niveau de dépendance (GIR)', 'Modalité de travail souhaitée',
+    'Message', 'Consentement RGPD'
+  ],
+  'Cours de Batterie': [
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Date de naissance', 'Niveau (cours)', 'Instrument à la maison',
+    'Genres / musiques écoutées', 'Écoute la plus fréquente',
+    'Applis musique', 'Playlists à partager',
+    'Latéralité', 'Morceaux rêvés', 'Batteurs préférés',
+    'Références réseaux sociaux (Batterie)',
+    'Temps hebdomadaire disponible',
+    'Message', 'Consentement RGPD'
+  ],
+  'Cours de Handpan': [
+    'Domaine', 'Nom', 'Email', 'Téléphone',
+    'Genres / musiques écoutées', 'Écoute la plus fréquente',
+    'Applis musique', 'Playlists à partager',
+    'Latéralité', 'Handpanistes préférés',
+    'Références réseaux sociaux (Handpan)',
+    'Temps hebdomadaire disponible',
+    'Message', 'Consentement RGPD'
   ],
 };
 

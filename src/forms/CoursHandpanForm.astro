@@ -1,0 +1,128 @@
+---
+/** Sous-formulaire : Cours de Handpan
+ * S’affiche quand le domaine = "Cours de Handpan"
+ * - Champs visibles avec data-reg-id="<id du hidden>"
+ * - Registre hidden (names Netlify) désactivé par défaut
+ */
+---
+<section
+  data-domain-form="Cours de Handpan"
+  class="hidden border border-stone-900 bg-orange-100 p-4 md:p-5 shadow-md shadow-orange-300/50"
+  aria-label="Questions spécifiques — Cours de Handpan"
+>
+  <h2 class="hand text-3xl mb-6 text-center">Cours de Handpan</h2>
+
+  <!-- Goûts musicaux / écoute / applis / playlists -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <label class="block md:col-span-2">
+      <span class="text-sm">Quelles musiques écoutes-tu le plus souvent ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-genresHpan"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Styles/artistes préférés…"
+      ></textarea>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Comment écoutes-tu la musique le plus souvent ?</span>
+      <select
+        data-reg-id="reg-ecouteMethodeHpan"
+        class="mt-1 w-full border bg-white p-2"
+      >
+        <option value="">— Sélectionner —</option>
+        <option value="enceinte">Avec une enceinte</option>
+        <option value="casque">Avec un casque</option>
+        <option value="ecouteurs">Avec des écouteurs</option>
+      </select>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Quelles applis utilises-tu pour écouter de la musique ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-applisHpan"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Spotify, YouTube, Deezer, Apple Music…"
+      ></textarea>
+    </label>
+
+    <label class="block md:col-span-2">
+      <span class="text-sm">As-tu des playlists à partager ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-playlistsHpan"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Colle ici les liens de playlists (facultatif)"
+      ></textarea>
+    </label>
+  </div>
+
+  <!-- Latéralité (requis) -->
+  <label class="block mt-4">
+    <span class="text-sm">Tu es… *</span>
+    <select
+      data-reg-id="reg-lateraliteHpan"
+      required aria-required="true"
+      class="mt-1 w-full border bg-white p-2"
+    >
+      <option value="">— Sélectionner —</option>
+      <option value="droitier">Droitier(ère)</option>
+      <option value="gaucher">Gaucher(ère)</option>
+      <option value="ambidextre">Ambidextre</option>
+    </select>
+  </label>
+
+  <!-- Handpanistes / réseaux -->
+    <label class="block mt-4">
+      <span class="text-sm">Connais-tu les noms des handpanistes que tu aimes ? Lesquels ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-handpanistesHpan"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="Artistes, chaînes, références…"
+      ></textarea>
+    </label>
+
+    <label class="block mt-4">
+      <span class="text-sm">Sur les réseaux sociaux, qui suis-tu dans le domaine du handpan ?</span>
+      <textarea
+        rows="3"
+        data-reg-id="reg-reseauxHpan"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="@comptes, chaînes YouTube, etc."
+      ></textarea>
+    </label>
+
+  <!-- Temps hebdo (requis) -->
+  <label class="block mt-4">
+    <span class="text-sm">Combien de temps peux-tu consacrer à la pratique chaque semaine ? *</span>
+    <select
+      data-reg-id="reg-tempsHebdoHpan"
+      required aria-required="true"
+      class="mt-1 w-full border bg-white p-2"
+    >
+      <option value="">— Sélectionner —</option>
+      <option value="15min-jour">~15 min / jour</option>
+      <option value="30min-jour">~30 min / jour</option>
+      <option value="1h-jour">~1 h / jour</option>
+      <option value="2-3h-semaine">2–3 h / semaine</option>
+      <option value="4-6h-semaine">4–6 h / semaine</option>
+      <option value="7h-plus-semaine">≥ 7 h / semaine</option>
+    </select>
+  </label>
+
+  <!-- 🔒 Registre hidden -->
+  <div data-registry class="hidden" aria-hidden="true">
+    <input type="hidden" name="Genres / musiques écoutées" id="reg-genresHpan" disabled />
+    <input type="hidden" name="Écoute la plus fréquente" id="reg-ecouteMethodeHpan" disabled />
+    <input type="hidden" name="Applis musique" id="reg-applisHpan" disabled />
+    <input type="hidden" name="Playlists à partager" id="reg-playlistsHpan" disabled />
+
+    <input type="hidden" name="Latéralité" id="reg-lateraliteHpan" disabled />
+    <input type="hidden" name="Handpanistes préférés" id="reg-handpanistesHpan" disabled />
+    <input type="hidden" name="Références réseaux sociaux (Handpan)" id="reg-reseauxHpan" disabled />
+
+    <input type="hidden" name="Temps hebdomadaire disponible" id="reg-tempsHebdoHpan" disabled />
+  </div>
+</section>

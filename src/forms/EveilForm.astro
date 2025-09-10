@@ -3,11 +3,12 @@
 ---
 <section
   data-domain-form="Éveil musical"
-  class="hidden border border-stone-900 bg-violet-100 p-4 md:p-5"
+  class="hidden border border-stone-900 bg-red-100 p-4 md:p-5 shadow-md shadow-red-300/50"
   aria-label="Questions spécifiques — Éveil musical"
 >
   <h2 class="hand text-3xl mb-6 text-center">Éveil musical</h2>
 
+  <!-- Téléphone -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
       <span class="text-sm">N° de téléphone *</span>
@@ -15,33 +16,43 @@
         data-reg-id="reg-tel"
         type="tel"
         required
+        aria-required="true"
         class="mt-1 w-full border bg-white p-2"
         placeholder="03… / 06…"
         inputmode="tel"
+        autocomplete="tel"
       />
     </label>
   </div>
 
+  <!-- Structure & adresse -->
   <label class="block mt-4">
     <span class="text-sm">Structure et adresse *</span>
     <textarea
       rows="3"
       data-reg-id="reg-structure"
       required
+      aria-required="true"
       class="mt-1 w-full border bg-white p-2"
       placeholder="Nom et adresse de la structure"
+      autocomplete="organization"
     ></textarea>
   </label>
 
+  <!-- CP + Ville -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
       <span class="text-sm">Code postal *</span>
       <input
         data-reg-id="reg-cp"
         required
+        aria-required="true"
         class="mt-1 w-full border bg-white p-2"
         placeholder="90000"
         inputmode="numeric"
+        pattern="\\d{5}"
+        title="5 chiffres (code postal en France)"
+        autocomplete="postal-code"
       />
     </label>
 
@@ -50,22 +61,26 @@
       <input
         data-reg-id="reg-ville"
         required
+        aria-required="true"
         class="mt-1 w-full border bg-white p-2"
+        autocomplete="address-level2"
+        placeholder="Ex. Belfort"
       />
     </label>
   </div>
 
-  <!-- Choix de mise en place -->
-  <label class="block mt-6">
+  <!-- Type de mise en place -->
+  <label class="block mt-4">
     <span class="text-sm">Vous souhaitez mettre en place… *</span>
     <select
       data-reg-id="reg-typeEveil"
       required
+      aria-required="true"
       class="mt-1 w-full border bg-white p-2"
     >
       <option value="">— Sélectionner —</option>
-      <option value="regulieres">Des séances d’éveil musical régulières</option>
-      <option value="spectacle">Un spectacle pour les jeunes enfants</option>
+      <option value="regulieres">Des séances régulières</option>
+      <option value="spectacle">Un spectacle</option>
       <option value="parents-enfants">Des séances parents–enfants</option>
     </select>
   </label>
@@ -77,13 +92,14 @@
       <select
         data-reg-id="reg-frequence"
         required
+        aria-required="true"
         class="mt-1 w-full border bg-white p-2"
       >
         <option value="">— Sélectionner —</option>
-        <option value="hebdo">Une fois par semaine</option>
-        <option value="bihebdo">Une fois tous les 15 jours</option>
-        <option value="mensuel">Une fois par mois</option>
-        <option value="autre">Autre (préciser)</option>
+        <option value="hebdo">Hebdo</option>
+        <option value="quinzaine">15 jours</option>
+        <option value="mensuel">Mensuel</option>
+        <option value="autre">Autre</option>
       </select>
     </label>
 
@@ -98,13 +114,14 @@
     </label>
   </div>
 
-  <!-- Infos atelier (on garde tes champs classiques, utiles pour calibrer) -->
-  <div class="grid md:grid-cols-2 gap-4 mt-6">
+  <!-- Infos atelier -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
       <span class="text-sm">Âge des enfants *</span>
       <input
         data-reg-id="reg-age"
         required
+        aria-required="true"
         class="mt-1 w-full border bg-white p-2"
         placeholder="Ex. 2–3 ans"
       />
@@ -115,9 +132,11 @@
       <input
         data-reg-id="reg-nbParticipants"
         type="number"
-        required
-        class="mt-1 w-full border bg-white p-2"
         min="1"
+        required
+        aria-required="true"
+        class="mt-1 w-full border bg-white p-2"
+        placeholder="min 1"
       />
     </label>
 
@@ -140,18 +159,15 @@
     </label>
   </div>
 
-  <!-- 🔒 Registre hidden -->
+  <!-- 🔒 Registre hidden (NOMS EXACTS pour le webhook) -->
   <div data-registry class="hidden" aria-hidden="true">
     <input type="hidden" name="Téléphone" id="reg-tel" disabled />
     <input type="hidden" name="Structure (adresse)" id="reg-structure" disabled />
     <input type="hidden" name="Code postal" id="reg-cp" disabled />
     <input type="hidden" name="Ville" id="reg-ville" disabled />
-
     <input type="hidden" name="Type de demande (éveil)" id="reg-typeEveil" disabled />
-
     <input type="hidden" name="Fréquence (éveil)" id="reg-frequence" disabled />
     <input type="hidden" name="Fréquence (précision)" id="frequenceAutre" disabled />
-
     <input type="hidden" name="Âge des enfants" id="reg-age" disabled />
     <input type="hidden" name="Nombre de participants" id="reg-nbParticipants" disabled />
     <input type="hidden" name="Lieu" id="reg-lieu" disabled />

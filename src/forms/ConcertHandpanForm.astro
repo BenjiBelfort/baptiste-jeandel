@@ -1,15 +1,15 @@
 ---
-/** Sous-formulaire : Spectacle */
+/** Sous-formulaire : Concert Handpan */
 ---
 <section
-  data-domain-form="Spectacles"
+  data-domain-form="Concert Handpan"
   class="hidden border border-stone-900 bg-red-100 p-4 md:p-5 shadow-md shadow-red-300/50"
-  aria-label="Questions spécifiques — Spectacle"
+  aria-label="Questions spécifiques — Concert Handpan"
 >
-  <h2 class="hand text-3xl mb-6 text-center">Spectacle</h2>
+  <h2 class="hand text-3xl mb-6 text-center">Concert Handpan</h2>
 
   <!-- Téléphone -->
-  <div class="grid md:grid-cols-2 gap-4 mt-4">
+  <div class="grid md:grid-cols-2 gap-4">
     <label class="block">
       <span class="text-sm">N° de téléphone *</span>
       <input
@@ -32,70 +32,56 @@
       type="number" min="1" step="1"
       required aria-required="true"
       class="mt-1 w-full border bg-white p-2"
-      placeholder="Ex. 40"
+      placeholder="Ex. 100"
       inputmode="numeric"
     />
   </label>
 
-  <!-- Accompagnement -->
+  <!-- Type d’événement (optionnel) -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
-      <span class="text-sm">Les enfants seront-ils accompagnés ? *</span>
+      <span class="text-sm">De quel événement s’agit-il ?</span>
       <select
-        data-reg-id="reg-accompagnement"
-        required aria-required="true"
+        data-reg-id="reg-typeEvent"
         class="mt-1 w-full border bg-white p-2"
       >
         <option value="">— Sélectionner —</option>
-        <option value="parents">Parents</option>
-        <option value="assistantes">Assistant(e)s maternel(le)s</option>
-        <option value="les-deux">Les deux</option>
-        <option value="aucun">Non</option>
+        <option value="mariage">Mariage</option>
+        <option value="enterrement">Enterrement / Funérailles</option>
+        <option value="anniversaire">Anniversaire</option>
         <option value="autre">Autre</option>
       </select>
     </label>
 
-    <label class="block" data-show-if="reg-accompagnement" data-show-eq="autre">
-      <span class="text-sm">Précisez l’accompagnement *</span>
+    <label class="block" data-show-if="reg-typeEvent" data-show-eq="autre">
+      <span class="text-sm">Précisez l’événement</span>
       <input
-        data-reg-id="reg-accompagnementAutre"
-        data-required
+        data-reg-id="reg-typeEventAutre"
         class="mt-1 w-full border bg-white p-2"
-        placeholder="Ex. enseignants, bénévoles…"
+        placeholder="Ex. cérémonie laïque, inauguration…"
       />
     </label>
   </div>
 
-  <!-- Âges des enfants -->
+  <!-- Adresse précise du lieu -->
   <label class="block mt-4">
-    <span class="text-sm">Âges des enfants *</span>
-    <input
-      data-reg-id="reg-agesEnfants"
-      required aria-required="true"
-      class="mt-1 w-full border bg-white p-2"
-      placeholder="Ex. 2–3 ans / 4–6 ans"
-    />
-  </label>
-
-  <!-- Adresse exacte du lieu -->
-  <label class="block mt-4">
-    <span class="text-sm">Adresse exacte du lieu où le spectacle aura lieu *</span>
+    <span class="text-sm">Adresse exacte du lieu où le concert aura lieu *</span>
     <textarea
       rows="3"
-      data-reg-id="reg-lieuSpectacle"
+      data-reg-id="reg-lieuConcert"
       required aria-required="true"
       class="mt-1 w-full border bg-white p-2"
-      placeholder="Nom de la structure, rue, code postal, ville…"
+      placeholder="Nom du lieu, rue, code postal, ville…"
       autocomplete="street-address"
     ></textarea>
   </label>
 
-  <!-- Date + Horaires -->
+  <!-- Date + Horaire -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
-      <span class="text-sm">Date *</span>
+      <span class="text-sm">Date de votre événement *</span>
       <input
-        data-reg-id="reg-date"
+        data-reg-id="reg-dateEvent"
         type="date"
         required aria-required="true"
         class="mt-1 w-full border bg-white p-2"
@@ -109,7 +95,7 @@
         type="text"
         required aria-required="true"
         class="mt-1 w-full border bg-white p-2"
-        placeholder="Ex. 10h–11h30"
+        placeholder="Ex. 18h30–19h / installation 17h30"
       />
     </label>
   </div>
@@ -119,13 +105,12 @@
     <input type="hidden" name="Téléphone" id="reg-tel" disabled />
     <input type="hidden" name="Nombre de personnes" id="reg-nbParticipants" disabled />
 
-    <input type="hidden" name="Accompagnement enfants" id="reg-accompagnement" disabled />
-    <input type="hidden" name="Accompagnement (précision)" id="reg-accompagnementAutre" disabled />
+    <input type="hidden" name="Type d’événement" id="reg-typeEvent" disabled />
+    <input type="hidden" name="Événement (précision)" id="reg-typeEventAutre" disabled />
 
-    <input type="hidden" name="Âges des enfants" id="reg-agesEnfants" disabled />
-    <input type="hidden" name="Adresse (lieu du spectacle)" id="reg-lieuSpectacle" disabled />
+    <input type="hidden" name="Adresse (lieu du concert)" id="reg-lieuConcert" disabled />
 
-    <input type="hidden" name="Date souhaitée" id="reg-date" disabled />
-    <input type="hidden" name="Heure de début" id="reg-horaire" disabled />
+    <input type="hidden" name="Date de l’événement" id="reg-dateEvent" disabled />
+    <input type="hidden" name="Horaire" id="reg-horaire" disabled />
   </div>
 </section>

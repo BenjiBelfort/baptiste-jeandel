@@ -1,13 +1,13 @@
 ---
 /** Sous-formulaire : Cours de batterie
- * S’affiche quand le domaine = "Cours de batterie"
+ * S’affiche quand le domaine = "Cours de Batterie"
  * - Champs visibles avec data-reg-id="<id du hidden>"
  * - Registre hidden (names Netlify) désactivé par défaut
  */
 ---
 <section
   data-domain-form="Cours de Batterie"
-  class="hidden border border-stone-900 bg-green-100 p-4 md:p-5"
+  class="hidden border border-stone-900 bg-orange-100 p-4 md:p-5 shadow-md shadow-orange-300/50"
   aria-label="Questions spécifiques — Cours de Batterie"
 >
   <h2 class="hand text-3xl mb-6 text-center">Cours de Batterie</h2>
@@ -20,6 +20,7 @@
         data-reg-id="reg-naissanceHp"
         type="date"
         class="mt-1 w-full border bg-white p-2"
+        autocomplete="bday"
       />
     </label>
 
@@ -28,7 +29,7 @@
       <span class="text-sm">Niveau *</span>
       <select
         data-reg-id="reg-niveauHp"
-        required
+        required aria-required="true"
         class="mt-1 w-full border bg-white p-2"
       >
         <option value="">— Sélectionner —</option>
@@ -44,7 +45,7 @@
     <span class="text-sm">Quel instrument as-tu à la maison ? *</span>
     <select
       data-reg-id="reg-instruMaisonHp"
-      required
+      required aria-required="true"
       class="mt-1 w-full border bg-white p-2"
     >
       <option value="">— Sélectionner —</option>
@@ -63,7 +64,7 @@
         rows="3"
         data-reg-id="reg-genresHp"
         class="mt-1 w-full border bg-white p-2"
-        placeholder="Styles/artistes préférés…"
+        placeholder="Styles / artistes préférés…"
       ></textarea>
     </label>
 
@@ -74,7 +75,7 @@
         class="mt-1 w-full border bg-white p-2"
       >
         <option value="">— Sélectionner —</option>
-        <option value="enceinte">Avec une enceinte connectée</option>
+        <option value="enceinte">Avec une enceinte</option>
         <option value="casque">Avec un casque</option>
         <option value="ecouteurs">Avec des écouteurs</option>
       </select>
@@ -106,7 +107,7 @@
     <span class="text-sm">Tu es… *</span>
     <select
       data-reg-id="reg-lateraliteHp"
-      required
+      required aria-required="true"
       class="mt-1 w-full border bg-white p-2"
     >
       <option value="">— Sélectionner —</option>
@@ -117,8 +118,8 @@
   </label>
 
   <!-- Morceaux & inspirations -->
-  <div class="grid md:grid-cols-2 gap-4 mt-4">
-    <label class="block md:col-span-2">
+
+    <label class="block mt-4">
       <span class="text-sm">Quels morceaux rêves-tu de jouer ? (au moins 3)</span>
       <textarea
         rows="3"
@@ -128,7 +129,7 @@
       ></textarea>
     </label>
 
-    <label class="block">
+    <label class="block mt-4">
       <span class="text-sm">Connais-tu les noms des batteurs que tu aimes ? Lesquels ?</span>
       <textarea
         rows="3"
@@ -137,8 +138,8 @@
       ></textarea>
     </label>
 
-    <label class="block">
-      <span class="text-sm">Sur les réseaux sociaux, qui suis-tu dans le domaine de la Batterie ?</span>
+    <label class="block mt-4">
+      <span class="text-sm">Sur les réseaux sociaux, qui suis-tu dans le domaine de la batterie ?</span>
       <textarea
         rows="3"
         data-reg-id="reg-reseauxHp"
@@ -146,14 +147,13 @@
         placeholder="@comptes, chaînes YouTube, etc."
       ></textarea>
     </label>
-  </div>
 
   <!-- Temps hebdo -->
   <label class="block mt-4">
     <span class="text-sm">Combien de temps peux-tu consacrer à la pratique chaque semaine ? *</span>
     <select
       data-reg-id="reg-tempsHebdoHp"
-      required
+      required aria-required="true"
       class="mt-1 w-full border bg-white p-2"
     >
       <option value="">— Sélectionner —</option>
