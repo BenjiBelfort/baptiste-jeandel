@@ -3,17 +3,40 @@
   node_bundler = "esbuild"
 
 [build]
-  command = "npm run build"   # lance "astro build"
-  publish = "dist"            # dossier généré par Astro
+  # 1 Génère humans.txt avant le build Astro
+  # (si tu préfères via npm scripts, vois note en bas)
+  command = "node src/scripts/generate-humans.js && astro build"
+  publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"         # propre et évite les surprises
+  NODE_VERSION = "20"
 
+# 2 Cache agressif pour les assets Astro
 [[headers]]
   for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# 3 humans.txt : NE PAS le mettre en cache (il change à chaque build)
+[[headers]]
+  for = "/humans.txt"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# 4 Sitemaps : alias/redirects vers l’index réel d’Astro
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap-index.xml"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sitemap-site.xml"
+  to = "/sitemap-index.xml"
+  status = 301
+  force = true
+
+# 5 Préviews & branches : noindex
 [context.deploy-preview]
   [[context.deploy-preview.headers]]
     for = "/*"

@@ -49,7 +49,7 @@ dans le terminal (régler L3 L4 L5 pour la profondeur)
 
 A faire avant mise en ligne
 - changer le nom de domaine partout
-- vérifier tous les reste de https://baptiste-j-dev.netlify.app/
+- vérifier tous les restes de https://baptiste-j-dev.netlify.app/
 
 A faire plus tard :
 - image og pour chaque activité

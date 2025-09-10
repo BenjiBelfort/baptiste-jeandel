@@ -1,10 +1,10 @@
 /* TEAM */
 Site owner: Baptiste Jeandel
 Developer: Benjamin Tisserand
-Contact: contact@ton-domaine.fr
+Contact: ecrireabaptiste@gmail.com
 
 /* SITE */
-Last update: 2025-08-29
+Last update: 2025-09-10
 Language: French [fr]
 Doctype: HTML5
 Standards: W3C Validated

@@ -36,7 +36,6 @@ export default defineConfig({
         const bad = [
           '/404',
           '/merci',
-          '/choucroute', // EE
         ];
         return !bad.includes(page);
       },
