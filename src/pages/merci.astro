@@ -5,12 +5,22 @@ import FunkyButton from '@/components/FunkyButton.astro';
 
 <Site title="Merci — Message envoyé" description="Votre demande a bien été envoyée.">
   <section class="mx-auto max-w-xl px-4 py-20 text-center">
-    <h1 class="mb-4 text-3xl font-bold">Merci beaucoup</h1>
+    <!-- Image pigeon -->
+    <img 
+      src="/images/annimation/pigeon-merci.png" 
+      alt="Pigeon messager"
+      width="205"
+      height="199"
+      class="w-24 mx-auto mb-6 drop-shadow-xl"
+    />
+
+    <h1 class="mb-4 text-3xl font-bold">Merci beaucoup !</h1>
     <p class="text-stone-700">Votre message a bien été envoyé. Je reviens vers vous rapidement.</p>
 
-    <div class="mt-8">
+    <div class="mt-8 mb-12">
       <FunkyButton href="/" label="Retour à l’accueil" color="bg-stone-300" />
     </div>
+
   </section>
 
   <!-- Évite l’indexation SEO -->

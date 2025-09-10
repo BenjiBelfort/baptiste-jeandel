@@ -53,3 +53,4 @@ A faire avant mise en ligne
 A faire plus tard :
 - optimisation SEO dans le frontmatter des MDX
 - JsonLD pour les FAQ
+- image og pour chaque activité

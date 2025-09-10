@@ -46,13 +46,13 @@ const DEFAULT_ORDER = [
 
 // Ordres spécifiques par domaine (tu peux en ajouter d’autres)
 const DOMAIN_ORDERS = {
-  'Cours de batterie / Handpan': [
+  'Cours de Batterie / Handpan': [
     'Domaine','Nom','Email','Téléphone',
     'Niveau (cours)','Instrument à la maison',
     'Genres / musiques écoutées','Écoute la plus fréquente',
     'Applis musique','Playlists à partager',
     'Latéralité','Morceaux rêvés','Batteurs préférés',
-    'Références réseaux sociaux (batterie)',
+    'Références réseaux sociaux (Batterie)',
     'Temps hebdomadaire disponible',
     'Date de naissance',
     'Message','Consentement RGPD'
@@ -81,13 +81,13 @@ const DOMAIN_ORDERS = {
     'Adresse (lieu du spectacle)','Heure de début','Nombre de personnes intéressées',
     'Message','Consentement RGPD'
   ],
-  'Atelier EHPAD': [
+  'Formation EHPAD': [
     'Domaine','Nom','Email','Téléphone',
     'Public ciblé (résident·e·s)','Niveau de dépendance (GIR)','Modalité de travail souhaitée',
     'Structure','Thématiques à renforcer',
     'Message','Consentement RGPD'
   ],
-  'Atelier petite enfance': [
+  'Formation petite enfance': [
     'Domaine','Nom','Email','Téléphone',
     'Profil des apprenant(e)s',
     'Message','Consentement RGPD'
