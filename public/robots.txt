@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.ton-domaine.fr/sitemap-index.xml
+Sitemap: https://baptiste-j-dev.netlify.app/sitemap-index.xml

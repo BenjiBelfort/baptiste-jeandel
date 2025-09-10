@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "generate-humans": "node scripts/generate-humans.js",
     "sync": "astro sync",
     "astro": "astro"
   },

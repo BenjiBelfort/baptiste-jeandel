@@ -70,7 +70,7 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
         <!-- Centre (mobile: 2 / desktop: 2) -->
         <nav class="order-2 md:order-2 flex justify-center gap-4">
           <a href="/mentions-legales" class="hover:text-slate-400 hover:underline hover:underline-offset-2">Mentions légales</a>
-          <a href="/sitemap.xml" class="hover:text-slate-400 hover:underline hover:underline-offset-2">Plan du site</a>
+          <a href="/sitemap-index.xml" class="hover:text-slate-400 hover:underline hover:underline-offset-2">Plan du site</a>
           <a href="/humans.txt" class="hover:text-slate-400 hover:underline hover:underline-offset-2">humans.txt</a>
         </nav>
 
@@ -86,16 +86,6 @@ const currentPath = Astro.url.pathname + (Astro.url.search ?? '');
             <img src="/logos/logo-CPEP.png" alt="Logo CPEP" class="h-5 w-auto" />
           </a>
         </p>
-
-        <!-- Lien secret mobile-only, centré sous "Dev by" -->
-        <p class="order-4 md:hidden -mt-6 text-center">
-          <a href="/choucroute" class="hover:text-slate-400 hover:underline hover:underline-offset-2">
-            choucroute ?
-          </a>
-        </p>
       </div>
     </div>
-
-
-
 </footer>

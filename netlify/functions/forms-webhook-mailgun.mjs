@@ -46,7 +46,7 @@ const DEFAULT_ORDER = [
 
 // Ordres spécifiques par domaine (tu peux en ajouter d’autres)
 const DOMAIN_ORDERS = {
-  'Éveil musical': [
+  'Éveil Musical': [
     'Domaine', 'Nom', 'Email', 'Téléphone',
     'Structure (adresse)', 'Code postal', 'Ville',
     'Type de demande (éveil)',
@@ -64,7 +64,7 @@ const DOMAIN_ORDERS = {
     'Public ciblé', 'Séances individuelles (précisions)',
     'Message', 'Consentement RGPD'
   ],
-  'Relaxations sonores': [
+  'Relaxations Sonores': [
     'Domaine', 'Nom', 'Email', 'Téléphone',
     'Structure (adresse)', 'Code postal', 'Ville',
     'Nombre de participants', 'Date', 'Horaire',
@@ -87,7 +87,7 @@ const DOMAIN_ORDERS = {
     'Date de l’événement', 'Horaire',
     'Message', 'Consentement RGPD'
   ],
-  'Archives sonores': [
+  'Archives Sonores': [
     'Domaine', 'Nom', 'Email', 'Téléphone',
     'Bénéficiaire (Prénom Nom)', 'Lien avec la personne',
     'Déjà parlé à la personne ?', 'Supports disponibles',
@@ -105,7 +105,7 @@ const DOMAIN_ORDERS = {
     'Niveau de dépendance (GIR)', 'Modalité de travail souhaitée',
     'Message', 'Consentement RGPD'
   ],
-  'Formation petite enfance': [
+  'Formation Petite Enfance': [
     'Domaine', 'Nom', 'Email', 'Téléphone',
     'Structure', 'Code postal', 'Ville',
     'Nombre de personnes intéressées', 'Profil des apprenant(e)s',

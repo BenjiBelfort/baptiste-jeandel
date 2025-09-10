@@ -2,11 +2,11 @@
 /** Sous-formulaire : Archives sonores */
 ---
 <section
-  data-domain-form="Archives sonores"
+  data-domain-form="Archives Sonores"
   class="hidden border border-stone-900 bg-red-100 p-4 md:p-5 shadow-md shadow-red-300/50"
-  aria-label="Questions spécifiques — Archives sonores"
+  aria-label="Questions spécifiques — Archives Sonores"
 >
-  <h2 class="hand text-3xl mb-6 text-center">Archives sonores</h2>
+  <h2 class="hand text-3xl mb-6 text-center">Archives Sonores</h2>
 
   <!-- Téléphone -->
   <div class="grid md:grid-cols-2 gap-4">
@@ -84,10 +84,10 @@
     <span class="text-sm">Durée d’enregistrement imaginée (minutes) *</span>
     <input
       data-reg-id="reg-duree"
-      type="number" min="15" step="5"
+      type="number" min="5" step="5" max="60"
       required aria-required="true"
       class="mt-1 w-full border bg-white p-2"
-      placeholder="Ex. 60"
+      placeholder="Ex. 30, maximum 60 minutes"
       inputmode="numeric"
     />
   </label>
