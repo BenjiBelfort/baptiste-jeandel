@@ -235,7 +235,7 @@ export async function handler(event) {
 
     // Contenu email
     const when = new Intl.DateTimeFormat('fr-FR', { dateStyle:'medium', timeStyle:'short', timeZone:'Europe/Paris' }).format(new Date());
-    const subject = `Nouveau formulaire: ${form_name}${domaineVal ? ` — ${domaineVal}` : ''} — ${when}`;
+    const subject = `Nouveau contact pour Baptiste${domaineVal ? ` — ${domaineVal}` : ''} — ${when}`;
 
     const text = `Formulaire: ${form_name}
 Site: ${site_url}
