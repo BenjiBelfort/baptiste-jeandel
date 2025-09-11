@@ -222,7 +222,7 @@ export async function handler(event) {
     const IGNORE = new Set(['form-name', 'bot-field', 'payload', 'token']);
     const DROP   = new Set(['ip', 'user_agent', 'referrer']); // masque ces champs
     let entries = Object.entries(data).filter(([k,v]) =>
-      !IGNORE.has(k) && !DROP.has(k) && v != null && String(v).trim() !== ''
+      !IGNORE.has(k) && !DROP.has(k) && !k.startsWith('_') && v != null && String(v).trim() !== ''
     );
     if (!entries.length) return { statusCode: 200, body: 'Empty after pruning; stored only.' };
 

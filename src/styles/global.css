@@ -21,6 +21,9 @@ html { scroll-behavior: smooth; }
 .bg-bleuBJ   { background-color: var(--bleuBJ); }
 .bg-orangeBJ { background-color: var(--orangeBJ); }
 
+.prose h2.text-left {
+  @apply text-left;
+}
 
 /* Conteneur typographique MDX */
 .prose h2 { @apply mt-8 mb-4 text-2xl font-semibold text-center; }

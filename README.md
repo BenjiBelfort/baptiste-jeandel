@@ -53,6 +53,7 @@ A faire avant mise en ligne
 
 A faire plus tard :
 - image og pour chaque activité
+- Breadcrumb ?
 - virer les champs radio inutiles dans les formulaires avec radio (info dans le mail pas utile)
 ajouter un ignore dans le webhook :
 

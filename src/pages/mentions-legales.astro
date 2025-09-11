@@ -3,74 +3,108 @@ import Site from '@/layouts/SiteLayout.astro';
 import backLinkUrl from '@/scripts/back-link.js?url';
 ---
 
-<Site title="Mentions légales — Baptiste Jeandel" description="Mentions légales du site de Baptiste Jeandel.">
-  <section class="max-w-3xl mx-auto px-4 prose prose-stone my-16">
-
+<Site
+  title="Mentions légales — Baptiste Jeandel"
+  description="Mentions légales du site de Baptiste Jeandel."
+  keywords="mentions légales, informations légales, éditeur du site, hébergeur, RGPD"
+>
+  <section class="max-w-3xl mx-auto px-4 prose prose-stone my-16" role="main">
     <div class="mb-6">
-        <!-- data-back-link + data-fallback pour config sans JS inline -->
-        <a id="back-link" data-back-link data-fallback="/" href="/" class="text-sm underline">← Retour</a>
+      <a id="back-link" data-back-link data-fallback="/" href="/" class="text-sm underline">← Retour</a>
     </div>
 
-    <h2>Mentions légales</h2>
+    <h1 class="text-2xl md:text-3xl text-center font-bold">Mentions légales</h1>
 
-    <h3>Éditeur du site</h3>
-    <p>
+    <h2 class="text-left">Éditeur du site</h2>
+    <address class="not-italic">
       <strong>Baptiste Jeandel</strong><br />
       10 rue de la Bavière<br />
-      90110 Rougemont-le-Château<br />
+      90110 Rougemont-le-Château — France<br />
       Email : <a href="mailto:ecrireabaptiste@gmail.com">ecrireabaptiste@gmail.com</a><br />
-      Téléphone : <a href="tel:+33666636228">+33 (0)6 66 63 62 28</a><br />
-      SIRET : 515 117 257 000 37
-    </p>
+      Téléphone : <a href="tel:+33666636228">+33 6 66 63 62 28</a><br />
+      SIRET : 515&nbsp;117&nbsp;257&nbsp;000&nbsp;37
+    </address>
+
+    <h3>Directeur de la publication</h3>
+    <p><strong>Baptiste Jeandel</strong>.</p>
 
     <h3>Développement web</h3>
-    <p>
-      <strong>Benjamin TISSERAND</strong><br />
-    </p>
+    <p><strong>Benjamin Tisserand</strong>.</p>
 
     <h3>Hébergement</h3>
     <p>
-      Le site est hébergé par <strong>Netlify.</strong><br />
-      Netlify, Inc. – 44 Montgomery Street, Suite 300, San Francisco, California 94104. 
+      Le site est hébergé par <strong>Netlify</strong> — Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, CA 94104.<br />
+      Support : <a href="https://www.netlify.com/support/" target="_blank" rel="noopener noreferrer">netlify.com/support</a>
     </p>
 
     <h3>Propriété intellectuelle</h3>
     <p>
-      L’ensemble du contenu du site (textes, images, vidéos, graphismes, logos) est la propriété exclusive de Baptiste Jeandel,
-      sauf mention contraire. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation expresse est interdite.
+      L’ensemble du contenu du site (textes, images, vidéos, graphismes, logos) est la propriété de Baptiste Jeandel, sauf mention contraire.
+      Toute reproduction, représentation ou diffusion, même partielle, est interdite sans autorisation écrite préalable.
     </p>
     <p>
-      Certaines illustrations utilisées sur ce site proviennent de la bibliothèque <strong>Canva Pro</strong>, utilisées conformément à leur licence.
+      Certaines illustrations proviennent de la bibliothèque <strong>Canva Pro</strong>, utilisées conformément à leur licence.
     </p>
     <p>
       Effets sonores par 
-      <a href="https://pixabay.com/fr/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=33366" target="_blank" rel="noopener noreferrer">
-        freesound_community
-      </a> 
-      from 
-      <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=33366" target="_blank" rel="noopener noreferrer">
-        Pixabay. 
-      </a>
+      <a href="https://pixabay.com/fr/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=33366" target="_blank" rel="noopener noreferrer">freesound_community</a>
+      via 
+      <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=33366" target="_blank" rel="noopener noreferrer">Pixabay</a>.
     </p>
     <p>
-      Crédits photographiques : <br />
-      <strong>Emeline HENCKEL</strong> 👸🏻 •  <strong>Gibson SONOR</strong>
+      Crédits photographiques : <br>
+      <strong>Emeline HENCKEL</strong> 👸🏻 • <strong>Gibson SONOR</strong>
     </p>
-
 
     <h3>Données personnelles</h3>
     <p>
-      Les informations collectées via les formulaires sont uniquement utilisées dans le cadre des services proposés.  
-      Conformément au RGPD, vous pouvez demander la modification ou la suppression de vos données personnelles en écrivant à l’adresse suivante :  
-      <a href="mailto:ecrireabaptiste@gmail.com">ecrireabaptiste@gmail.com</a>.
+      Responsable de traitement : Baptiste Jeandel. Les données collectées via les formulaires servent uniquement au traitement des demandes et au suivi relationnel (base légale : intérêt légitime/exécution de mesures précontractuelles).
+      Durée de conservation indicative : 24 mois après le dernier contact.
+    </p>
+    <p>
+      Vous pouvez exercer vos droits (accès, rectification, effacement, limitation, opposition) en écrivant à
+      <a href="mailto:ecrireabaptiste@gmail.com">ecrireabaptiste@gmail.com</a>. Vous pouvez également introduire une réclamation auprès de la CNIL :
+      <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener noreferrer">cnil.fr/plaintes</a>.
     </p>
 
     <h3>Responsabilité</h3>
     <p>
-      Baptiste Jeandel s’efforce d’assurer l’exactitude des informations présentes sur ce site, mais ne peut garantir qu’elles soient exemptes
-      d’erreurs ou d’omissions. L’éditeur ne pourra être tenu responsable de l’utilisation faite du site ou des informations qu’il contient.
+      Malgré le soin apporté à l’actualisation des contenus, des erreurs peuvent subsister. L’éditeur ne saurait être tenu responsable
+      de l’utilisation des informations publiées ni d’éventuels dommages directs ou indirects.
     </p>
   </section>
+
+  <!-- JSON-LD spécifique à la page -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Mentions légales",
+    "url": Astro.url.toString(),
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Baptiste Jeandel",
+      "url": Astro.site?.toString() ?? Astro.url.origin
+    }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Accueil",
+        "item": (Astro.site?.toString() ?? Astro.url.origin)
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Mentions légales",
+        "item": Astro.url.toString()
+      }
+    ]
+  })} />
 
   <script type="module" src={backLinkUrl}></script>
 </Site>

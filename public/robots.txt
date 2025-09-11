@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+Disallow: /merci
+
 Sitemap: https://baptiste-j-dev.netlify.app/sitemap.xml
