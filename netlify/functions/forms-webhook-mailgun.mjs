@@ -249,7 +249,7 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
     const html = `<!doctype html><meta charset="utf-8">
 <div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;max-width:720px;margin:0">
   ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Logo" style="height:36px;vertical-align:middle"></div>` : ''}
-  <h2 style="margin:0 0 8px">Nouveau formulaire: ${escapeHtml(form_name)}</h2>
+  <h2 style="margin:0 0 8px">Nouveau contact : ${escapeHtml(domaineVal)}</h2>
   <p style="margin:0 0 14px;color:#555">
     <strong>Site:</strong> <a href="${escapeAttr(site_url)}">${escapeHtml(site_url)}</a><br>
     <strong>Date:</strong> ${escapeHtml(when)}
