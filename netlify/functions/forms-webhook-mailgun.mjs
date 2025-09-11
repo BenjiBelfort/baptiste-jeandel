@@ -129,6 +129,7 @@ const DOMAIN_ORDERS = {
     'Latéralité', 'Morceaux rêvés', 'Batteurs préférés',
     'Références réseaux sociaux (Batterie)',
     'Temps hebdomadaire disponible',
+    'Préférence jour', 'Préférence horaire',
     'Message', 'Consentement RGPD'
   ],
   'Cours de Handpan': [
@@ -138,6 +139,7 @@ const DOMAIN_ORDERS = {
     'Latéralité', 'Handpanistes préférés',
     'Références réseaux sociaux (Handpan)',
     'Temps hebdomadaire disponible',
+    'Préférence jour', 'Préférence horaire',
     'Message', 'Consentement RGPD'
   ],
 };

@@ -14,6 +14,7 @@ const baseFields = {
   seoDescription: z.string().optional(),
   image: z.string().optional(),
   ctaMessage: z.string().optional(),
+  ctaLabel: z.string().optional(),
   seoKeywords: z.string().optional(),
   // NEW ↓ — champ FAQ optionnel pour toutes les collections
   faq: z.array(faqItem).optional(),

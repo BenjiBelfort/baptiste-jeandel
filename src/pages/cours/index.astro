@@ -21,7 +21,7 @@ const items = (await getCollection('cours')).sort((a,b)=>a.data.sort - b.data.so
         href={`/cours/${entry.slug}`}
         ctaLabel="En savoir plus"
         secondaryHref={`/contact?domain=${encodeURIComponent(entry.data.domain)}&origin=${encodeURIComponent(`cours/${entry.slug}`)}`}
-        secondaryLabel="Demander un devis"
+        secondaryLabel="Demander un RDV"
         debug={entry.slug}
         image={entry.data.image}
       />

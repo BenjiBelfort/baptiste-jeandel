@@ -1,6 +1,4 @@
 ---
-import FunkyButton from "./FunkyButton.astro";
-
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 function isActive(href: string) {
   const clean = href.replace(/\/+$/, '') || '/';
@@ -10,7 +8,7 @@ function isActive(href: string) {
 const services = [
   { href: '/services/eveil-musical', label: 'Éveil Musical' },
   { href: '/services/musico-therapie', label: 'Musicothérapie' },
-    { href: '/services/relaxations-sonores', label: 'Relaxations Sonores' },
+  { href: '/services/relaxations-sonores', label: 'Relaxations Sonores' },
   { href: '/services/spectacles', label: 'Spectacle Enfants' },
   { href: '/services/concert-handpan', label: 'Concert Handpan' },
   { href: '/services/archives-sonores', label: 'Archives Sonores' },
@@ -25,13 +23,6 @@ const formations = [
 const cours = [
   { href: '/cours/batterie', label: 'Cours de Batterie' },
   { href: '/cours/handpan', label: 'Cours de Handpan' },
-];
-
-const socials = [
-  { href: 'https://www.youtube.com/@baptistejeandel', label: 'YouTube', key: 'yt' },
-  { href: 'https://www.facebook.com/profile.php?id=100076213966457', label: 'Facebook', key: 'fb' },
-  { href: 'https://www.instagram.com/baptiste_jeandel_pro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', label: 'Instagram', key: 'ig' },
-  { key: 'li', href: 'https://www.linkedin.com/in/baptiste-jeandel-musicien-musicotherapeute/', label: 'LinkedIn' },
 ];
 ---
 <!-- Skip link -->
@@ -154,8 +145,8 @@ const socials = [
 
     <!-- Droite : Réseaux + Contact -->
     <div class="hidden lg:flex items-center gap-3">
-      <a href="/#reseaux" class="px-1 py-1 hover:underline underline-offset-6">
-        Mes internets
+      <a href="/#reseaux" class="text-xs text-right px-1 py-1 hover:underline underline-offset-2">
+        Mes réseaux<br /> sociaux
       </a>
 
       <a href="/contact" class="inline-flex text-sm w-20 py-2 justify-center border hover:bg-stone-200 hover:font-bold hover:text-black rounded-full">
@@ -236,7 +227,7 @@ const socials = [
 
           <!-- Réseaux (lien texte, plus d’icônes) -->
           <a href="/#reseaux" class="mt-2 px-2 py-2 text-base hover:underline underline-offset-4">
-            Mes internets
+            Mes réseaux sociaux
           </a>
 
           <!-- Contact (rounded-full) -->

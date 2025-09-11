@@ -110,6 +110,36 @@
       <option value="7h-plus-semaine">≥ 7 h / semaine</option>
     </select>
   </label>
+  <p class="mt-6 text-3xl text-center text-stone-700 hand">Vos disponibilités</p>
+    <!-- Préférences : jour & horaire -->
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <label class="block">
+      <span class="text-sm">Préférence jour de la semaine</span>
+      <select
+        data-reg-id="reg-jourPref"
+        class="mt-1 w-full border bg-white p-2 appearance-none"
+      >
+        <option value="">— Indifférent —</option>
+        <option>lundi</option>
+        <option>mardi</option>
+        <option>mercredi</option>
+        <option>jeudi</option>
+        <option>vendredi</option>
+      </select>
+    </label>
+
+    <label class="block">
+      <span class="text-sm">Préférence horaire</span>
+      <select
+        data-reg-id="reg-creneauPref"
+        class="mt-1 w-full border bg-white p-2 appearance-none"
+      >
+        <option value="">— Indifférent —</option>
+        <option>10h–12h</option>
+        <option>14h–16h</option>
+      </select>
+    </label>
+  </div>
 
   <!-- 🔒 Registre hidden -->
   <div data-registry class="hidden" aria-hidden="true">
@@ -123,5 +153,7 @@
     <input type="hidden" name="Références réseaux sociaux (Handpan)" id="reg-reseauxHpan" disabled />
 
     <input type="hidden" name="Temps hebdomadaire disponible" id="reg-tempsHebdoHpan" disabled />
+    <input type="hidden" name="Préférence jour" id="reg-jourPref" disabled />
+    <input type="hidden" name="Préférence horaire" id="reg-creneauPref" disabled />
   </div>
 </section>

@@ -1,7 +1,7 @@
 ---
 import SectionTitle from "@/components/SectionTitle.astro"
 
-type Social = { href: string; label: string; key: 'yt' | 'fb' | 'ig' | 'li' };
+type Social = { href: string; label: string; key: 'yt' | 'fb' | 'ig' };
 
 const {
   id = 'reseaux',
@@ -13,7 +13,6 @@ const socials: Social[] =
     { href: 'https://www.youtube.com/@baptistejeandel', label: 'YouTube', key: 'yt' },
     { href: 'https://www.facebook.com/profile.php?id=100076213966457', label: 'Facebook', key: 'fb' },
     { href: 'https://www.instagram.com/baptiste_jeandel_pro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', label: 'Instagram', key: 'ig' },
-    { href: 'https://www.linkedin.com/in/baptiste-jeandel-musicien-musicotherapeute/', label: 'LinkedIn', key: 'li' },
   ];
 ---
 
