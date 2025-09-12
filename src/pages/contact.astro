@@ -18,7 +18,6 @@ import CoursHandpanForm from '@/forms/CoursHandpanForm.astro';
 
 const url = new URL(Astro.request.url);
 const originFromQuery = url.searchParams.get('origin') ?? '';
-const domainFromQuery = url.searchParams.get('domain') ?? '';
 ---
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
@@ -112,22 +111,28 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
 
       <!-- Consentement RGPD -->
       <div class="flex items-start gap-2 text-sm">
-        <input 
-          type="checkbox" 
-          id="consentement" 
-          name="Consentement RGPD" 
-          value="Oui" 
-          required 
-          class="mt-1" 
+        <!-- Label a11y uniquement -->
+        <label for="consentement" class="sr-only">Consentement RGPD</label>
+
+        <input
+          type="checkbox"
+          id="consentement"
+          name="Consentement RGPD"
+          value="Oui"
+          required
+          class="mt-1"
+          aria-describedby="consentement-help"
         />
-        <label for="consentement" class="cursor-default select-text">
+
+        <!-- Texte visible, non cliquable -->
+        <span id="consentement-help" class="cursor-default select-text">
           J’accepte que mes informations soient utilisées par <strong>Baptiste Jeandel</strong> et son équipe afin d’être recontacté.
           <br />
           <span class="text-stone-600">
             Vos données ne sont jamais revendues. En savoir plus :
             <a href="/mentions-legales" class="underline">Mentions légales</a>.
           </span>
-        </label>
+        </span>
       </div>
 
       <div class="flex items-center justify-between pt-2">
@@ -366,6 +371,9 @@ const domainFromQuery = url.searchParams.get('domain') ?? '';
           hidden.disabled = false;
         }
       });
+
+      // 4.bis) Neutraliser les champs techniques (name commençant par _)
+      $$('[name^="_"]', active).forEach(el => { el.disabled = true; });
 
       // 5) Ajouter origin dans l'URL de redirection si présent (vers /merci)
       const action = form.getAttribute('action') || '/merci';
