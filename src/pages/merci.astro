@@ -14,13 +14,19 @@ import FunkyButton from '@/components/FunkyButton.astro';
       class="w-24 mx-auto mb-6 drop-shadow-xl"
     />
 
-    <h1 class="mb-4 text-3xl font-bold">Merci beaucoup !</h1>
-    <p class="text-stone-700">Votre message a bien été envoyé. Je reviens vers vous rapidement.</p>
+    <!-- Ligne dynamique -->
+    <p id="merci-line" class="text-xl md:text-2xl font-bold mb-2">
+      Merci pour votre demande.
+    </p>
+
+    <p class="text-stone-700">
+      Votre message a bien été envoyé. Je reviens vers vous rapidement.
+    </p>
 
     <div class="mt-8 mb-12">
-      <FunkyButton href="/" label="Retour à l’accueil" color="bg-stone-300" />
+      <!-- id pour pouvoir binder le nettoyage -->
+      <FunkyButton id="home-link" href="/" label="Retour à l’accueil" color="bg-stone-300" />
     </div>
-
   </section>
 
   <!-- Évite l’indexation SEO -->
@@ -29,5 +35,91 @@ import FunkyButton from '@/components/FunkyButton.astro';
     m.name = 'robots';
     m.content = 'noindex, nofollow';
     document.head.appendChild(m);
+  </script>
+
+  <!-- Remplissage dynamique + nettoyage storage -->
+  <script is:inline>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const getQP = (...keys) => {
+        for (const k of keys) {
+          const v = params.get(k);
+          if (v) return v;
+        }
+        return null;
+      };
+      const clean = (s) => String(s || '').trim().replace(/\s+/g, ' ');
+
+      // Supporte soit name complet, soit prénom/nom séparés
+      let prenom  = getQP('prenom','Prénom','first','first_name','firstName');
+      let nom     = getQP('nom','Nom','last','last_name','lastName');
+      let full    = getQP('name','Name','nom_complet','Nom complet');
+      let domaine = getQP('domaine','Domaine','domain');
+
+      // Fallback : sessionStorage (au cas où les query params manquent)
+      try {
+        const ss = sessionStorage;
+        const getSS = (...keys) => {
+          for (const k of keys) {
+            const v = ss.getItem(k);
+            if (v) return v;
+          }
+          return null;
+        };
+        if (!prenom)  prenom  = getSS('Prénom','prenom','firstName','reg-prenom','reg-firstname');
+        if (!nom)     nom     = getSS('Nom','nom','lastName','reg-nom');
+        if (!full)    full    = getSS('Nom complet','fullname','name','reg-nom-complet','Nom');
+        if (!domaine) domaine = getSS('Domaine','domaine','reg-domaine','domain');
+      } catch (_) {}
+
+      const displayName = clean([prenom, nom].filter(Boolean).join(' ')) || clean(full);
+      const line = document.getElementById('merci-line');
+
+      if (line) {
+        if (displayName && domaine) {
+          line.textContent = `Merci ${displayName} pour votre demande sur ${domaine}.`;
+        } else if (displayName) {
+          line.textContent = `Merci ${displayName}, pour votre demande.`;
+        } else if (domaine) {
+          line.textContent = `Merci pour votre demande sur ${domaine}.`;
+        } else {
+          line.textContent = `Merci pour votre demande.`;
+        }
+      }
+
+      // --- Nettoyage storage (tout de suite + sur interactions) ---------------
+      const clear = () => {
+        try {
+          sessionStorage.removeItem('Prénom');
+          sessionStorage.removeItem('prenom');
+          sessionStorage.removeItem('firstName');
+          sessionStorage.removeItem('reg-prenom');
+          sessionStorage.removeItem('reg-firstname');
+
+          sessionStorage.removeItem('Nom');
+          sessionStorage.removeItem('lastName');
+          sessionStorage.removeItem('reg-nom');
+
+          sessionStorage.removeItem('Nom complet');
+          sessionStorage.removeItem('fullname');
+          sessionStorage.removeItem('name');
+          sessionStorage.removeItem('reg-nom-complet');
+
+          sessionStorage.removeItem('Domaine');
+          sessionStorage.removeItem('domaine');
+          sessionStorage.removeItem('reg-domaine');
+          sessionStorage.removeItem('domain');
+        } catch(_) {}
+      };
+
+      // Nettoie juste après affichage
+      clear();
+
+      // Nettoie si l’utilisateur clique sur “Retour à l’accueil”
+      document.getElementById('home-link')?.addEventListener('click', clear);
+
+      // Nettoie si la page revient depuis le cache du navigateur (bfcache)
+      window.addEventListener('pageshow', (e) => { if (e.persisted) clear(); });
+    })();
   </script>
 </Site>

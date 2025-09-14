@@ -1,5 +1,5 @@
 ---
-/** Sous-formulaire : Cours de Handpan
+/** Sous-formulaire : Cours de Handpan (version "vous")
  * S’affiche quand le domaine = "Cours de Handpan"
  * - Champs visibles avec data-reg-id="<id du hidden>"
  * - Registre hidden (names Netlify) désactivé par défaut
@@ -13,53 +13,52 @@
   <h2 class="hand text-3xl mb-6 text-center">Cours de Handpan</h2>
 
   <!-- Goûts musicaux / écoute / applis / playlists -->
+  <label class="block mt-4">
+    <span class="text-sm">Quelles musiques écoutez-vous le plus souvent&nbsp;?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-genresHpan"
+      class="mt-1 w-full border bg-white p-2 appearance-none"
+      placeholder="Styles / artistes préférés…"
+    ></textarea>
+  </label>
 
-    <label class="block mt-4">
-      <span class="text-sm">Quelles musiques écoutes-tu le plus souvent ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-genresHpan"
-        class="mt-1 w-full border bg-white p-2 appearance-none"
-        placeholder="Styles/artistes préférés…"
-      ></textarea>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Comment écoutez-vous la musique le plus souvent&nbsp;?</span>
+    <select
+      data-reg-id="reg-ecouteMethodeHpan"
+      class="mt-1 w-full border bg-white p-2 appearance-none"
+    >
+      <option value="">— Sélectionner —</option>
+      <option value="enceinte">Avec une enceinte</option>
+      <option value="casque">Avec un casque</option>
+      <option value="ecouteurs">Avec des écouteurs</option>
+    </select>
+  </label>
 
-    <label class="block mt-4">
-      <span class="text-sm">Comment écoutes-tu la musique le plus souvent ?</span>
-      <select
-        data-reg-id="reg-ecouteMethodeHpan"
-        class="mt-1 w-full border bg-white p-2 appearance-none"
-      >
-        <option value="">— Sélectionner —</option>
-        <option value="enceinte">Avec une enceinte</option>
-        <option value="casque">Avec un casque</option>
-        <option value="ecouteurs">Avec des écouteurs</option>
-      </select>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Quelles applis utilisez-vous pour écouter de la musique&nbsp;?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-applisHpan"
+      class="mt-1 w-full border bg-white p-2 appearance-none"
+      placeholder="Spotify, YouTube, Deezer, Apple Music…"
+    ></textarea>
+  </label>
 
-    <label class="block mt-4">
-      <span class="text-sm">Quelles applis utilises-tu pour écouter de la musique ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-applisHpan"
-        class="mt-1 w-full border bg-white p-2 appearance-none"
-        placeholder="Spotify, YouTube, Deezer, Apple Music…"
-      ></textarea>
-    </label>
-
-    <label class="block mt-4">
-      <span class="text-sm">As-tu des playlists à partager ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-playlistsHpan"
-        class="mt-1 w-full border bg-white p-2 appearance-none"
-        placeholder="Colle ici les liens de playlists (facultatif)"
-      ></textarea>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Avez-vous des playlists à partager&nbsp;?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-playlistsHpan"
+      class="mt-1 w-full border bg-white p-2 appearance-none"
+      placeholder="Collez ici les liens de playlists (facultatif)"
+    ></textarea>
+  </label>
 
   <!-- Latéralité (requis) -->
   <label class="block mt-4">
-    <span class="text-sm">Tu es… *</span>
+    <span class="text-sm">Vous êtes… *</span>
     <select
       data-reg-id="reg-lateraliteHpan"
       required aria-required="true"
@@ -73,29 +72,29 @@
   </label>
 
   <!-- Handpanistes / réseaux -->
-    <label class="block mt-4">
-      <span class="text-sm">Connais-tu les noms des handpanistes que tu aimes ? Lesquels ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-handpanistesHpan"
-        class="mt-1 w-full border bg-white p-2 appearance-none"
-        placeholder="Artistes, chaînes, références…"
-      ></textarea>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Quels handpanistes appréciez-vous&nbsp;?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-handpanistesHpan"
+      class="mt-1 w-full border bg-white p-2 appearance-none"
+      placeholder="Artistes, chaînes, références…"
+    ></textarea>
+  </label>
 
-    <label class="block mt-4">
-      <span class="text-sm">Sur les réseaux sociaux, qui suis-tu dans le domaine du handpan ?</span>
-      <textarea
-        rows="3"
-        data-reg-id="reg-reseauxHpan"
-        class="mt-1 w-full border bg-white p-2 appearance-none"
-        placeholder="@comptes, chaînes YouTube, etc."
-      ></textarea>
-    </label>
+  <label class="block mt-4">
+    <span class="text-sm">Sur les réseaux sociaux, qui suivez-vous dans le domaine du handpan&nbsp;?</span>
+    <textarea
+      rows="3"
+      data-reg-id="reg-reseauxHpan"
+      class="mt-1 w-full border bg-white p-2 appearance-none"
+      placeholder="@comptes, chaînes YouTube, etc."
+    ></textarea>
+  </label>
 
   <!-- Temps hebdo (requis) -->
   <label class="block mt-4">
-    <span class="text-sm">Combien de temps peux-tu consacrer à la pratique chaque semaine ? *</span>
+    <span class="text-sm">Combien de temps pouvez-vous consacrer à la pratique chaque semaine&nbsp;? *</span>
     <select
       data-reg-id="reg-tempsHebdoHpan"
       required aria-required="true"
@@ -110,11 +109,13 @@
       <option value="7h-plus-semaine">≥ 7 h / semaine</option>
     </select>
   </label>
+
   <p class="mt-6 text-3xl text-center text-stone-700 hand">Vos disponibilités</p>
-    <!-- Préférences : jour & horaire -->
+
+  <!-- Préférences : jour & horaire -->
   <div class="grid md:grid-cols-2 gap-4 mt-4">
     <label class="block">
-      <span class="text-sm">Préférence jour de la semaine</span>
+      <span class="text-sm">Jour de préférence</span>
       <select
         data-reg-id="reg-jourPref"
         class="mt-1 w-full border bg-white p-2 appearance-none"

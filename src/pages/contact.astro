@@ -34,7 +34,13 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       <a id="back-link" href="/" class="text-sm underline">← Retour</a>
     </div>
 
-    <h1 class="text-3xl font-bold mb-6">Contact / Demander un devis</h1>
+    <h1 class="text-3xl text-center font-bold mb-6">Contact / Demander un devis</h1>
+
+    <p class="text-stone-700 mb-3">
+      Merci d’avance pour le temps que vous consacrez à vos réponses, vos précisions nous aideront à vous proposer
+      <strong>la réponse la plus pertinente</strong> (et plus rapide).
+    </p>
+
     <p class="text-stone-600 mb-6">
       Choisissez un domaine pour afficher les questions adaptées. Tous les champs marqués * sont requis.
     </p>
@@ -380,6 +386,20 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       const current = new URL(action, location.origin);
       const originVal = originParam || ($('#Provenance')?.value || '');
       if (originVal) current.searchParams.set('origin', originVal);
+
+      const nameInput   = document.querySelector('input[name="Nom"]');
+      const domainValue = domainSelect?.value?.trim() || '';
+      const nameValue   = (nameInput?.value || '').trim();
+
+      if (nameValue)   current.searchParams.set('name', nameValue);
+      if (domainValue) current.searchParams.set('domaine', domainValue);
+
+      // Backup discret (si jamais l'URL saute) :
+      try {
+        if (nameValue)   sessionStorage.setItem('Nom', nameValue);
+        if (domainValue) sessionStorage.setItem('Domaine', domainValue);
+      } catch(_) {}
+
       form.setAttribute('action', `${current.pathname}${current.search}`);
       // Laissez Netlify soumettre
     });
