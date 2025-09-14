@@ -50,24 +50,12 @@ dans le terminal (régler L3 L4 L5 pour la profondeur)
 A faire avant mise en ligne
 - changer le nom de domaine partout
 - vérifier tous les restes de https://baptiste-j-dev.netlify.app/
+- checker robots.txt (ajouter les disallow)
 
 A faire plus tard :
 - image og pour chaque activité
 - Breadcrumb ?
-- virer les champs radio inutiles dans les formulaires avec radio (info dans le mail pas utile)
-ajouter un ignore dans le webhook :
 
-            const IGNORE = new Set([
-            'form-name', 'bot-field', 'payload', 'token',
-            'parle', 'supports', 'accompagnement', 'truc-etc'
-            ]);
 
-ça c'est très bien :
-Propre (côté formulaire) : tu fais en sorte que les name= “techniques” (ceux de tes radios ou inputs temporaires) ne partent jamais. Par exemple :
-tu les retires (removeAttribute('name')) juste avant le submit,
-ou tu les renommes en name="_parle" → comme ça tu peux ignorer tout ce qui commence par _ côté webhook.
-Ça te donnerait un IGNORE générique :
-js
-Copier le code
-if (k.startsWith('_')) return false; // on jette tous les champs “techniques”
-👉 Résultat : plus besoin de courir après chaque coquille une par une
+- ajouter dans mentions légales le crédit illustrations
+- texte engageant pour inciter les gens à remplir le formulaire

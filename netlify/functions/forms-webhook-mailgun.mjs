@@ -5,10 +5,21 @@ function toObjectFromQS(qs) { const out = {}; for (const [k, v] of new URLSearch
 function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function escapeAttr(s){return escapeHtml(s).replace(/"/g,'&quot;')}
 function splitList(s){ return (s||'').split(',').map(x=>x.trim()).filter(Boolean); }
+function isValidEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s||'').trim()); }
+
+// === Vos éléments EN DUR pour l’email client ================================
+const SITE_URL = 'https://baptiste-j-dev.netlify.app';   // ← remplace si besoin
+const SOCIALS_HTML = `
+<p style="margin:12px 0 0">
+  Nous suivre :
+  <a href="https://www.youtube.com/@baptistejeandel" target="_blank" rel="noopener">YouTube</a>
+  <a href="https://www.facebook.com/profile.php?id=100076213966457" target="_blank" rel="noopener">Facebook</a> ·
+  <a href="https://www.instagram.com/baptiste_jeandel_pro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">Instagram</a> ·
+</p>`;
+// ===========================================================================
 
 // ---- Formatage dates / âge -------------------------------------------------
 function formatDateFR(isoYYYYMMDD){
-  // isoYYYYMMDD = "1977-05-12"
   const [Y,M,D] = isoYYYYMMDD.split('-').map(Number);
   const d = new Date(Y, M-1, D);
   return new Intl.DateTimeFormat('fr-FR', { day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' }).format(d);
@@ -25,11 +36,9 @@ function ageFromDOB(isoYYYYMMDD){
 function prettyValue(key, val){
   if (typeof val !== 'string') return val;
   const v = val.trim();
-  // Date de naissance: "12 mai 1977 - 48 ans"
   if (key === 'Date de naissance' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
     return `${formatDateFR(v)} - ${ageFromDOB(v)} ans`;
   }
-  // Bonus: Date souhaitée → format FR
   if (key === 'Date souhaitée' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
     return formatDateFR(v);
   }
@@ -37,14 +46,12 @@ function prettyValue(key, val){
 }
 
 // ---- Ordonnancement des champs --------------------------------------------
-// Ordre par défaut (si pas de liste spécifique au domaine)
 const DEFAULT_ORDER = [
   'Provenance','Domaine','Nom','Email','Téléphone',
   'Structure (adresse)','Code postal','Ville',
   'Message','Consentement RGPD'
 ];
 
-// Ordres spécifiques par domaine (tu peux en ajouter d’autres)
 const DOMAIN_ORDERS = {
   'Éveil Musical': [
     'Domaine', 'Nom', 'Email', 'Téléphone',
@@ -148,15 +155,13 @@ function orderEntries(entries, domaineVal){
   const orderList = DOMAIN_ORDERS[domaineVal] || DEFAULT_ORDER;
   const weight = (label) => {
     const idx = orderList.indexOf(label);
-    return idx === -1 ? 10_000 : idx; // inconnus à la fin
+    return idx === -1 ? 10_000 : idx;
   };
-  // garde ordre DOM “naturel” pour les inconnus (via index initial)
   return entries
     .map((pair, i) => ({ pair, i }))
     .sort((a,b) => {
       const wa = weight(a.pair[0]); const wb = weight(b.pair[0]);
       if (wa !== wb) return wa - wb;
-      // poids égal → conserve l'ordre d'origine
       return a.i - b.i;
     })
     .map(x => x.pair);
@@ -165,7 +170,6 @@ function orderEntries(entries, domaineVal){
 // ----------------------------------------------------------------------------
 
 export async function handler(event) {
-  // Ping GET (debug)
   if (event.httpMethod === 'GET') {
     return {
       statusCode: 200, headers: { 'Content-Type': 'application/json' },
@@ -187,7 +191,6 @@ export async function handler(event) {
     };
   }
 
-  // Auth simple via token (query ou header)
   const qsToken  = event.queryStringParameters?.token || '';
   const hdrToken = event.headers?.['x-webhook-token'] || event.headers?.['X-Webhook-Token'];
   const token = qsToken || hdrToken || '';
@@ -196,7 +199,6 @@ export async function handler(event) {
   }
 
   try {
-    // Parse body (JSON / x-www-form-urlencoded, base64 ok)
     const ct = (event.headers?.['content-type'] || event.headers?.['Content-Type'] || '').toLowerCase();
     const raw = event.isBase64Encoded ? Buffer.from(event.body || '', 'base64').toString('utf8') : (event.body || '');
 
@@ -207,37 +209,29 @@ export async function handler(event) {
       bodyObj = toObjectFromQS(raw);
       if (typeof bodyObj.payload === 'string') bodyObj = { ...bodyObj, ...safeJSON(bodyObj.payload, {}) };
     } else {
-      bodyObj = safeJSON(raw, toObjectFromQS(raw)); // best effort
+      bodyObj = safeJSON(raw, toObjectFromQS(raw));
     }
 
     const payload   = bodyObj.payload && typeof bodyObj.payload === 'object' ? bodyObj.payload : bodyObj;
     const form_name = payload.form_name || 'inconnu';
-    const site_url  = payload.site_url  || '-';
+    const site_url  = payload.site_url || SITE_URL || '-';
     const data      = payload.data      || payload;
 
-    // Anti-spam honeypot
     if (data['bot-field']) return { statusCode: 200, body: 'Ignored spam (honeypot).' };
 
-    // Filtrage des champs
     const IGNORE = new Set(['form-name', 'bot-field', 'payload', 'token']);
-    const DROP   = new Set(['ip', 'user_agent', 'referrer']); // masque ces champs
+    const DROP   = new Set(['ip', 'user_agent', 'referrer']);
     let entries = Object.entries(data).filter(([k,v]) =>
       !IGNORE.has(k) && !DROP.has(k) && !k.startsWith('_') && v != null && String(v).trim() !== ''
     );
     if (!entries.length) return { statusCode: 200, body: 'Empty after pruning; stored only.' };
 
-    // Récup domaine (pour tri spécifique) + formatage valeurs (dates, etc.)
     const domaineVal = (entries.find(([k]) => k.toLowerCase() === 'domaine') || [,''])[1] || '';
-
-    // Tri suivant le domaine (ou défaut)
     entries = orderEntries(entries, domaineVal);
-
-    // Applique prettyValue sur chaque valeur (date de naissance, etc.)
     entries = entries.map(([k,v]) => [k, prettyValue(k, v)]);
 
-    // Contenu email
     const when = new Intl.DateTimeFormat('fr-FR', { dateStyle:'medium', timeStyle:'short', timeZone:'Europe/Paris' }).format(new Date());
-    const subject = `Nouveau contact pour Baptiste${domaineVal ? ` — ${domaineVal}` : ''} — ${when}`;
+    const adminSubject = `Nouveau contact pour Baptiste${domaineVal ? ` — ${domaineVal}` : ''} — ${when}`;
 
     const text = `Formulaire: ${form_name}
 Site: ${site_url}
@@ -248,6 +242,12 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
 — Fin —`;
 
     const logo = process.env.EMAIL_LOGO_URL || 'https://baptiste-j-dev.netlify.app/logos/mini-logo.webp';
+    const tableRowsHtml = entries.map(([k,v]) => `
+      <tr>
+        <td style="border:1px solid #eee;background:#fafafa;width:34%"><strong>${escapeHtml(k)}</strong></td>
+        <td style="border:1px solid #eee">${escapeHtml(String(v))}</td>
+      </tr>`).join('');
+
     const html = `<!doctype html><meta charset="utf-8">
 <div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;max-width:720px;margin:0">
   ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Logo" style="height:36px;vertical-align:middle"></div>` : ''}
@@ -257,19 +257,15 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
     <strong>Date:</strong> ${escapeHtml(when)}
   </p>
   <table cellpadding="8" cellspacing="0" style="border-collapse:collapse;border:1px solid #eee;width:100%">
-    ${entries.map(([k,v]) => `
-      <tr>
-        <td style="border:1px solid #eee;background:#fafafa;width:34%"><strong>${escapeHtml(k)}</strong></td>
-        <td style="border:1px solid #eee">${escapeHtml(String(v))}</td>
-      </tr>`).join('')}
+    ${tableRowsHtml}
   </table>
   <p style="color:#777;margin-top:12px">— Fin —</p>
 </div>`;
 
-    // Reply-To = email saisi (si présent)
-    const replyTo = (entries.find(([k]) => k.toLowerCase() === 'email') || [,''])[1] || '';
+    // Email de la personne (pour l'ACK)
+    const submitterEmail = (entries.find(([k]) => k.toLowerCase() === 'email') || [,''])[1] || '';
 
-    // Envoi Mailgun
+    // --- Envoi Mailgun ADMIN (inchangé) -------------------------------------
     const DOMAIN = process.env.MAILGUN_DOMAIN;
     const API_KEY = process.env.MAILGUN_API_KEY;
     const REGION  = (process.env.MAILGUN_REGION || 'EU').toUpperCase();
@@ -288,29 +284,88 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
     const url  = `${API_BASE}/v3/${DOMAIN}/messages`;
     const auth = Buffer.from(`api:${API_KEY}`).toString('base64');
 
-    const form = new URLSearchParams({
+    const formAdmin = new URLSearchParams({
       from: EMAIL_FROM,
-      subject,
+      subject: adminSubject,
       text,
       html,
       'o:tracking': 'no',
     });
-    for (const addr of TO)  form.append('to',  addr);
-    for (const addr of CC)  form.append('cc',  addr);
-    for (const addr of BCC) form.append('bcc', addr);
-    if (replyTo) form.append('h:Reply-To', replyTo);
+    for (const addr of TO)  formAdmin.append('to',  addr);
+    for (const addr of CC)  formAdmin.append('cc',  addr);
+    for (const addr of BCC) formAdmin.append('bcc', addr);
+    if (isValidEmail(submitterEmail)) formAdmin.append('h:Reply-To', submitterEmail);
 
-    const resp = await fetch(url, {
+    const respAdmin = await fetch(url, {
       method: 'POST',
       headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: form.toString(),
+      body: formAdmin.toString(),
     });
 
-    if (!resp.ok) {
-      const t = await resp.text();
-      console.error('[forms-webhook] Mailgun error', resp.status, t);
+    if (!respAdmin.ok) {
+      const t = await respAdmin.text();
+      console.error('[forms-webhook] Mailgun error (admin)', respAdmin.status, t);
       return { statusCode: 500, body: 'Email send failed' };
     }
+
+    // --- Auto-accusé de réception pour l’émetteur ---------------------------
+    if (isValidEmail(submitterEmail)) {
+      const name = (entries.find(([k]) => k.toLowerCase() === 'nom') || [,''])[1] || '';
+      const politeName = String(name || '').trim() || 'Bonjour';
+
+      const userSubject = `Merci — nous avons bien reçu votre demande${domaineVal ? ` (${domaineVal})` : ''}`;
+      const userText = 
+`${politeName},
+
+Merci pour votre message — nous revenons vers vous très vite.
+Récapitulatif de votre demande :
+${entries.map(([k,v]) => `- ${k}: ${String(v).replace(/\s+/g,' ').slice(0,500)}`).join('\n')}
+
+En attendant, vous pouvez visiter : ${SITE_URL}
+Bien cordialement,
+L'équipe Baptiste Jeandel
+`;
+
+      const userHtml = `<!doctype html><meta charset="utf-8">
+<div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111;max-width:720px;margin:0">
+  ${logo ? `<div style="margin:0 0 10px"><img src="${escapeAttr(logo)}" alt="Logo" style="height:36px;vertical-align:middle"></div>` : ''}
+  <h2 style="margin:0 0 8px">${escapeHtml(politeName)}, merci !</h2>
+  <p style="margin:0 0 10px">Nous avons bien reçu votre demande${domaineVal ? ` <strong>(${escapeHtml(domaineVal)})</strong>` : ''}.<br>
+  Nous revenons vers vous très vite. Voici un récapitulatif :</p>
+  <table cellpadding="8" cellspacing="0" style="border-collapse:collapse;border:1px solid #eee;width:100%">
+    ${tableRowsHtml}
+  </table>
+  <p style="margin-top:14px">👉 <a href="${escapeAttr(SITE_URL)}">Visiter le site</a></p>
+  ${SOCIALS_HTML}
+  <p style="color:#777;margin-top:12px">Si vous répondez à ce message, votre réponse sera envoyée à notre adresse professionnelle (et pas au postmaster).</p>
+</div>`;
+
+      // Les réponses du client vont à EMAIL_TO + EMAIL_CC (pas au postmaster)
+      const replyToPro = [...TO, ...CC].filter(Boolean).join(', ');
+
+      const formUser = new URLSearchParams({
+        from: EMAIL_FROM,
+        to: submitterEmail,
+        subject: userSubject,
+        text: userText,
+        html: userHtml,
+        'o:tracking': 'no',
+        'h:Reply-To': replyToPro,
+      });
+
+      const respUser = await fetch(url, {
+        method: 'POST',
+        headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formUser.toString(),
+      });
+
+      if (!respUser.ok) {
+        const tu = await respUser.text();
+        console.error('[forms-webhook] Mailgun error (user ack)', respUser.status, tu);
+        // on ne casse pas si l’ACK échoue
+      }
+    }
+
     return { statusCode: 200, body: 'OK' };
   } catch (err) {
     console.error('[forms-webhook] ERROR', err);
