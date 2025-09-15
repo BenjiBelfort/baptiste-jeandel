@@ -108,7 +108,7 @@ const DOMAIN_ORDERS = {
     'Structure (adresse)', 'Code postal', 'Ville',
     'Nombre de personnes intéressées', 'Profil des apprenant(e)s',
     'Matériel sur place (précisions)',
-    'Public ciblé (résident·e·s)',
+    'Public ciblé (résident(e)s)',
     'Niveau de dépendance (GIR)', 'Modalité de travail souhaitée',
     'Message', 'Consentement RGPD'
   ],
@@ -124,7 +124,7 @@ const DOMAIN_ORDERS = {
     'Structure (adresse)', 'Code postal', 'Ville',
     'Nombre de personnes intéressées', 'Profil des apprenant(e)s',
     'Matériel sur place (précisions)',
-    'Public ciblé (résident·e·s)',
+    'Public ciblé (résident(e)s)',
     'Niveau de dépendance (GIR)', 'Modalité de travail souhaitée',
     'Message', 'Consentement RGPD'
   ],
