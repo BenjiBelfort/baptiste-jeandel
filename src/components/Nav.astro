@@ -25,32 +25,24 @@ const cours = [
   { href: '/cours/handpan', label: 'Cours de Handpan' },
 ];
 ---
-<!-- Skip link -->
 <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[80] focus:px-3 focus:py-2 focus:rounded-lg focus:bg-black focus:text-white">
   Aller au contenu
 </a>
 
-<!-- Navbar (au-dessus du menu mobile) -->
 <header class="fixed inset-x-0 top-0 z-50 w-full bg-black backdrop-blur text-white">
   <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 shadow-md">
-    <!-- Logo -->
     <a href="/" class="flex items-center gap-4" aria-label="Accueil — Baptiste Jeandel">
-      <!-- Logo -->
       <img src="/logos/mini-logo.webp" alt="logo Baptiste Jeandel" class="w-12 h-auto"/>
-
-      <!-- Texte -->
       <span class="font-semibold text-2xl md:text-3xl hand whitespace-nowrap">
         Baptiste Jeandel
       </span>
     </a>
 
-    <!-- Centre : À propos + Services / Formations -->
     <div class="hidden lg:flex items-center gap-8 mx-auto">
       <a href="/#a-propos" class="px-1 py-1 hover:underline underline-offset-6">
         À propos
       </a>
 
-      <!-- Services -->
       <div class="relative group has-menu" data-open="0">
         <a href="/services" class="menu-head inline-flex items-center gap-2 px-1 py-1">
           <svg class="w-3.5 h-3.5 transition-transform duration-150 origin-center group-[data-open='1']:rotate-90 group-hover:rotate-90"
@@ -62,7 +54,7 @@ const cours = [
         </a>
 
         <div class="absolute left-0 right-0 h-2 top-full"></div>
-        <!-- Sous-menu collé à l’entête -->
+
         <div
           class="absolute left-1/2 top-8 -translate-x-1/2 w-64 text-black bg-redBJ border border-black shadow-lg
                 opacity-0 -translate-y-2 pointer-events-none rounded-b-lg
@@ -82,7 +74,6 @@ const cours = [
         </div>
       </div>
 
-      <!-- Formations -->
       <div class="relative group has-menu" data-open="0">
         <a href="/formations" class="menu-head inline-flex items-center gap-2 px-1 py-1">
           <svg class="w-3.5 h-3.5 transition-transform duration-150 origin-center group-[data-open='1']:rotate-90 group-hover:rotate-90"
@@ -112,7 +103,6 @@ const cours = [
         </div>
       </div>
 
-      <!-- Cours -->
       <div class="relative group has-menu" data-open="0">
         <a href="/cours" class="menu-head inline-flex items-center gap-2 px-1 py-1">
           <svg class="w-3.5 h-3.5 transition-transform duration-150 origin-center group-[data-open='1']:rotate-90 group-hover:rotate-90"
@@ -143,7 +133,6 @@ const cours = [
       </div>
     </div>
 
-    <!-- Droite : Réseaux + Contact -->
     <div class="hidden lg:flex items-center gap-3">
       <a href="/#reseaux" class="text-xs text-right px-1 py-1 hover:underline underline-offset-2">
         Mes réseaux<br /> sociaux
@@ -154,8 +143,6 @@ const cours = [
       </a>
     </div>  
 
-
-    <!-- Toggle mobile -->
     <button
       type="button"
       class="ml-auto lg:hidden inline-flex items-center justify-center z-50"
@@ -175,7 +162,6 @@ const cours = [
     </button>
   </nav>
 
-  <!-- Menu mobile (derrière le header : z-[40] < z-[70]) -->
   <div
     id="mobile-menu"
     class="lg:hidden fixed inset-x-0 top-0 -z-10 translate-y-[-100%] aria-[hidden=false]:translate-y-0 transition-transform duration-300 ease-out"
@@ -186,7 +172,6 @@ const cours = [
         <nav class="flex flex-col gap-2 py-3">
           <a href="/#a-propos" class="px-2 py-2 text-base hover:underline underline-offset-4">À propos</a>
 
-          <!-- Services (accordion) -->
           <div class="mt-2">
             <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="services" aria-expanded="false">
               <span>Services</span>
@@ -199,7 +184,6 @@ const cours = [
             </div>
           </div>
 
-          <!-- Formations (accordion) -->
           <div class="mt-2">
             <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="formations" aria-expanded="false">
               <span>Formations</span>
@@ -212,7 +196,6 @@ const cours = [
             </div>
           </div>
 
-          <!-- Cours (accordion) -->
           <div class="mt-2">
             <button type="button" class="w-full flex items-center justify-between px-2 py-2 text-base font-medium" data-acc="cours" aria-expanded="false">
               <span>Cours</span>
@@ -225,12 +208,10 @@ const cours = [
             </div>
           </div>
 
-          <!-- Réseaux (lien texte, plus d’icônes) -->
           <a href="/#reseaux" class="mt-2 px-2 py-2 text-base hover:underline underline-offset-4">
             Mes réseaux sociaux
           </a>
 
-          <!-- Contact (rounded-full) -->
           <a href="/contact" class="mt-2 px-2 py-2 border text-base text-center rounded-full">
             Contact
           </a>
@@ -242,7 +223,6 @@ const cours = [
 </header>
 
 <script is:inline>
-  // --- Desktop dropdowns ---
   document.querySelectorAll('.has-menu').forEach((box) => {
     const head = box.querySelector('.menu-head');
     box.addEventListener('mouseenter', () => box.setAttribute('data-open', '1'));
@@ -256,7 +236,6 @@ const cours = [
     });
   });
 
-  // --- Mobile menu toggle (derrière le header) ---
   const toggle = document.getElementById('menu-toggle');
   const mm = document.getElementById('mobile-menu');
   const openI = document.getElementById('icon-open');
@@ -278,7 +257,6 @@ const cours = [
     if (a) setOpen(false);
   });
 
-  // --- Accordéons mobile : un seul ouvert à la fois ---
   const accButtons = Array.from(document.querySelectorAll('[data-acc]'));
   const panels = {
     services: document.getElementById('acc-services'),
@@ -309,10 +287,8 @@ const cours = [
       const icon = btn.querySelector('.acc-icon');
       const willOpen = panel.classList.contains('hidden');
 
-      // ferme tous les autres d’abord
       closeAll(key);
 
-      // toggle celui-ci
       panel.classList.toggle('hidden', !willOpen);
       btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
       icon?.classList.toggle('-rotate-90', willOpen);

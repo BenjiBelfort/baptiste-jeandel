@@ -6,7 +6,7 @@ type Props = {
   origin?: string;
   color?: string;
   label?: string;
-  message?: string; // <- reçoit ctaMessage du MDX
+  message?: string;
 };
 
 const {
@@ -16,13 +16,11 @@ const {
   message,
 } = Astro.props;
 
-// URL contact (avec paramètres)
+
 const contactHref = `/contact?domain=${encodeURIComponent(domain)}&origin=${encodeURIComponent(origin)}`;
 
-// Ne pas afficher si le MDX a ctaMessage: "" (ou espaces)
 const hideCTA = typeof message === 'string' && message.trim() === '';
 
-// Fallback seulement quand message est undefined/null
 const finalMessage = message ?? 'Besoin d’un devis ? Je vous réponds rapidement';
 ---
 

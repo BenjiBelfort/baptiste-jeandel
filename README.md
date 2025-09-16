@@ -49,8 +49,10 @@ dans le terminal (régler L3 L4 L5 pour la profondeur)
 
 A faire avant mise en ligne
 - changer le nom de domaine partout
-- vérifier tous les restes de https://baptiste-j-dev.netlify.app/
+- vérifier remplacer tous les https://baptiste-j-dev.netlify.app/ par https://www.baptistejeandel.fr/
 - checker robots.txt (ajouter les disallow)
+
+Vérifier si basehead est bien config ainsi que le layout et astro.config.mjs
 
 A faire plus tard :
 - image og pour chaque activité

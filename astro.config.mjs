@@ -6,11 +6,10 @@ import sitemap from '@astrojs/sitemap';
 import rehypeExternalLinks from 'rehype-external-links';
 import { EnumChangefreq } from 'sitemap';
 
-// Priorités d'URL pour Netlify (prod/preview) + fallback local
 const SITE =
   process.env.PUBLIC_SITE ||
   process.env.URL ||
-  process.env.DEPLOY_PRIME_URL || // <-- ajouté
+  process.env.DEPLOY_PRIME_URL ||
   'http://localhost:4321';
 
 function getPriority(p) {

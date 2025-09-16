@@ -1,18 +1,16 @@
 ---
 const path = Astro.url.pathname;
 
-// Autorisé uniquement sur "/", "/services", "/formations", "/cours"
 const showRelaxShortcut = ["/", "/services", "/formations", "/cours"].includes(path);
 
-// Offsets sous la nav (peut s’ajuster si ta nav change de hauteur)
-const topMobile = 50;   // px
-const topDesktop = 69;  // px
+const topMobile = 50;
+const topDesktop = 69;
 
-// Anim de glissade (départ/arrivée)
-const startMobile = -110;   // px (hors écran)
-const startDesktop = -115;  // px (hors écran)
-const endMobile = 0;        // px (visible)
-const endDesktop = 0;       // px (visible)
+
+const startMobile = -110;
+const startDesktop = -115;
+const endMobile = 0;
+const endDesktop = 0;
 ---
 
 {showRelaxShortcut && (
@@ -39,7 +37,6 @@ const endDesktop = 0;       // px (visible)
 )}
 
 <style is:inline>
-  /* Position + glissade (mobile par défaut) */
   #relax-shortcut {
     top: var(--top-mobile);
     transform: translateY(var(--start-mobile));
@@ -67,7 +64,6 @@ const endDesktop = 0;       // px (visible)
     const on = () => bar.classList.add('is-open');
     const off = () => bar.classList.remove('is-open');
 
-    // Sur /services, /formations, /cours : visible direct
     const path = location.pathname;
     const alwaysOpen = path.startsWith('/services') || path.startsWith('/formations') || path.startsWith('/cours');
 
@@ -76,14 +72,13 @@ const endDesktop = 0;       // px (visible)
       return;
     }
 
-    // Sur la Home : visible après scroll >= hauteur de la hero
     if (path === '/') {
-      // Essaie de trouver la hero (id/class/data-attr)
+
       const hero =
         document.querySelector('[data-hero]') ||
         document.getElementById('hero') ||
         document.querySelector('.hero') ||
-        document.querySelector('main > section') || // fallback "raisonnable"
+        document.querySelector('main > section') ||
         null;
 
       const navOffset = Math.max(
@@ -111,7 +106,6 @@ const endDesktop = 0;       // px (visible)
         }
       };
 
-      // Évalue tout de suite, au cas où on arrive déjà scrolleté (ancre, reload, etc.)
       evaluate();
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', evaluate, { passive: true });
@@ -123,9 +117,5 @@ const endDesktop = 0;       // px (visible)
 
       return;
     }
-
-    // Par défaut (autres routes non prévues) : on ne l’affiche pas
-    // Mais si tu veux le forcer visible, dé-commente :
-    // on();
   })();
 </script>

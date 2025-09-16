@@ -3,13 +3,12 @@ type Props = {
   title: string;
   color?: string;
 
-  // Positions en px (valeurs par défaut raisonnables)
-  topMobile?: number;      // top mobile
-  topDesktop?: number;     // top md+
-  startMobile?: number;    // translateY mobile (au repos = caché)
-  startDesktop?: number;   // translateY md+ (au repos = caché)
-  endMobile?: number;      // translateY mobile (visible)
-  endDesktop?: number;     // translateY md+ (visible)
+  topMobile?: number;
+  topDesktop?: number;
+  startMobile?: number;
+  startDesktop?: number;
+  endMobile?: number; 
+  endDesktop?: number;
 };
 
 const {
@@ -18,13 +17,12 @@ const {
 
   topMobile = 52,
   topDesktop = 58,
-  startMobile = -105,     // remonte hors écran (px)
-  startDesktop = -110,     // petit décalage sous la nav en md
-  endMobile = 0,          // pleinement visible en mobile
-  endDesktop = 0,         // pleinement visible en md
+  startMobile = -105,
+  startDesktop = -110,
+  endMobile = 0,
+  endDesktop = 0,
 } = Astro.props;
 
-// Couleur auto selon la route (overridable via `color`)
 const path = Astro.url.pathname;
 let autoBg = 'bg-stone-200';
 if (path.startsWith('/services'))   autoBg = 'bg-redBJ';
@@ -33,7 +31,6 @@ if (path.startsWith('/cours')) autoBg = 'bg-orangeBJ';
 const bgClass = color ?? autoBg;
 ---
 
-<!-- Bandeau FIXED, contrôlé par variables -->
 <div
   id="sticky-section-hint"
   class="

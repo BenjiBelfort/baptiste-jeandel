@@ -3,7 +3,6 @@ import Site from '@/layouts/SiteLayout.astro';
 import FunkyButton from '@/components/FunkyButton.astro';
 import PigeonEasterEgg from '@/components/PigeonEasterEgg.astro';
 
-// Domain subforms
 import MusicoForm from '@/forms/MusicoForm.astro';
 import EveilForm from '@/forms/EveilForm.astro';
 import RelaxForm from '@/forms/RelaxForm.astro';
@@ -22,7 +21,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
 
 <Site title="Contact — Demander un devis" description="Demandez un devis pour services ou formations.">
 
-  <!-- Anti-FOUC + étoile dynamique -->
   <style is:inline>
     [data-show-if] { display: none; }
     [data-show-if].__show { display: block; }
@@ -55,14 +53,12 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       class="space-y-6"
       autocomplete="off"
     >
-      <!-- Netlify Forms -->
+
       <input type="hidden" name="form-name" value="contact-pour-Baptiste" />
       <input type="text" name="bot-field" class="hidden" tabindex="-1" autocomplete="off" />
 
-      <!-- Provenance -->
       <input type="hidden" id="Provenance" name="Provenance" value={originFromQuery} />
 
-      <!-- Domaine -->
       <label class="block">
         <span>Domaine *</span>
         <select id="domain" name="Domaine" required class="mt-1 w-full border bg-white p-2">
@@ -82,7 +78,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         </select>
       </label>
 
-      <!-- Coordonnées (communs) -->
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm">Prénom Nom *</span>
@@ -94,7 +89,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         </label>
       </div>
 
-      <!-- Bloc spécifique domaine -->
       <div id="domain-blocks" class="space-y-6">
         <MusicoForm />
         <EveilForm />
@@ -115,9 +109,8 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         <textarea id="message" name="Message" rows="5" class="mt-1 w-full border bg-white p-2"></textarea>
       </label>
 
-      <!-- Consentement RGPD -->
       <div class="flex items-start gap-2 text-sm">
-        <!-- Label a11y uniquement -->
+
         <label for="consentement" class="sr-only">Consentement RGPD</label>
 
         <input
@@ -130,7 +123,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
           aria-describedby="consentement-help"
         />
 
-        <!-- Texte visible, non cliquable -->
         <span id="consentement-help" class="cursor-default select-text">
           J’accepte que mes informations soient utilisées par <strong>Baptiste Jeandel</strong> et son équipe afin d’être recontacté.
           <br />
@@ -188,7 +180,6 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
     function setBlockActive(block, isActive) {
       block.classList.toggle('hidden', !isActive);
 
-      // (dés)activer uniquement les champs visibles (pas le registre hidden)
       $$('input, select, textarea', block).forEach(el => {
         if (el.type === 'hidden') return;
 
@@ -326,13 +317,11 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       if (!els || !els.length) return '';
       const sample = els[0];
 
-      // Radios
       if (sample instanceof HTMLInputElement && sample.type === 'radio') {
         const checked = els.find(e => e.checked);
         return checked ? (checked.value || '').trim() : '';
       }
 
-      // Checkboxes
       if (sample instanceof HTMLInputElement && sample.type === 'checkbox') {
         if (els.length > 1) {
           return els.filter(e => e.checked).map(e => (e.value || '').trim()).join(', ');
@@ -340,32 +329,26 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         return sample.checked ? (sample.value || 'Oui') : '';
       }
 
-      // Select / Text / Textarea
       return (sample.value || '').trim();
     }
 
     form?.addEventListener('submit', () => {
-      // 1) quel sous-form est actif ?
       const active = $$('[data-domain-form]').find(b => !b.classList.contains('hidden'));
       if (!active) return;
 
-      // 2) reset de tous les registres des sous-forms
       $$('[data-domain-form] [data-registry] input[type="hidden"]').forEach(h => {
         h.disabled = true;
         h.value = '';
       });
 
-      // 3) regrouper les contrôles visibles par clé data-reg-id
       const groups = groupByDataRegId($$('[data-reg-id]', active));
 
-      // 4) pour chaque groupe → valeur → hidden correspondant (#reg-xxx)
       groups.forEach((els, key) => {
         const hidden = active.querySelector(`#${key}`);
         if (!hidden) return;
 
         let val = valueForGroup(els);
 
-        // cas particulier : fréquence "autre" → précision
         if (key === 'reg-frequence' && val === 'autre') {
           const other = active.querySelector('[data-reg-id="frequenceAutre"]');
           const otherVal = other ? valueForGroup([other]) : '';
@@ -378,10 +361,8 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
         }
       });
 
-      // 4.bis) Neutraliser les champs techniques (name commençant par _)
       $$('[name^="_"]', active).forEach(el => { el.disabled = true; });
 
-      // 5) Ajouter origin dans l'URL de redirection si présent (vers /merci)
       const action = form.getAttribute('action') || '/merci';
       const current = new URL(action, location.origin);
       const originVal = originParam || ($('#Provenance')?.value || '');
@@ -394,17 +375,14 @@ const originFromQuery = url.searchParams.get('origin') ?? '';
       if (nameValue)   current.searchParams.set('name', nameValue);
       if (domainValue) current.searchParams.set('domaine', domainValue);
 
-      // Backup discret (si jamais l'URL saute) :
       try {
         if (nameValue)   sessionStorage.setItem('Nom', nameValue);
         if (domainValue) sessionStorage.setItem('Domaine', domainValue);
       } catch(_) {}
 
       form.setAttribute('action', `${current.pathname}${current.search}`);
-      // Laissez Netlify soumettre
     });
 
-    // UX : focus/scroll sur le premier champ invalide
     form?.addEventListener('invalid', () => {}, true);
     form?.addEventListener('submit', (e) => {
       if (!form.checkValidity()) {

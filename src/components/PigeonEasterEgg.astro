@@ -4,7 +4,6 @@ const CAT_SRC    = "/images/annimation/chat.png";
 ---
 
 <style is:inline>
-  /* Desktop only */
   @media (max-width:1023px){
     #pigeon-wrap, #pigeon-cat { display:none !important; }
   }
@@ -15,17 +14,17 @@ const CAT_SRC    = "/images/annimation/chat.png";
     left: calc(50% + 50px);
     bottom: 2.8rem;
     transform: translateX(-50%);
-    z-index: 5;                 /* crée un contexte d’empilement local */
+    z-index: 5;
     pointer-events: auto;
-    width: max-content;         /* évite l’écrasement */
+    width: max-content;
   }
 
-  :root { --pigeon-size: 70px; }     /* taille globale du pigeon */
+  :root { --pigeon-size: 70px; }
 
   #pigeon{
     width: var(--pigeon-size) !important;
     height: auto !important;
-    aspect-ratio: 1 / 1;        /* réserve la hauteur avant chargement (fix FF 1er hover) */
+    aspect-ratio: 1 / 1;
     max-width: none !important;
     max-height: none !important;
     display: block;
@@ -34,7 +33,7 @@ const CAT_SRC    = "/images/annimation/chat.png";
     left: 50%;
     transform: translateX(-50%);
     filter: drop-shadow(0 2px 0 rgba(0,0,0,.2));
-    z-index: 1;                 /* en dessous de la bulle */
+    z-index: 1;
   }
 
   /* BULLE */
@@ -49,47 +48,41 @@ const CAT_SRC    = "/images/annimation/chat.png";
     font-size: .95rem;
     line-height: 1.15;
     text-align: center;
-    white-space: nowrap;             /* 1 ligne par défaut */
+    white-space: nowrap;
     display: inline-block;
     max-width: none;
     opacity: 0;
     transition: opacity .18s ease, transform .18s ease;
     pointer-events: none;
     box-shadow: 0 2px 0 rgba(0,0,0,.2);
-    z-index: 2;                      /* au-dessus du pigeon (fix empilement FF) */
-    will-change: opacity, transform; /* rend l’apparition plus fiable */
+    z-index: 2;
+    will-change: opacity, transform;
   }
 
-  /* pas de petite pointe */
   #pigeon-bubble::before,
   #pigeon-bubble::after{ display: none !important; content: none !important; }
 
-  /* visible au hover (sauf si fade/lock) */
   #pigeon-wrap:hover #pigeon-bubble{
     opacity:1; transform:translate(-50%,-12px);
   }
 
-  /* mode message bloquant → DEUX LIGNES EXACTES (respect \n, pas de wrap auto) */
   #pigeon-wrap.msg-lock #pigeon-bubble{
     opacity:1 !important;
     transform:translate(-50%,-12px) !important;
-    white-space: pre; /* respecte \n, pas d'autowrap */
+    white-space: pre;
   }
 
-  /* état de disparition en fondu (général) */
   #pigeon-bubble.bubble--fade{
     opacity: 0 !important;
     transform: translate(-50%,-6px);
     transition: opacity .35s ease, transform .35s ease;
   }
 
-  /* >>> gagne la guerre de spécificité quand msg-lock est actif */
   #pigeon-wrap.msg-lock #pigeon-bubble.bubble--fade{
     opacity: 0 !important;
     transform: translate(-50%,-6px) !important;
   }
 
-  /* >>> neutralise aussi le :hover pendant le fade */
   #pigeon-wrap:hover #pigeon-bubble.bubble--fade{
     opacity: 0 !important;
     transform: translate(-50%,-6px) !important;
@@ -110,13 +103,11 @@ const CAT_SRC    = "/images/annimation/chat.png";
   #pigeon-cat.cat--out{ transform: translateX(0)      scale(1);   }
 </style>
 
-<!-- Wrap pigeon + bulle -->
 <div id="pigeon-wrap" aria-hidden="true">
   <div id="pigeon-bubble">envoyer un pigeon voyageur</div>
   <img id="pigeon" src={PIGEON_SRC} alt="" />
 </div>
 
-<!-- Chat à droite -->
 <img id="pigeon-cat" src={CAT_SRC} alt="" />
 
 <script is:inline>
@@ -128,27 +119,23 @@ const CAT_SRC    = "/images/annimation/chat.png";
   if (!wrap || !bubble || !pigeon || !cat) return;
 
   const DEFAULT_MSG = 'envoyer un pigeon voyageur';
-  // EXACTEMENT 2 lignes :
+
   const BLOCK_MSG   = 'décollage impossible : le chat est là !\nUtilisez plutôt le bouton ci-dessous. merci';
 
-  const DISPLAY_MS  = 3500;  // durée d'affichage du message 2 lignes (+2s vs avant)
-  const FADE_MS     = 350;   // doit correspondre au CSS
+  const DISPLAY_MS  = 3500;
+  const FADE_MS     = 350;
 
   let locked = false;
   let timer  = null;
 
-  // --- Patch FF: premier survol parfois “mou” → on force un reflow safe au 1er hover
   let primed = false;
   const primeHover = () => {
     if (primed) return;
-    // retire toute trace d’un éventuel état résiduel + force reflow
     bubble.classList.remove('bubble--fade');
-    // lecture synchrone pour forcer le navigateur à prendre en compte l’état
     void bubble.offsetWidth;
     primed = true;
   };
 
-  // Chat apparaît au hover (si pas lock)
   wrap.addEventListener('mouseenter', () => {
     primeHover();
     if (locked) return;
@@ -161,13 +148,12 @@ const CAT_SRC    = "/images/annimation/chat.png";
     cat.classList.add('cat--out');
   });
 
-  // Clic → message 2 lignes + fade out sans glitch
   wrap.addEventListener('click', () => {
     if (locked) return;
     locked = true;
 
     wrap.classList.add('msg-lock');
-    bubble.classList.remove('bubble--fade'); // reset au cas où
+    bubble.classList.remove('bubble--fade');
     bubble.textContent = BLOCK_MSG;
 
     cat.classList.add('cat--in');
@@ -175,19 +161,17 @@ const CAT_SRC    = "/images/annimation/chat.png";
 
     clearTimeout(timer);
     timer = setTimeout(() => {
-      // Lancer le fade d'abord (on ne change PAS le texte ici)
+
       bubble.classList.add('bubble--fade');
 
-      // Fin de transition → reset propre sans flash
       const onFadeEnd = (e) => {
         if (e.propertyName !== 'opacity') return;
         bubble.removeEventListener('transitionend', onFadeEnd);
 
-        // on sort du mode lock APRES avoir gagné la spécificité via .bubble--fade
         wrap.classList.remove('msg-lock');
         bubble.classList.remove('bubble--fade');
-        bubble.style.opacity = '0';           // s'assure que c'est bien caché
-        bubble.textContent = DEFAULT_MSG;     // on remet le texte maintenant
+        bubble.style.opacity = '0';
+        bubble.textContent = DEFAULT_MSG;
 
         cat.classList.remove('cat--in');
         cat.classList.add('cat--out');
@@ -198,7 +182,6 @@ const CAT_SRC    = "/images/annimation/chat.png";
     }, DISPLAY_MS);
   });
 
-  // position verticale du chat
   function positionCatY(){
     const r = pigeon.getBoundingClientRect();
     cat.style.top = Math.round(r.top + r.height + 30) + 'px';
@@ -206,7 +189,6 @@ const CAT_SRC    = "/images/annimation/chat.png";
   window.addEventListener('resize', positionCatY);
   window.addEventListener('scroll', positionCatY, { passive:true });
 
-  // si l'image n'est pas encore décodée, cale après
   if ('decode' in pigeon) {
     pigeon.decode().finally(positionCatY);
   } else {

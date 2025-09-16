@@ -1,7 +1,7 @@
 ---
 type Props = {
   label: string;
-  color?: string;           // ex: "bg-violet-300" OU "redBJ"
+  color?: string;
   href?: string;
   as?: 'a' | 'button';
   type?: 'button' | 'submit' | 'reset';
@@ -9,16 +9,14 @@ type Props = {
   class?: string;
 };
 
-// mapping pour les couleurs Tailwind standard (300 → 500)
 const shadowMap: Record<string, string> = {
-  "bg-violet-300": "rgb(139 92 246)", // violet-500
-  "bg-green-300": "rgb(34 197 94)",   // green-500
-  "bg-sky-300": "rgb(14 165 233)",    // sky-500
-  "bg-yellow-300": "rgb(234 179 8)",  // yellow-500
-  "bg-slate-300": "rgb(71 85 105)",   // slate-500
+  "bg-violet-300": "rgb(139 92 246)",
+  "bg-green-300": "rgb(34 197 94)",
+  "bg-sky-300": "rgb(14 165 233)",
+  "bg-yellow-300": "rgb(234 179 8)",
+  "bg-slate-300": "rgb(71 85 105)",
 };
 
-// mapping pour tes couleurs custom
 const customColors: Record<string, {bg: string; shadow: string}> = {
   redBJ: { bg: "var(--redBJ)", shadow: "var(--redBJ-shadow)" },
   bleuBJ: { bg: "var(--bleuBJ)", shadow: "var(--bleuBJ-shadow)" },
@@ -35,16 +33,13 @@ const {
   class: extra = "",
 } = Astro.props;
 
-// check si c’est une couleur custom
 let bgClass = color;
 let shadowColor = "rgba(0,0,0,0.25)";
 
 if (customColors[color]) {
-  // couleur custom
-  bgClass = ""; // on va appliquer le bg via style
+  bgClass = "";
   shadowColor = customColors[color].shadow;
 } else {
-  // couleur Tailwind classique
   shadowColor = shadowMap[color] ?? "rgba(0,0,0,0.25)";
 }
 

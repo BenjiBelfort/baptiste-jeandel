@@ -30,22 +30,22 @@ const socials: Social[] =
         class="inline-flex w-12 h-12 items-center justify-center rounded-lg border hover:bg-stone-100"
       >
         {s.key === 'yt' ? (
-          /* YouTube */
+
           <svg viewBox="0 0 24 24" class="w-8 h-8 block" fill="currentColor" aria-hidden="true">
             <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.9 3 12 3 12 3s-6.9 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.1 21 12 21 12 21s6.9 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.8 15.5V8.5l6.5 3.5-6.5 3.5z"/>
           </svg>
         ) : s.key === 'fb' ? (
-          /* Facebook */
+
           <svg viewBox="0 0 24 24" class="w-8 h-8 block" fill="currentColor" aria-hidden="true">
             <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.7V12h2.7V9.8c0-2.7 1.6-4.2 4-4.2 1.2 0 2.4.2 2.4.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 2.9h-2.5v7A10 10 0 0 0 22 12"/>
           </svg>
         ) : s.key === 'ig' ? (
-          /* Instagram */
+
           <svg viewBox="0 0 24 24" class="w-8 h-8 block" fill="currentColor" aria-hidden="true">
             <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.7A5.3 5.3 0 1 1 6.7 13 5.3 5.3 0 0 1 12 7.7zm0 2A3.3 3.3 0 1 0 15.3 13 3.3 3.3 0 0 0 12 9.7zM18 6.8a1.2 1.2 0 1 1-1.2 1.2A1.2 1.2 0 0 1 18 6.8z"/>
           </svg>
         ) : s.key === 'li' ? (
-          /* LinkedIn */
+
             <svg viewBox="0 0 24 24" class="w-8 h-8 block" fill="currentColor" aria-hidden="true">
             <path d="M22.225 0H1.771A1.77 1.77 0 0 0 0 1.74v20.52C0 23.4.79 24 1.771 24h20.454C23.21 24 24 23.4 24 22.26V1.74A1.77 1.77 0 0 0 22.225 0zM7.05 20.452H3.9V9h3.15v11.452zM5.475 7.433a1.82 1.82 0 1 1 0-3.64 1.82 1.82 0 0 1 0 3.64zM20.452 20.452h-3.15V14.84c0-1.34-.027-3.06-1.995-3.06-1.995 0-2.3 1.47-2.3 2.98v5.693H9.857V9h3.02v1.56h.042c.42-.79 1.447-1.62 2.976-1.62 3.18 0 3.557 2.09 3.557 4.81v6.702z"/>
           </svg>
@@ -79,7 +79,7 @@ const socials: Social[] =
   }
 
   handpanImg.addEventListener('click', () => {
-    const audio = new Audio('/sounds/handpan-c-97696.mp3'); // chemin vers ton mp3
+    const audio = new Audio('/sounds/handpan-c-97696.mp3');
     audio.play().catch(() => {/* ignore si bloqué par navigateur */});
   });
 

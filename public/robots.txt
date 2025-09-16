@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /merci
 
-Sitemap: https://baptiste-j-dev.netlify.app/sitemap.xml
+Sitemap: https://www.baptistejeandel.fr/sitemap.xml

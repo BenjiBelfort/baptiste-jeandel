@@ -5,7 +5,6 @@ import FunkyButton from '@/components/FunkyButton.astro';
 
 <Site title="Merci — Message envoyé" description="Votre demande a bien été envoyée.">
   <section class="mx-auto max-w-xl px-4 py-20 text-center">
-    <!-- Image pigeon -->
     <img 
       src="/images/annimation/pigeon-merci.png" 
       alt="Pigeon messager"
@@ -14,7 +13,6 @@ import FunkyButton from '@/components/FunkyButton.astro';
       class="w-24 mx-auto mb-6 drop-shadow-xl"
     />
 
-    <!-- Ligne dynamique -->
     <p id="merci-line" class="text-xl md:text-2xl font-bold mb-2">
       Merci pour votre demande.
     </p>
@@ -24,12 +22,10 @@ import FunkyButton from '@/components/FunkyButton.astro';
     </p>
 
     <div class="mt-8 mb-12">
-      <!-- id pour pouvoir binder le nettoyage -->
       <FunkyButton id="home-link" href="/" label="Retour à l’accueil" color="bg-stone-300" />
     </div>
   </section>
 
-  <!-- Évite l’indexation SEO -->
   <script is:inline>
     const m = document.createElement('meta');
     m.name = 'robots';
@@ -37,7 +33,6 @@ import FunkyButton from '@/components/FunkyButton.astro';
     document.head.appendChild(m);
   </script>
 
-  <!-- Remplissage dynamique + nettoyage storage -->
   <script is:inline>
     (function () {
       const params = new URLSearchParams(location.search);
@@ -50,13 +45,11 @@ import FunkyButton from '@/components/FunkyButton.astro';
       };
       const clean = (s) => String(s || '').trim().replace(/\s+/g, ' ');
 
-      // Supporte soit name complet, soit prénom/nom séparés
       let prenom  = getQP('prenom','Prénom','first','first_name','firstName');
       let nom     = getQP('nom','Nom','last','last_name','lastName');
       let full    = getQP('name','Name','nom_complet','Nom complet');
       let domaine = getQP('domaine','Domaine','domain');
 
-      // Fallback : sessionStorage (au cas où les query params manquent)
       try {
         const ss = sessionStorage;
         const getSS = (...keys) => {
@@ -112,13 +105,10 @@ import FunkyButton from '@/components/FunkyButton.astro';
         } catch(_) {}
       };
 
-      // Nettoie juste après affichage
       clear();
 
-      // Nettoie si l’utilisateur clique sur “Retour à l’accueil”
       document.getElementById('home-link')?.addEventListener('click', clear);
 
-      // Nettoie si la page revient depuis le cache du navigateur (bfcache)
       window.addEventListener('pageshow', (e) => { if (e.persisted) clear(); });
     })();
   </script>

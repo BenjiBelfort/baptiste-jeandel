@@ -1,4 +1,4 @@
-// netlify/functions/forms-webhook-mailgun.mjs
+
 
 function safeJSON(str, fallback = null) { try { return JSON.parse(str); } catch { return fallback; } }
 function toObjectFromQS(qs) { const out = {}; for (const [k, v] of new URLSearchParams(qs)) out[k] = v; return out; }
@@ -7,8 +7,7 @@ function escapeAttr(s){return escapeHtml(s).replace(/"/g,'&quot;')}
 function splitList(s){ return (s||'').split(',').map(x=>x.trim()).filter(Boolean); }
 function isValidEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s||'').trim()); }
 
-// === Vos éléments EN DUR pour l’email client ================================
-const SITE_URL = 'https://baptiste-j-dev.netlify.app';   // ← remplace si besoin
+const SITE_URL = 'https://www.baptistejeandel.fr/';
 const SOCIALS_HTML = `
 <p style="margin:12px 0 0">
   Nous suivre :
@@ -16,9 +15,7 @@ const SOCIALS_HTML = `
   <a href="https://www.facebook.com/profile.php?id=100076213966457" target="_blank" rel="noopener">Facebook</a> ·
   <a href="https://www.instagram.com/baptiste_jeandel_pro?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">Instagram</a> ·
 </p>`;
-// ===========================================================================
 
-// ---- Formatage dates / âge -------------------------------------------------
 function formatDateFR(isoYYYYMMDD){
   const [Y,M,D] = isoYYYYMMDD.split('-').map(Number);
   const d = new Date(Y, M-1, D);
@@ -45,7 +42,6 @@ function prettyValue(key, val){
   return v;
 }
 
-// ---- Ordonnancement des champs --------------------------------------------
 const DEFAULT_ORDER = [
   'Provenance','Domaine','Nom','Email','Téléphone',
   'Structure (adresse)','Code postal','Ville',
@@ -241,7 +237,7 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
 
 — Fin —`;
 
-    const logo = process.env.EMAIL_LOGO_URL || 'https://baptiste-j-dev.netlify.app/logos/mini-logo.webp';
+    const logo = process.env.EMAIL_LOGO_URL || 'https://www.baptistejeandel.fr/logos/mini-logo.webp';
     const tableRowsHtml = entries.map(([k,v]) => `
       <tr>
         <td style="border:1px solid #eee;background:#fafafa;width:34%"><strong>${escapeHtml(k)}</strong></td>
@@ -262,10 +258,8 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
   <p style="color:#777;margin-top:12px">— Fin —</p>
 </div>`;
 
-    // Email de la personne (pour l'ACK)
     const submitterEmail = (entries.find(([k]) => k.toLowerCase() === 'email') || [,''])[1] || '';
 
-    // --- Envoi Mailgun ADMIN (inchangé) -------------------------------------
     const DOMAIN = process.env.MAILGUN_DOMAIN;
     const API_KEY = process.env.MAILGUN_API_KEY;
     const REGION  = (process.env.MAILGUN_REGION || 'EU').toUpperCase();
@@ -308,7 +302,6 @@ ${entries.map(([k,v]) => `${k}\t${v}`).join('\n')}
       return { statusCode: 500, body: 'Email send failed' };
     }
 
-    // --- Auto-accusé de réception pour l’émetteur ---------------------------
     if (isValidEmail(submitterEmail)) {
       const name = (entries.find(([k]) => k.toLowerCase() === 'nom') || [,''])[1] || '';
       const politeName = String(name || '').trim() || 'Bonjour';
@@ -340,7 +333,6 @@ L'équipe Baptiste Jeandel
   <p style="color:#777;margin-top:12px">Si vous répondez à ce message, votre réponse sera envoyée à notre adresse professionnelle (et pas au postmaster).</p>
 </div>`;
 
-      // Les réponses du client vont à EMAIL_TO + EMAIL_CC (pas au postmaster)
       const replyToPro = [...TO, ...CC].filter(Boolean).join(', ');
 
       const formUser = new URLSearchParams({
@@ -362,7 +354,6 @@ L'équipe Baptiste Jeandel
       if (!respUser.ok) {
         const tu = await respUser.text();
         console.error('[forms-webhook] Mailgun error (user ack)', respUser.status, tu);
-        // on ne casse pas si l’ACK échoue
       }
     }
 
