@@ -17,7 +17,9 @@ const {
   siteName = 'Baptiste Jeandel',
   locale = 'fr_FR',
   article,
-  keywords, // NEW
+  keywords,
+  orgName = 'Baptiste Jeandel',
+  orgLogo = '/logo-bj-512.png',
 } = Astro.props as {
   title?: string;
   description?: string;
@@ -28,6 +30,8 @@ const {
   locale?: string;
   article?: ArticleMeta;
   keywords?: string;
+  orgName?: string;
+  orgLogo?: string;
 };
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
@@ -78,6 +82,8 @@ const websiteLd = {
   }
 };
 
+const absOrgLogo = toAbs(orgLogo);
+
 const articleLd = (type === 'article' && article) ? {
   "@context": "https://schema.org",
   "@type": "Article",
@@ -88,8 +94,23 @@ const articleLd = (type === 'article' && article) ? {
   "datePublished": article.publishedTime,
   "dateModified": article.modifiedTime ?? article.publishedTime,
   "mainEntityOfPage": canonical,
-  ...(keywords ? { "keywords": keywords } : {}) // NEW
+    "publisher": {
+    "@type": "Organization",
+    "name": orgName,
+    "logo": { "@type": "ImageObject", "url": absOrgLogo }
+  },
+  ...(keywords ? { "keywords": keywords } : {})
 } : null;
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": orgName,
+  "url": site || canonical,
+  "logo": absOrgLogo,
+  "sameAs": personLd.sameAs
+};
+
 ---
 <head>
   <meta charset="utf-8" />
@@ -143,6 +164,7 @@ const articleLd = (type === 'article' && article) ? {
 
   <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(organizationLd)} />
   {articleLd && (
     <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   )}
