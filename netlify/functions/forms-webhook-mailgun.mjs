@@ -21,6 +21,17 @@ function formatDateFR(isoYYYYMMDD){
   const d = new Date(Y, M-1, D);
   return new Intl.DateTimeFormat('fr-FR', { day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' }).format(d);
 }
+
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+function formatDateFRShort(isoYYYYMMDD){
+  const [Y,M,D] = isoYYYYMMDD.split('-').map(Number);
+  const d = new Date(Y, M-1, D);
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy = d.getFullYear();
+  return `${dd}/${mm}/${yyyy}`;
+}
+
 function ageFromDOB(isoYYYYMMDD){
   const [y,m,d] = isoYYYYMMDD.split('-').map(Number);
   const today = new Date();
@@ -33,14 +44,23 @@ function ageFromDOB(isoYYYYMMDD){
 function prettyValue(key, val){
   if (typeof val !== 'string') return val;
   const v = val.trim();
-  if (key === 'Date de naissance' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
-    return `${formatDateFR(v)} - ${ageFromDOB(v)} ans`;
+
+  if (ISO_DATE_RE.test(v)) {
+    const wantsShort = [
+      'Date', 'Date de l’événement', 'Date événement', 'Date session',
+      'Date souhaitée', 'Date de naissance'
+    ].some(lbl => lbl.toLowerCase() === key.toLowerCase());
+
+    if (key === 'Date de naissance') {
+      return `${formatDateFRShort(v)} - ${ageFromDOB(v)} ans`;
+    }
+
+    return wantsShort ? formatDateFRShort(v) : formatDateFR(v);
   }
-  if (key === 'Date souhaitée' && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
-    return formatDateFR(v);
-  }
+
   return v;
 }
+
 
 const DEFAULT_ORDER = [
   'Provenance','Domaine','Nom','Email','Téléphone',

@@ -61,3 +61,6 @@ A faire plus tard :
 
 - ajouter dans mentions légales le crédit illustrations
 - texte engageant pour inciter les gens à remplir le formulaire
+
+Version :
+1.0.1 - correctif sur formats des dates dans les formulaires

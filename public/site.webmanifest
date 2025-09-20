@@ -3,6 +3,11 @@
   "short_name": "Baptiste Jeandel",
   "start_url": "/",
   "icons": [
+        {
+      "src": "/logo-bj-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
     {
       "src": "/web-app-manifest-192x192.png",
       "sizes": "192x192",
